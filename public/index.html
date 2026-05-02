@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belissima — Create Account / Login Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-1: #fff1f6;
+      --pink-2: #ffd9e8;
+      --pink-3: #f6b7cd;
+      --pink-4: #e98ab0;
+      --pink-5: #cf5d8c;
+      --text: #5f4b56;
+      --muted: #9a8a92;
+      --white: #ffffff;
+      --success: #117a45;
+      --error: #b42318;
+      --shadow: 0 24px 90px rgba(120, 53, 86, 0.16);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.45), transparent 24%),
+        linear-gradient(135deg, #ffeaf2 0%, #ffd7e6 42%, #f5b4ca 100%);
+      color: var(--text);
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1180px, 100%);
+      min-height: 720px;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      background: rgba(255,255,255,0.48);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .portal {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      min-height: 720px;
+      position: relative;
+    }
+
+    .forms-zone {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 244, 248, 0.88);
+      padding: 36px;
+    }
+
+    .brand {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      z-index: 8;
+    }
+
+    .brand img {
+      width: 180px;
+      max-width: 42vw;
+      height: auto;
+      display: block;
+    }
+
+    .auth-view-switch {
+      position: absolute;
+      top: 28px;
+      right: 28px;
+      z-index: 8;
+      display: inline-flex;
+      gap: 10px;
+      background: rgba(255,255,255,0.78);
+      padding: 8px;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(120,53,86,0.08);
+      border: 1px solid rgba(255,255,255,0.75);
+    }
+
+    .view-btn,
+    .type-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .view-btn.active,
+    .type-btn.active {
+      background: linear-gradient(135deg, #f8bfd3, #ef9fbe);
+      color: #7b2e56;
+      box-shadow: 0 6px 14px rgba(207,93,140,0.22);
+    }
+
+    .view-stage {
+      position: relative;
+      width: 100%;
+      min-height: 100%;
+      padding-top: 44px;
+    }
+
+    .view-panel {
+      display: none;
+      min-height: 100%;
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+      filter: blur(10px);
+      transition: opacity 0.45s ease, transform 0.5s ease, filter 0.5s ease;
+    }
+
+    .view-panel.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .signup-wrap,
+    .login-wrap {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 28px 40px;
+    }
+
+    .form-card {
+      width: min(470px, 100%);
+      margin-inline: auto;
+      animation: fadeUp 0.45s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      color: #b06d8d;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.74rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 4vw, 4rem);
+      line-height: 0.95;
+      color: #8d4168;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .subcopy {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin: 0 auto 28px;
+      max-width: 44ch;
+      text-align: center;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #8d6d79;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 54px;
+      border-radius: 16px;
+      border: 1px solid rgba(207, 93, 140, 0.12);
+      background: rgba(255,255,255,0.82);
+      padding: 0 16px;
+      font: inherit;
+      color: #694c58;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(207, 93, 140, 0.55);
+      box-shadow: 0 0 0 4px rgba(233, 138, 176, 0.14), 0 0 22px rgba(233, 138, 176, 0.18);
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,244,248,0.96));
+    }
+
+
+    .input-shell {
+      position: relative;
+    }
+
+    .input-shell::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(233,138,176,0.16), rgba(255,255,255,0.45));
+      opacity: 0;
+      filter: blur(10px);
+      transition: opacity 0.28s ease;
+      pointer-events: none;
+    }
+
+    .input-shell:focus-within::after {
+      opacity: 1;
+    }
+
+    .password-strength {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .strength-bars {
+      display: inline-grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      flex: 1;
+      max-width: 170px;
+    }
+
+    .strength-bars span {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(207,93,140,0.12);
+      transition: transform 0.22s ease, background 0.22s ease, opacity 0.22s ease;
+    }
+
+    .strength-bars span.active {
+      background: linear-gradient(135deg, #f3adc7, #cf5d8c);
+      transform: scaleY(1.08);
+    }
+
+    .submit-btn {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .submit-btn.loading {
+      pointer-events: none;
+      opacity: 0.92;
+    }
+
+    .submit-btn.loading .btn-text {
+      opacity: 0.25;
+    }
+
+    .submit-btn.loading::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px 24px;
+      margin: 14px 0 22px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .actions label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .actions a,
+    .text-link {
+      text-decoration: none;
+      color: #b55482;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 999px;
+      border: 0;
+      background: linear-gradient(135deg, #e98ab0, #cf5d8c);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 26px rgba(207,93,140,0.24);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(207,93,140,0.28);
+    }
+
+
+    .mode-hint,
+    .status-message {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    .mode-hint { color: var(--muted); }
+
+    .mode-hint button {
+      border: 0;
+      background: none;
+      color: #b55482;
+      font-weight: 700;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .status-message {
+      min-height: 22px;
+      font-weight: 600;
+      max-width: 40ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .status-message.success { color: var(--success); }
+    .status-message.error { color: var(--error); }
+
+    .login-type-switch {
+      display: inline-flex;
+      gap: 10px;
+      background: rgba(255,255,255,0.78);
+      padding: 8px;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(120,53,86,0.08);
+      border: 1px solid rgba(255,255,255,0.75);
+      margin: 0 auto 28px;
+    }
+
+    .login-track-shell {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .forms-track {
+      position: relative;
+      width: 200%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transform: translateX(0%);
+      transition: transform 0.75s cubic-bezier(.77,0,.18,1);
+    }
+
+    .login-wrap.admin-active .forms-track {
+      transform: translateX(-50%);
+    }
+
+    .form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      padding: 0 22px;
+    }
+
+    .visual-zone {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08)),
+        radial-gradient(circle at top left, rgba(255,255,255,0.38), transparent 24%),
+        linear-gradient(140deg, #f4afc7 0%, #e78bb0 55%, #cd618f 100%);
+      min-height: 720px;
+    }
+
+    .slider-spotlight {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .spotlight-track {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .spotlight-card {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      opacity: 0;
+      transform: translateX(70px) scale(0.96);
+      transition: all 0.7s cubic-bezier(.77,0,.18,1);
+      padding: 24px;
+    }
+
+    .spotlight-card.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
+    .spotlight-card.leave-left {
+      opacity: 0;
+      transform: translateX(-70px) scale(0.96);
+    }
+
+    .spotlight-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.7rem, 4vw, 4.4rem);
+      line-height: 0.95;
+      margin-bottom: 14px;
+      color: #fff2f7;
+    }
+
+    .spotlight-copy {
+      max-width: 34ch;
+      line-height: 1.8;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .bubble,
+    .bubble::before,
+    .bubble::after {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .bubble {
+      width: 280px;
+      height: 280px;
+      right: -70px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(255,255,255,0.32), rgba(255,255,255,0));
+    }
+
+    .bubble::before {
+      content: "";
+      width: 180px;
+      height: 180px;
+      left: -540px;
+      top: 420px;
+      background: radial-gradient(circle, rgba(255,255,255,0.22), rgba(255,255,255,0));
+    }
+
+    .bubble::after {
+      content: "";
+      width: 120px;
+      height: 120px;
+      left: -430px;
+      top: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18), rgba(255,255,255,0));
+    }
+
+
+
+    .field-centered {
+      max-width: 100%;
+    }
+
+    .forms-zone::after {
+      content: "";
+      position: absolute;
+      inset: auto 14% 6% 14%;
+      height: 90px;
+      background: radial-gradient(circle, rgba(255,255,255,0.7), rgba(255,255,255,0));
+      filter: blur(22px);
+      pointer-events: none;
+    }
+
+    .visual-zone::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.28), rgba(255,255,255,0));
+      filter: blur(6px);
+      animation: luxuryFloat 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes luxuryFloat {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
+      50% { transform: translate(-50%, -54%) scale(1.06); opacity: 1; }
+    }
+
+    /* ── Document Preview Modal ── */
+    .doc-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(95, 40, 70, 0.45);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .doc-modal-overlay.open {
+      display: flex;
+    }
+    .doc-modal {
+      background: #fff9fb;
+      border-radius: 24px;
+      box-shadow: 0 32px 100px rgba(120,53,86,0.28);
+      border: 1px solid rgba(233,138,176,0.25);
+      width: min(680px, 100%);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalIn 0.35s cubic-bezier(.77,0,.18,1);
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: translateY(28px) scale(0.96); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    .doc-modal-header {
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid rgba(233,138,176,0.18);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,244,248,0.92));
+      flex-shrink: 0;
+    }
+    .doc-modal-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      color: #8d4168;
+      font-size: 1.7rem;
+      margin-bottom: 4px;
+    }
+    .doc-modal-header p {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+    .scroll-progress-bar-wrap {
+      height: 4px;
+      background: rgba(207,93,140,0.12);
+      border-radius: 999px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .scroll-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f3adc7, #cf5d8c);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+    .doc-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px;
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: #5f4b56;
+      scroll-behavior: smooth;
+    }
+    .doc-modal-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: #8d4168;
+      margin: 22px 0 6px;
+    }
+    .doc-modal-body p { margin-bottom: 10px; }
+    .doc-modal-body ul { padding-left: 20px; margin-bottom: 10px; }
+    .doc-modal-footer {
+      padding: 18px 28px;
+      border-top: 1px solid rgba(233,138,176,0.18);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,244,248,0.92));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+    .scroll-hint {
+      font-size: 0.84rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity 0.3s;
+    }
+    .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+    .scroll-hint svg { flex-shrink: 0; }
+    .modal-accept-btn {
+      height: 46px;
+      padding: 0 28px;
+      border-radius: 999px;
+      border: 0;
+      background: linear-gradient(135deg, #e98ab0, #cf5d8c);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(207,93,140,0.22);
+      transition: all 0.2s ease;
+      opacity: 0.4;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .modal-accept-btn.unlocked {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-accept-btn.unlocked:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(207,93,140,0.3);
+    }
+
+    /* Terms checkbox area */
+    .terms-checks-area {
+      margin: 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .terms-check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .terms-check-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #cf5d8c;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .terms-check-row input[type="checkbox"]:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .doc-link-btn {
+      background: none;
+      border: none;
+      color: #b55482;
+      font-weight: 600;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    /* Pink caution error */
+    .status-message.error {
+      color: #cf5d8c !important;
+    }
+    .status-message.error::before {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cf5d8c'%3E%3Cpath d='M12 2L1 21h22L12 2zm0 3.5L20.5 19H3.5L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      vertical-align: middle;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 980px) {
+      .portal { grid-template-columns: 1fr; }
+      .visual-zone { min-height: 280px; order: 1; }
+      .forms-zone { order: 2; }
+      .signup-wrap, .login-wrap { padding-top: 84px; }
+    }
+
+    @media (max-width: 620px) {
+      .forms-zone { padding: 22px; }
+      .brand { top: 18px; left: 18px; }
+      .brand img { width: 140px; }
+      .auth-view-switch {
+        position: static;
+        margin: 78px 0 0 auto;
+        width: fit-content;
+      }
+      .two-col { grid-template-columns: 1fr; }
+      .ghost-row { flex-direction: column; }
+      .spotlight-title { font-size: 2.4rem; }
+    }
+
+    /* ── Password Show/Hide Eye Toggle ── */
+    .input-shell {
+      position: relative;
+    }
+    .eye-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #c48aa8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      border-radius: 6px;
+      transition: color 0.2s ease;
+      line-height: 1;
+    }
+    .eye-toggle:hover { color: #cf5d8c; }
+    .eye-toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+    /* Give password inputs space for the eye button */
+    .input-shell input[type="password"],
+    .input-shell input[type="text"].pwd-field {
+      padding-right: 46px;
+    }
+
+    /* Forgot-modal password inputs with eye toggle */
+    .modal-pwd-wrap {
+      position: relative;
+    }
+    .modal-pwd-wrap input {
+      width: 100%;
+      height: 54px;
+      border-radius: 16px;
+      border: 1px solid rgba(207,93,140,0.12);
+      background: rgba(255,255,255,0.82);
+      padding: 0 46px 0 16px;
+      font: inherit;
+      color: #694c58;
+      outline: none;
+    }
+    .modal-pwd-wrap .eye-toggle {
+      right: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell" id="shell">
+    <div class="portal">
+      <section class="forms-zone">
+<a href="#" class="brand">
+  <img src="belissima-logo.png" alt="Belissima logo">
+</a>
+        <a href="#" class="brand" aria-label="Belissima home">
+          <img src="belissima-logo.png" alt="Belissima logo">
+        </a>
+
+        <div class="auth-view-switch">
+          <button class="view-btn active" data-view="signup">Create Account</button>
+          <button class="view-btn" data-view="login">Login Portal</button>
+        </div>
+
+        <div class="view-stage">
+          <div class="view-panel active" id="signup-view">
+            <div class="signup-wrap">
+              <div class="form-card">
+                <div class="eyebrow">Join Belissima</div>
+                <h1>Create Account</h1>
+                <p class="subcopy">Create your Belissima account first. Once you sign up, your details sync with the user login so you can sign in right away from the portal.</p>
+
+                <form id="signupForm">
+                  <div class="field field-centered">
+                    <label for="signup-name">Full Name</label>
+                    <div class="input-shell"><input id="signup-name" name="name" type="text" placeholder="Enter your name" required></div>
+                  </div>
+
+                  <div class="field">
+                    <label for="signup-email">Email</label>
+                    <div class="input-shell"><input id="signup-email" name="email" type="email" placeholder="Enter your email" required></div>
+                  </div>
+
+                  <div class="two-col">
+                    <div class="field">
+                      <label for="signup-password">Password</label>
+                      <div class="input-shell"><input id="signup-password" name="password" type="password" placeholder="Create a password" required></div>
+                    </div>
+                    <div class="field">
+                      <label for="signup-confirm-password">Confirm Password</label>
+                      <div class="input-shell"><input id="signup-confirm-password" name="confirmPassword" type="password" placeholder="Confirm password" required></div>
+                    </div>
+                  </div>
+
+                  <div class="password-strength" aria-live="polite" style="margin-top:14px; margin-bottom:20px;">
+                    <div class="strength-bars" id="strengthBars">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                    <span id="strengthText">Password strength</span>
+                  </div>
+
+                  <div class="terms-checks-area" style="margin-bottom:22px; padding: 14px 16px; background: rgba(255,255,255,0.55); border-radius: 14px; border: 1px solid rgba(207,93,140,0.12);">
+                    <div class="terms-check-row">
+                      <input type="checkbox" id="terms-check" disabled>
+                      <span style="color:var(--muted);font-size:0.88rem;">You must open and read the <button class="doc-link-btn" type="button" id="openTermsBtn">Terms &amp; Conditions</button> and <button class="doc-link-btn" type="button" id="openPrivacyBtn">Privacy Policy</button> to continue</span>
+                      <input type="checkbox" id="privacy-check" disabled style="display:none">
+                    </div>
+                  </div>
+
+                  <button class="submit-btn" type="submit" id="createAccountBtn" disabled style="opacity:0.45;cursor:not-allowed;pointer-events:none;"><span class="btn-text">Create My Account</span></button>
+                </form>
+
+                <p class="mode-hint">Already signed up? <button type="button" id="goToLoginPortalBottom">Go to login portal</button></p>
+                <div class="status-message" id="signupMessage"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-panel" id="login-view">
+            <div class="login-wrap" id="loginWrap">
+              <div class="form-card" style="width:min(520px,100%);">
+                <div class="login-type-switch">
+                  <button class="type-btn active" data-mode="user">User Login</button>
+                  <button class="type-btn" data-mode="admin">Admin Login</button>
+                </div>
+
+                <div class="login-track-shell">
+                  <div class="forms-track">
+                    <div class="form-panel">
+                      <div class="form-card">
+                        <div class="eyebrow">Belissima Access</div>
+                        <h1>User Sign In</h1>
+                        <p class="subcopy">For clients and providers. Sign in using the account you created to manage bookings, favourites, and your Belissima profile.</p>
+
+                        <form id="userLoginForm">
+                          <div class="field">
+                            <label for="user-email">Email</label>
+                            <div class="input-shell"><input id="user-email" name="email" type="email" placeholder="Enter your email" required></div>
+                          </div>
+
+                          <div class="field">
+                            <label for="user-password">Password</label>
+                            <div class="input-shell"><input id="user-password" name="password" type="password" placeholder="Enter your password" required></div>
+                          </div>
+
+                          <div class="actions">
+                            <label><input type="checkbox" name="remember"> Remember me</label>
+                            <button type="button" id="forgotPasswordBtn" style="border:0;background:none;color:#b55482;font-weight:600;cursor:pointer;font:inherit;">Forgot password?</button>
+                          </div>
+
+                          <button class="submit-btn" type="submit"><span class="btn-text">Sign In as User</span></button>
+                        </form>
+
+                        <p class="mode-hint">Need admin access instead? <button type="button" data-mode-jump="admin">Switch to admin</button></p>
+                        <div class="status-message" id="userLoginMessage"></div>
+                      </div>
+                    </div>
+
+                    <div class="form-panel">
+                      <div class="form-card">
+                        <div class="eyebrow">Management Portal</div>
+                        <h1>Admin Sign In</h1>
+                        <p class="subcopy">For Belissima staff only. Use your admin credentials and security code to manage providers, users, approvals, and platform activity.</p>
+
+                        <form id="adminLoginForm">
+                          <div class="field">
+                            <label for="admin-email">Admin Email</label>
+                            <div class="input-shell"><input id="admin-email" name="email" type="email" placeholder="Enter admin email" required></div>
+                          </div>
+
+                          <div class="two-col">
+                            <div class="field">
+                              <label for="admin-password">Password</label>
+                              <div class="input-shell"><input id="admin-password" name="password" type="password" placeholder="Password" required></div>
+                            </div>
+                            <div class="field">
+                              <label for="admin-code">Security Code</label>
+                              <div class="input-shell"><input id="admin-code" name="admin_code" type="password" placeholder="Admin code" required></div>
+                            </div>
+                          </div>
+
+                          <div class="actions">
+                            <label><input type="checkbox" name="remember_admin"> Keep me signed in</label>
+                            <a href="/admin/help">Need help?</a>
+                          </div>
+
+                          <button class="submit-btn" type="submit"><span class="btn-text">Sign In as Admin</span></button>
+                        </form>
+
+                        <p class="mode-hint">Need the regular account screen? <button type="button" data-mode-jump="user">Switch to user</button></p>
+                        <div class="status-message" id="adminLoginMessage"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="mode-hint" style="margin-top:24px;">Need to make a new account? <button type="button" id="backToSignup">Go back to create account</button></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="visual-zone">
+        <div class="bubble"></div>
+        <div class="slider-spotlight">
+          <div class="spotlight-track">
+            <div class="spotlight-card active" data-spotlight="signup">
+              <div class="spotlight-title">Create Your<br>Beauty Account</div>
+              <p class="spotlight-copy">Start with a polished sign-up experience, then move straight into the Belissima login portal whenever you are ready.</p>
+            </div>
+
+            <div class="spotlight-card" data-spotlight="user">
+              <div class="spotlight-title">Hello,<br>Beautiful!</div>
+              <p class="spotlight-copy">Search, discover, and book trusted beauty services with a polished experience made for everyday users.</p>
+            </div>
+
+            <div class="spotlight-card" data-spotlight="admin">
+              <div class="spotlight-title">Hello,<br>Admin!</div>
+              <p class="spotlight-copy">Oversee provider records, review accounts, and manage platform activity from one secure login portal.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Terms & Conditions Modal -->
+  <div class="doc-modal-overlay" id="termsModal">
+    <div class="doc-modal">
+      <div class="doc-modal-header">
+        <h2>Terms &amp; Conditions</h2>
+        <p>Please read through the entire document to continue. <em>Last Updated: April 19, 2026</em></p>
+        <div class="scroll-progress-bar-wrap"><div class="scroll-progress-bar" id="termsProgress"></div></div>
+      </div>
+      <div class="doc-modal-body" id="termsBody">
+        <h3>1. Introduction</h3>
+        <p>Welcome to Belissima. This platform is designed to connect users with reliable and trusted beauty service providers across Jamaica. By accessing or using this website, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please do not use the platform.</p>
+        <h3>2. Definitions</h3>
+        <p>"Platform" refers to Belissima. "Users" refers to individuals browsing or using the platform. "Service Providers" refers to beauty professionals listed on the platform. "Creators" refers to the developers/owners of the platform.</p>
+        <h3>3. Use of the Platform</h3>
+        <p>Users agree to:</p>
+        <ul>
+          <li>Use the platform only for lawful purposes.</li>
+          <li>Provide accurate and truthful information when required.</li>
+          <li>Not engage in any activity that may harm the platform or its users.</li>
+        </ul>
+        <h3>4. Service Provider Listings</h3>
+        <p>The platform aims to promote reliable beauty service providers; however, we do not guarantee the quality, safety, or legality of services offered. Users are responsible for conducting their own due diligence before engaging any service provider. Any agreements made between users and service providers are independent of the platform.</p>
+        <h3>5. Removal of Service Providers</h3>
+        <p>The creators reserve the right to remove, suspend, or restrict any service provider from the platform at any point in time, without prior notice, for reasons including but not limited to:</p>
+        <ul>
+          <li>Violation of platform policies</li>
+          <li>Receiving consistent negative feedback</li>
+          <li>Suspicious, fraudulent, or unethical behavior</li>
+        </ul>
+        <h3>6. Limitation of Liability</h3>
+        <p>The platform acts only as an intermediary and is not responsible for any disputes, damages, injuries, or losses resulting from interactions between users and service providers. Use of the platform is at your own risk.</p>
+        <h3>7. Nature of the Platform (No Booking or Payments)</h3>
+        <p>This platform is strictly for informational and promotional purposes only. The platform does not facilitate bookings, scheduling, or payments between users and service providers. The platform will never request, collect, or store users' banking, credit card, or financial information. Any arrangements, bookings, or payments made between users and service providers are done independently and at the users' own risk.</p>
+        <h3>8. AI Chat Feature (Smart Filtering Assistance)</h3>
+        <p>The platform includes an AI-powered chatbot designed to assist users in filtering and identifying suitable beauty service providers based on user preferences. The AI chat feature provides suggestions and recommendations for convenience only and does not guarantee accuracy, completeness, or suitability of results. Users should independently verify all information provided by the AI before making decisions. The creators are not responsible for any outcomes, decisions, or actions taken based on information or recommendations provided by the AI chat feature. Users agree not to rely solely on the AI feature for making final decisions regarding service providers.</p>
+        <h3>9. Privacy</h3>
+        <p>Your use of the platform is also governed by our Privacy Policy. We are committed to protecting your personal information but cannot guarantee complete security.</p>
+        <h3>10. Intellectual Property</h3>
+        <p>All content on the platform (excluding user-generated content) is the property of the creators. Users may not copy, distribute, or reproduce any content without permission.</p>
+        <h3>11. Changes to Terms</h3>
+        <p>The creators reserve the right to update or modify these Terms and Conditions at any time. Continued use of the platform after changes are made constitutes acceptance of the revised terms.</p>
+        <h3>12. Governing Law</h3>
+        <p>These Terms and Conditions shall be governed by and interpreted in accordance with the laws of Jamaica.</p>
+        <h3>13. Contact Information</h3>
+        <p>For questions or concerns regarding these Terms and Conditions, please contact: <strong>belissima3901@yahoo.com</strong></p>
+        <p style="margin-top:18px;font-weight:600;color:#8d4168;">By using this platform, you acknowledge that you have read, understood, and agreed to these Terms and Conditions.</p>
+      </div>
+      <div class="doc-modal-footer">
+        <span class="scroll-hint" id="termsScrollHint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cf5d8c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll to read the full document
+        </span>
+        <button class="modal-accept-btn" id="termsAcceptBtn" type="button">I've Read &amp; Agree ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div class="doc-modal-overlay" id="privacyModal">
+    <div class="doc-modal">
+      <div class="doc-modal-header">
+        <h2>Privacy Policy</h2>
+        <p>Please read through the entire document to continue. <em>Last Updated: April 19, 2026</em></p>
+        <div class="scroll-progress-bar-wrap"><div class="scroll-progress-bar" id="privacyProgress"></div></div>
+      </div>
+      <div class="doc-modal-body" id="privacyBody">
+        <h3>1. Introduction</h3>
+        <p>Belissima ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our platform, which promotes beauty service providers in Jamaica. By using the platform, you agree to the collection and use of information in accordance with this policy.</p>
+        <h3>2. Information We Collect</h3>
+        <p><strong>a. Personal Information</strong><br>We may collect limited personal information such as: Name, Email address, and any information you voluntarily provide (e.g., through contact forms).</p>
+        <p><strong>b. Non-Personal Information</strong><br>We may collect: Browser type and device information, and IP address.</p>
+        <p><strong>c. AI Chat Interactions</strong><br>Information you input into the AI chat feature may be collected to improve functionality and user experience. Users are advised not to share sensitive personal or financial information in the AI chat.</p>
+        <h3>3. How We Use Your Information</h3>
+        <p>We use collected information to: improve the functionality and performance of the platform, provide recommendations through the AI chat feature, respond to user inquiries or feedback, and monitor and prevent misuse of the platform.</p>
+        <h3>4. No Collection of Financial Information</h3>
+        <p>The platform does not collect, process, or store any banking, credit card, or payment information. Users should not submit such information anywhere on the platform.</p>
+        <h3>5. Sharing of Information</h3>
+        <p>We do not sell, trade, or rent users' personal information. We may share information only: when required by law, or to protect the rights, safety, and security of the platform and its users.</p>
+        <h3>6. Data Security</h3>
+        <p>We take reasonable measures to protect your information from unauthorized access, loss, or misuse. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+        <h3>7. Third-Party Links</h3>
+        <p>The platform may contain links to third-party websites or service providers. We are not responsible for the privacy practices or content of those external sites.</p>
+        <h3>8. AI Chat Feature Disclaimer</h3>
+        <p>The AI chat feature is provided to assist users with filtering and recommendations. Any information shared through the AI chat is used to improve the service. Users should avoid sharing sensitive personal data, as the platform cannot guarantee full confidentiality of such inputs.</p>
+        <h3>9. Your Rights</h3>
+        <p>Users may: request access to the personal data we hold about them, and request correction or deletion of their data (where applicable). To make a request, contact us using the information below.</p>
+        <h3>10. Children's Privacy</h3>
+        <p>This platform is not intended for children under the age of 13. We do not knowingly collect personal information from children.</p>
+        <h3>11. Changes to This Privacy Policy</h3>
+        <p>We reserve the right to update or modify this Privacy Policy at any time. Changes will be posted on this page with an updated date.</p>
+        <h3>12. Contact Information</h3>
+        <p>If you have any questions or concerns about this Privacy Policy, please contact: <strong>belissima3901@yahoo.com</strong></p>
+        <p style="margin-top:18px;font-weight:600;color:#8d4168;">By using this platform, you consent to this Privacy Policy.</p>
+      </div>
+      <div class="doc-modal-footer">
+        <span class="scroll-hint" id="privacyScrollHint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cf5d8c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Scroll to read the full document
+        </span>
+        <button class="modal-accept-btn" id="privacyAcceptBtn" type="button">I've Read &amp; Agree ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div class="doc-modal-overlay" id="forgotModal">
+    <div class="doc-modal" style="max-width:460px;">
+      <div class="doc-modal-header">
+        <h2 id="forgotModalTitle">Reset Password</h2>
+        <p id="forgotModalSubtitle">Enter your email and we'll send you a reset link.</p>
+        <div class="scroll-progress-bar-wrap" style="display:none"></div>
+      </div>
+      <div class="doc-modal-body" style="overflow:visible;padding:24px 28px 8px;">
+
+        <!-- Step 1: Email entry -->
+        <div id="forgotStep1">
+          <div class="field">
+            <label for="forgot-email" style="font-size:0.9rem;font-weight:600;color:#8d6d79;display:block;margin-bottom:7px;">Email Address</label>
+            <div class="input-shell">
+              <input id="forgot-email" type="email" placeholder="Enter your account email" style="width:100%;height:54px;border-radius:16px;border:1px solid rgba(207,93,140,0.12);background:rgba(255,255,255,0.82);padding:0 16px;font:inherit;color:#694c58;outline:none;transition:all .25s ease;">
+            </div>
+          </div>
+          <div class="status-message" id="forgotMsg" style="margin-top:10px;min-height:20px;font-size:0.87rem;"></div>
+        </div>
+
+        <!-- Step 2: Token + New Password -->
+        <div id="forgotStep2" style="display:none;">
+          <div class="field">
+            <label style="font-size:0.9rem;font-weight:600;color:#8d6d79;display:block;margin-bottom:7px;">Reset Code</label>
+            <div class="input-shell">
+              <input id="forgot-token" type="text" placeholder="Enter the code from your email" maxlength="8" style="width:100%;height:54px;border-radius:16px;border:1px solid rgba(207,93,140,0.12);background:rgba(255,255,255,0.82);padding:0 16px;font:inherit;color:#694c58;outline:none;letter-spacing:.15em;text-transform:uppercase;">
+            </div>
+          </div>
+          <div class="field">
+            <label style="font-size:0.9rem;font-weight:600;color:#8d6d79;display:block;margin-bottom:7px;">New Password</label>
+            <div class="input-shell">
+              <div class="modal-pwd-wrap"><input id="forgot-new-password" type="password" placeholder="Create a new password"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label style="font-size:0.9rem;font-weight:600;color:#8d6d79;display:block;margin-bottom:7px;">Confirm New Password</label>
+            <div class="input-shell">
+              <div class="modal-pwd-wrap"><input id="forgot-confirm-password" type="password" placeholder="Confirm new password"></div>
+            </div>
+          </div>
+          <div class="status-message" id="forgotMsg2" style="margin-top:10px;min-height:20px;font-size:0.87rem;"></div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div id="forgotStep3" style="display:none;text-align:center;padding:16px 0 8px;">
+          <div style="font-size:3rem;margin-bottom:12px;">🎉</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#8d4168;margin-bottom:8px;">Password Updated!</p>
+          <p style="color:var(--muted);font-size:0.92rem;">You can now sign in with your new password.</p>
+        </div>
+
+      </div>
+      <div class="doc-modal-footer" style="justify-content:flex-end;gap:12px;">
+        <button type="button" id="forgotCancelBtn" style="height:46px;padding:0 22px;border-radius:999px;border:1px solid rgba(207,93,140,0.25);background:transparent;color:#b55482;font-size:0.92rem;font-weight:600;cursor:pointer;">Cancel</button>
+        <button type="button" id="forgotActionBtn" class="modal-accept-btn unlocked" style="min-width:160px;">Send Reset Code</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const API_BASE = 'http://localhost:3000/api';
+
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const viewPanels = {
+      signup: document.getElementById('signup-view'),
+      login: document.getElementById('login-view')
+    };
+
+    const signupForm = document.getElementById('signupForm');
+    const signupMessage = document.getElementById('signupMessage');
+    const userLoginForm = document.getElementById('userLoginForm');
+    const userLoginMessage = document.getElementById('userLoginMessage');
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const adminLoginMessage = document.getElementById('adminLoginMessage');
+
+    const loginWrap = document.getElementById('loginWrap');
+    const typeButtons = document.querySelectorAll('.type-btn');
+    const modeJumps = document.querySelectorAll('[data-mode-jump]');
+    const spotlightCards = document.querySelectorAll('.spotlight-card');
+
+    // ── Checkbox elements ──
+    const termsCheck = document.getElementById('terms-check');
+    const privacyCheck = document.getElementById('privacy-check');
+
+    // Track which docs have been read
+    const docsRead = { terms: false, privacy: false };
+
+    function syncCheckbox() {
+      const allRead = docsRead.terms && docsRead.privacy;
+      termsCheck.checked = allRead;
+      termsCheck.disabled = !allRead;
+      privacyCheck.checked = allRead;
+      // Physically lock/unlock the submit button
+      const createBtn = document.getElementById('createAccountBtn');
+      if (createBtn) {
+        if (allRead) {
+          createBtn.disabled = false;
+          createBtn.style.opacity = '1';
+          createBtn.style.cursor = 'pointer';
+          createBtn.style.pointerEvents = 'auto';
+        } else {
+          createBtn.disabled = true;
+          createBtn.style.opacity = '0.45';
+          createBtn.style.cursor = 'not-allowed';
+          createBtn.style.pointerEvents = 'none';
+        }
+      }
+    }
+
+    // ── Modal logic ──
+    function setupModal(modalId, bodyId, progressId, hintId, acceptBtnId, docKey) {
+      const overlay = document.getElementById(modalId);
+      const body    = document.getElementById(bodyId);
+      const bar     = document.getElementById(progressId);
+      const hint    = document.getElementById(hintId);
+      const btn     = document.getElementById(acceptBtnId);
+      let scrolled  = false;
+
+      function updateProgress() {
+        const max = body.scrollHeight - body.clientHeight;
+        if (max <= 0) { unlock(); return; }
+        const pct = Math.min(100, (body.scrollTop / max) * 100);
+        bar.style.width = pct + '%';
+        if (pct >= 98) unlock();
+      }
+
+      function unlock() {
+        if (scrolled) return;
+        scrolled = true;
+        btn.classList.add('unlocked');
+        hint.classList.add('hidden');
+      }
+
+      body.addEventListener('scroll', updateProgress);
+
+      btn.addEventListener('click', () => {
+        docsRead[docKey] = true;
+        syncCheckbox();
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+
+      return {
+        open() {
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          if (!docsRead[docKey]) {
+            scrolled = false;
+            body.scrollTop = 0;
+            bar.style.width = '0%';
+            btn.classList.remove('unlocked');
+            hint.classList.remove('hidden');
+          } else {
+            btn.classList.add('unlocked');
+            hint.classList.add('hidden');
+          }
+          setTimeout(updateProgress, 100);
+        }
+      };
+    }
+
+    const termsModal   = setupModal('termsModal',   'termsBody',   'termsProgress',   'termsScrollHint',   'termsAcceptBtn',   'terms');
+    const privacyModal = setupModal('privacyModal', 'privacyBody', 'privacyProgress', 'privacyScrollHint', 'privacyAcceptBtn', 'privacy');
+
+    document.getElementById('openTermsBtn').addEventListener('click',   () => termsModal.open());
+    document.getElementById('openPrivacyBtn').addEventListener('click', () => privacyModal.open());
+
+    // Prevent direct checkbox interaction — must go through modal
+    termsCheck.addEventListener('click', (e) => {
+      if (!docsRead.terms || !docsRead.privacy) {
+        e.preventDefault();
+        termsCheck.checked = false;
+        if (!docsRead.terms) termsModal.open();
+        else privacyModal.open();
+      }
+    });
+
+    // ── Helpers ──
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = 'status-message ' + (type || '');
+    }
+
+    function setButtonLoading(button, isLoading) {
+      button.classList.toggle('loading', isLoading);
+      button.disabled = isLoading;
+    }
+
+    function checkPasswordStrength(password) {
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+      if (/\d/.test(password)) score++;
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+      return score;
+    }
+
+    function updateStrengthMeter(password) {
+      const bars = document.querySelectorAll('#strengthBars span');
+      const text = document.getElementById('strengthText');
+      const score = checkPasswordStrength(password);
+      const labels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
+      bars.forEach((bar, index) => bar.classList.toggle('active', index < score));
+      text.textContent = password ? `Password strength: ${labels[score]}` : 'Password strength';
+    }
+
+    function updateSpotlight(target) {
+      spotlightCards.forEach(card => {
+        const matches = card.dataset.spotlight === target;
+        card.classList.remove('active', 'leave-left');
+        if (matches) {
+          card.classList.add('active');
+        } else {
+          card.classList.add('leave-left');
+        }
+      });
+    }
+
+    function setView(view) {
+      const isLogin = view === 'login';
+      viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+
+      Object.entries(viewPanels).forEach(([key, panel]) => {
+        panel.classList.remove('active');
+        if (key === view) {
+          requestAnimationFrame(() => panel.classList.add('active'));
+        }
+      });
+
+      if (!isLogin) {
+        updateSpotlight('signup');
+      } else {
+        const adminActive = loginWrap.classList.contains('admin-active');
+        updateSpotlight(adminActive ? 'admin' : 'user');
+      }
+    }
+
+    function setMode(mode) {
+      const isAdmin = mode === 'admin';
+      loginWrap.classList.toggle('admin-active', isAdmin);
+      typeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      if (viewPanels.login.classList.contains('active')) {
+        updateSpotlight(isAdmin ? 'admin' : 'user');
+      }
+      showMessage(adminLoginMessage, '', '');
+      showMessage(userLoginMessage, '', '');
+    }
+
+    function prefillUserLogin() {
+      const savedEmail = localStorage.getItem('belissimaLastEmail');
+      if (savedEmail) {
+        document.getElementById('user-email').value = savedEmail;
+      }
+    }
+
+    document.getElementById('signup-password').addEventListener('input', (event) => {
+      updateStrengthMeter(event.target.value);
+    });
+
+    viewButtons.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+    document.getElementById('goToLoginPortalBottom').addEventListener('click', () => { setView('login'); prefillUserLogin(); setMode('user'); });
+    document.getElementById('backToSignup').addEventListener('click', () => setView('signup'));
+
+    typeButtons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+    modeJumps.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.modeJump)));
+
+    signupForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // HARD GATE — triple check: docsRead flags AND checkbox state
+      const allDocsRead = docsRead.terms && docsRead.privacy && termsCheck.checked;
+      if (!allDocsRead) {
+        let msg = '';
+        if (!docsRead.terms && !docsRead.privacy) {
+          msg = 'Please read the Terms & Conditions and Privacy Policy before creating an account.';
+        } else if (!docsRead.terms) {
+          msg = 'Please read the Terms & Conditions to continue.';
+        } else {
+          msg = 'Please read the Privacy Policy to continue.';
+        }
+        showMessage(signupMessage, msg, 'error');
+        // Re-lock the button in case something slipped through
+        const createBtn = document.getElementById('createAccountBtn');
+        if (createBtn) { createBtn.disabled = true; createBtn.style.opacity = '0.45'; createBtn.style.pointerEvents = 'none'; }
+        return;
+      }
+
+      const submitBtn = signupForm.querySelector('.submit-btn');
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim().toLowerCase();
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+      if (password !== confirmPassword) {
+        showMessage(signupMessage, 'Passwords do not match.', 'error');
+        return;
+      }
+
+      try {
+        setButtonLoading(submitBtn, true);
+        showMessage(signupMessage, '', '');
+
+        const response = await fetch(`${API_BASE}/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showMessage(signupMessage, data.message || 'Unable to create account.', 'error');
+          return;
+        }
+
+        localStorage.setItem('belissimaLastEmail', email);
+        showMessage(signupMessage, data.message || 'Account created successfully.', 'success');
+        signupForm.reset();
+        updateStrengthMeter('');
+        // Reset docs-read state
+        docsRead.terms = false; docsRead.privacy = false;
+        termsCheck.checked = false; termsCheck.disabled = true;
+        privacyCheck.checked = false;
+        syncCheckbox(); // Re-lock the create button
+
+        document.getElementById('user-email').value = email;
+        document.getElementById('user-password').value = password;
+
+        setTimeout(() => {
+          setView('login');
+          setMode('user');
+        }, 700);
+      } catch (error) {
+        showMessage(signupMessage, 'Could not connect to the server.', 'error');
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
+    });
+
+    userLoginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const submitBtn = userLoginForm.querySelector('.submit-btn');
+      const email = document.getElementById('user-email').value.trim().toLowerCase();
+      const password = document.getElementById('user-password').value;
+
+      try {
+        setButtonLoading(submitBtn, true);
+        showMessage(userLoginMessage, '', '');
+
+        const response = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showMessage(userLoginMessage, data.message || 'Login failed.', 'error');
+          return;
+        }
+
+        localStorage.setItem('belissimaLastEmail', email);
+        // Store user info — set BOTH localStorage and sessionStorage so dashboard auth works
+        if (data.user) {
+          const userJson = JSON.stringify(data.user);
+          localStorage.setItem('belissimaUser', userJson);
+          sessionStorage.setItem('belissimaUser', userJson);
+          sessionStorage.setItem('belissimaLoggedIn', 'true');
+        }
+        showMessage(userLoginMessage, data.message || 'Login successful. Redirecting...', 'success');
+
+        // Redirect to dashboard — same file for both roles; dashboard shows admin view if role=admin
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 700);
+      } catch (error) {
+        showMessage(userLoginMessage, 'Could not connect to the server.', 'error');
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
+    });
+
+    adminLoginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitBtn = adminLoginForm.querySelector('.submit-btn');
+      const email = document.getElementById('admin-email').value.trim().toLowerCase();
+      const password = document.getElementById('admin-password').value;
+      const adminCode = document.getElementById('admin-code').value;
+
+      try {
+        setButtonLoading(submitBtn, true);
+        showMessage(adminLoginMessage, '', '');
+
+        const response = await fetch(`${API_BASE}/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, admin_code: adminCode })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showMessage(adminLoginMessage, data.message || 'Admin login failed.', 'error');
+          return;
+        }
+
+        // Store admin session so dashboard shows admin view
+        if (data.user) {
+          const userJson = JSON.stringify(data.user);
+          localStorage.setItem('belissimaUser', userJson);
+          sessionStorage.setItem('belissimaUser', userJson);
+          sessionStorage.setItem('belissimaLoggedIn', 'true');
+        }
+        showMessage(adminLoginMessage, data.message || 'Admin login successful. Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 700);
+      } catch (error) {
+        showMessage(adminLoginMessage, 'Could not connect to the server.', 'error');
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
+    });
+
+    // ── Forgot Password Flow ──
+    let forgotStep = 1;
+    let forgotEmail = '';
+
+    function openForgotModal() {
+      forgotStep = 1;
+      forgotEmail = '';
+      document.getElementById('forgotStep1').style.display = '';
+      document.getElementById('forgotStep2').style.display = 'none';
+      document.getElementById('forgotStep3').style.display = 'none';
+      document.getElementById('forgotModalTitle').textContent = 'Reset Password';
+      document.getElementById('forgotModalSubtitle').textContent = "Enter your email and we'll send you a reset code.";
+      document.getElementById('forgotActionBtn').textContent = 'Send Reset Code';
+      document.getElementById('forgotActionBtn').classList.add('unlocked');
+      document.getElementById('forgot-email').value = '';
+      document.getElementById('forgot-token').value = '';
+      document.getElementById('forgot-new-password').value = '';
+      document.getElementById('forgot-confirm-password').value = '';
+      document.getElementById('forgotMsg').textContent = '';
+      document.getElementById('forgotMsg2').textContent = '';
+      document.getElementById('forgotCancelBtn').style.display = '';
+      document.getElementById('forgotModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgotModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function setForgotMsg(id, text, type) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = 'status-message ' + (type || '');
+    }
+
+    document.getElementById('forgotPasswordBtn').addEventListener('click', openForgotModal);
+    document.getElementById('forgotCancelBtn').addEventListener('click', closeForgotModal);
+    document.getElementById('forgotModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('forgotModal')) closeForgotModal();
+    });
+
+    document.getElementById('forgotActionBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('forgotActionBtn');
+
+      if (forgotStep === 1) {
+        // Send reset email
+        const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+        if (!email) { setForgotMsg('forgotMsg', 'Please enter your email.', 'error'); return; }
+
+        btn.textContent = 'Sending…';
+        btn.classList.remove('unlocked');
+        try {
+          const res = await fetch(`${API_BASE}/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const data = await res.json();
+          if (!res.ok) { setForgotMsg('forgotMsg', data.message || 'Could not send reset email.', 'error'); btn.textContent = 'Send Reset Code'; btn.classList.add('unlocked'); return; }
+
+          forgotEmail = email;
+          forgotStep = 2;
+          document.getElementById('forgotStep1').style.display = 'none';
+          document.getElementById('forgotStep2').style.display = '';
+          document.getElementById('forgotModalTitle').textContent = 'Check Your Email';
+          document.getElementById('forgotModalSubtitle').textContent = `We sent a reset code to ${email}`;
+          btn.textContent = 'Reset Password';
+          btn.classList.add('unlocked');
+        } catch { setForgotMsg('forgotMsg', 'Could not connect to server.', 'error'); btn.textContent = 'Send Reset Code'; btn.classList.add('unlocked'); }
+
+      } else if (forgotStep === 2) {
+        // Verify token and set new password
+        const token    = document.getElementById('forgot-token').value.trim().toUpperCase();
+        const newPass  = document.getElementById('forgot-new-password').value;
+        const confPass = document.getElementById('forgot-confirm-password').value;
+
+        if (!token)   { setForgotMsg('forgotMsg2', 'Please enter the reset code.', 'error'); return; }
+        if (!newPass) { setForgotMsg('forgotMsg2', 'Please enter a new password.', 'error'); return; }
+        if (newPass.length < 6) { setForgotMsg('forgotMsg2', 'Password must be at least 6 characters.', 'error'); return; }
+        if (newPass !== confPass) { setForgotMsg('forgotMsg2', 'Passwords do not match.', 'error'); return; }
+
+        btn.textContent = 'Updating…';
+        btn.classList.remove('unlocked');
+        try {
+          const res = await fetch(`${API_BASE}/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: forgotEmail, token, newPassword: newPass })
+          });
+          const data = await res.json();
+          if (!res.ok) { setForgotMsg('forgotMsg2', data.message || 'Reset failed. Check your code and try again.', 'error'); btn.textContent = 'Reset Password'; btn.classList.add('unlocked'); return; }
+
+          forgotStep = 3;
+          document.getElementById('forgotStep2').style.display = 'none';
+          document.getElementById('forgotStep3').style.display = '';
+          document.getElementById('forgotModalTitle').textContent = 'All Done!';
+          document.getElementById('forgotModalSubtitle').textContent = 'Your password has been reset.';
+          document.getElementById('forgotCancelBtn').style.display = 'none';
+          btn.textContent = 'Go to Login';
+          btn.classList.add('unlocked');
+        } catch { setForgotMsg('forgotMsg2', 'Could not connect to server.', 'error'); btn.textContent = 'Reset Password'; btn.classList.add('unlocked'); }
+
+      } else if (forgotStep === 3) {
+        closeForgotModal();
+      }
+    });
+
+    setView('signup');
+    setMode('user');
+    prefillUserLogin();
+  
+    // ── Eye Toggle: inject show/hide button into every password field ──
+    (function attachEyeToggles() {
+      // SVG icons
+      const eyeOpen = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+      const eyeClosed = `<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+
+      function makeToggle(input) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'eye-toggle';
+        btn.setAttribute('aria-label', 'Toggle password visibility');
+        btn.innerHTML = eyeClosed;
+        btn.addEventListener('click', () => {
+          const showing = input.type === 'text';
+          input.type = showing ? 'password' : 'text';
+          if (!showing) input.classList.add('pwd-field');
+          else input.classList.remove('pwd-field');
+          btn.innerHTML = showing ? eyeClosed : eyeOpen;
+          btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+        });
+        return btn;
+      }
+
+      // Attach to all password inputs inside .input-shell
+      document.querySelectorAll('.input-shell input[type="password"]').forEach(input => {
+        input.parentElement.appendChild(makeToggle(input));
+      });
+
+      // Attach to all password inputs inside .modal-pwd-wrap
+      document.querySelectorAll('.modal-pwd-wrap input[type="password"]').forEach(input => {
+        input.parentElement.appendChild(makeToggle(input));
+      });
+    })();
+
+  </script>
+</body>
+</html>

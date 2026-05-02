@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Belissima | Service Providers</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f8f3f6;
+      --text:#181114;
+      --muted:#6a5760;
+      --brand:#8a2347;
+      --brand-dark:#661731;
+      --soft:#efadc5;
+      --soft-2:#f8d0dd;
+      --border:rgba(156,62,92,0.18);
+      --content-width:min(100%,1300px);
+      --gutter:clamp(16px,3vw,40px);
+      --shadow:0 12px 32px rgba(111, 29, 57, 0.12);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:"Chivo",sans-serif;color:var(--text);background:var(--bg);line-height:1.4;}
+    
+    /* REMOVE ALL UNDERLINES */
+    a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    /* TOPBAR — matches become_provider.html exactly */
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      pointer-events: auto;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease, top 0.25s ease;
+    }
+    #topbar.scrolled { top: 14px; }
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 26px;
+      position: relative;
+      z-index: 10000;
+      background: transparent;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
+    }
+    #topbar.scrolled .topbar__inner {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+    /* Back button — matches become_provider .back-btn */
+    .back-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-family: "Chivo", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back-btn:hover { background: var(--brand-dark); }
+    /* Logo */
+    .logo img { height: 97px; width: auto; }
+    /* Nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+    .nav__link,
+    .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav__link {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    /* Active pill — subtle tint, matches become_provider */
+    .nav__link--active {
+      background: rgba(138, 35, 71, 0.12);
+      border-color: rgba(138, 35, 71, 0.35);
+    }
+    .nav__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav__icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .nav svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* HERO SECTION — half height */
+    .hero{
+      position:relative;
+      overflow:hidden;
+      min-height:50vh;
+      background:
+        linear-gradient(90deg, rgba(241, 233, 236, 0.96) 0%, rgba(255, 248, 250, 0.82) 38%, rgba(255, 248, 250, 0.08) 72%),
+        url("https://esmalteriacapricho.com.br/assets/img/esmaltaria-bg.jpg") center / cover no-repeat;
+      background-size:cover;
+      background-position:right center;
+      background-repeat:no-repeat;
+      padding:20px var(--gutter) 52px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:120px;
+      background:linear-gradient(to bottom, rgba(248,243,246,0) 0%, rgba(248,243,246,0.95) 70%, rgba(248,243,246,1) 100%);
+      pointer-events:none;
+      z-index:2;
+    }
+    .hero__overlay{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      background:linear-gradient(90deg, rgba(248,243,246,0.96) 0%, rgba(248,243,246,0.88) 38%, rgba(248,243,246,0.45) 65%, rgba(248,243,246,0.05) 100%);
+    }
+    .hero__inner{
+      width:var(--content-width);
+      margin:0 auto;
+      padding-top:110px;
+      position:relative;
+      z-index:3;
+    }
+    .hero__glass{
+      max-width:620px;
+      padding:clamp(24px, 4vw, 38px);
+      border-radius:28px;
+      background:rgba(255,255,255,0.34);
+      border:1px solid rgba(255,255,255,0.45);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:0 18px 45px rgba(138,35,71,0.14), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .hero__eyebrow{
+      font-family:"Cinzel",serif;
+      font-size:clamp(0.7rem, 0.6rem + 0.3vw, 0.9rem);
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      margin:0 0 10px;
+      color:var(--brand-dark);
+    }
+    .hero__title{
+      margin:0;
+      line-height:0.95;
+      text-transform:uppercase;
+    }
+    .hero__title-top{
+      display:block;
+      font-family:"Cinzel",serif;
+      font-size:clamp(2rem, 1.3rem + 2vw, 3.5rem);
+      font-weight:600;
+    }
+    .hero__title-mid{
+      display:block;
+      font-family:"Dancing Script", cursive;
+      font-size:clamp(1.9rem, 1.25rem + 1.8vw, 3rem);
+      font-weight:700;
+      text-transform:none;
+      color:var(--brand);
+    }
+    .hero__count{
+      margin-top:12px;
+      font-size:0.9rem;
+      color:var(--brand-dark);
+      font-weight:500;
+    }
+
+    /* MAIN */
+    .main{ width:var(--content-width); margin:0 auto; padding:20px var(--gutter) 80px; }
+
+    /* FILTERS */
+    .filters{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:28px;
+      padding-bottom:20px;
+      border-bottom:1px solid var(--border);
+    }
+    .filters__label{
+      font-family:'Cinzel',serif;
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+      margin-right:4px;
+      white-space:nowrap;
+    }
+    .filter-pill{
+      padding:7px 14px;
+      border-radius:999px;
+      border:1.5px solid var(--border);
+      background:white;
+      font-family:'DM Sans',sans-serif;
+      font-size:13px;
+      font-weight:600;
+      color:var(--brand-dark);
+      transition:all .15s;
+      cursor:pointer;
+    }
+    .filter-pill:hover{ background:var(--soft-2); border-color:var(--brand); }
+    .filter-pill.active{ background:var(--brand-dark); color:white; border-color:var(--brand-dark); }
+    .results-count{
+      margin-left:auto;
+      font-family:'Cinzel',serif;
+      font-size:13px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    /* ROW CARDS */
+    .cards-list{ display:flex; flex-direction:column; gap:16px; }
+    .row-card{
+      display:grid;
+      grid-template-columns:160px 2fr 1.4fr 1fr;
+      align-items:center;
+      gap:20px;
+      background:rgba(255,255,255,0.92);
+      border-radius:20px;
+      border:1px solid rgba(156,62,92,0.12);
+      padding:18px 24px 18px 18px;
+      transition:box-shadow .2s, transform .15s, border-color .2s;
+      cursor:pointer;
+      box-shadow:0 2px 8px rgba(0,0,0,0.02);
+    }
+    .row-card:hover{
+      box-shadow:0 12px 28px rgba(102,23,49,0.1);
+      border-color:rgba(138,35,71,0.3);
+      transform:translateY(-2px);
+      background:rgba(255,255,255,0.98);
+    }
+    .row-card__photo{
+      width:140px;
+      height:110px;
+      border-radius:16px;
+      overflow:hidden;
+      background:#e8d4db;
+      flex-shrink:0;
+    }
+    .row-card__photo img{
+      width:100%; height:100%;
+      object-fit:cover;
+      transition:transform .3s;
+    }
+    .row-card:hover .row-card__photo img{ transform:scale(1.04); }
+    .row-card__name{ 
+      font-size:1.1rem; 
+      font-weight:800; 
+      color:#1a1a1a; 
+      margin-bottom:6px;
+      letter-spacing:-0.2px;
+    }
+    .row-card__address{ font-size:.85rem; color:var(--muted); margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+    .row-card__phone{ font-size:.83rem; color:var(--muted); margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+    .row-card__hours{ font-size:.78rem; color:var(--muted); margin-top:4px; display:flex; align-items:center; gap:4px; }
+    .row-card__tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
+      margin-top:4px;
+    }
+    .rtag{
+      font-size:.70rem;
+      padding:4px 12px;
+      border-radius:30px;
+      background:rgba(138,35,71,0.08);
+      color:var(--brand-dark);
+      font-family:'DM Sans',sans-serif;
+      font-weight:600;
+      border:1px solid rgba(138,35,71,0.2);
+      white-space:nowrap;
+      letter-spacing:0.2px;
+    }
+    .row-card__worktime{ 
+      font-size:.78rem; 
+      color:var(--brand-dark); 
+      margin-top:6px;
+      background:rgba(239,173,197,0.2);
+      display:inline-block;
+      padding:3px 10px;
+      border-radius:20px;
+    }
+    .row-card__right{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:8px;
+    }
+    .row-card__price{
+      font-family:'Cinzel',serif;
+      font-size:1.1rem;
+      font-weight:800;
+      color:var(--brand-dark);
+      background:rgba(138,35,71,0.06);
+      padding:4px 12px;
+      border-radius:40px;
+    }
+    .row-card__pay{
+      font-size:.72rem;
+      color:var(--muted);
+      text-align:right;
+      background:rgba(106,87,96,0.05);
+      padding:3px 10px;
+      border-radius:20px;
+    }
+    .row-card__parish{
+      font-size:.68rem;
+      padding:4px 12px;
+      border-radius:30px;
+      background:rgba(138,35,71,0.12);
+      color:var(--brand-dark);
+      font-weight:700;
+      font-family:'Cinzel',serif;
+    }
+    .row-card__book{
+      display:inline-block;
+      background:var(--brand-dark);
+      color:white;
+      font-size:.78rem;
+      font-weight:700;
+      padding:7px 18px;
+      border-radius:999px;
+      transition:background .18s;
+      letter-spacing:0.3px;
+    }
+    .row-card:hover .row-card__book{ background:var(--brand); }
+    .loading-state, .error-state{ text-align:center; padding:60px; color:var(--muted); font-family:'Cinzel',serif; }
+    .error-state{ color:var(--brand); }
+
+    /* FOOTER */
+    .footer{
+      margin-top:clamp(36px,6vw,80px);
+      background:var(--brand-dark);
+      color:#fff6fa;
+      padding:36px var(--gutter);
+    }
+    .footer__inner{
+      width:var(--content-width);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1.1fr repeat(3,1fr);
+      gap:28px;
+    }
+    .footer h3{ margin:0 0 12px; font-size:1rem; font-family:"Cinzel",serif; }
+    .footer p,.footer li{ margin:0; color:rgba(255,246,250,.85); font-size:.92rem; }
+    .footer ul{ margin:0; padding:0; list-style:none; display:grid; gap:8px; }
+    .footer a{ color:rgba(255,246,250,.85); transition:color .15s; text-decoration:none; }
+    .footer a:hover{ color:white; text-decoration:none; }
+
+    /* SEARCH BAR */
+    .search-wrap{
+      display:flex; align-items:center;
+      background:linear-gradient(135deg,rgba(179,85,108,1.0) 0%,rgba(155,60,88,1.0) 100%);
+      border:1.5px solid rgba(255,255,255,0.40);
+      border-radius:30px; padding:10px 20px; gap:10px;
+      max-width:420px; flex:1;
+      cursor:text;
+      margin-bottom:24px;
+    }
+    .search-wrap svg{ width:16px; height:16px; stroke:white; fill:none; stroke-width:2; opacity:.85; }
+    .search-wrap input{
+      flex:1; border:none; background:none; outline:none;
+      font-family:'DM Sans',sans-serif; font-size:14px;
+      color:white; cursor:pointer;
+    }
+    .search-wrap input::placeholder{ color:rgba(255,255,255,0.85); }
+
+    /* PAGINATION */
+    .pagination{
+      display:flex; align-items:center; justify-content:center;
+      gap:8px; margin-top:36px; flex-wrap:wrap;
+    }
+    .page-btn{
+      width:38px; height:38px; border-radius:50%;
+      border:1.5px solid var(--border); background:white;
+      font-family:'Cinzel',serif; font-size:13px; font-weight:700;
+      color:var(--brand-dark); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all .15s;
+    }
+    .page-btn.active{ background:var(--brand-dark); color:white; border-color:var(--brand-dark); }
+    .page-btn:disabled{ opacity:.35; cursor:not-allowed; }
+
+    @media(max-width:960px){
+      .row-card{ grid-template-columns:120px 1fr 1fr; }
+      .row-card__right{ grid-column:2/4; flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:flex-start; gap:8px; }
+      .footer__inner{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:640px){
+      .row-card{ grid-template-columns:1fr; gap:12px; }
+      .row-card__photo{ width:100%; height:160px; }
+      .nav{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:100%; gap:6px; }
+      .topbar__inner{ flex-direction:column; align-items:stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR — matches become_provider.html exactly -->
+  <div id="topbar">
+    <div class="topbar__inner">
+      <a href="dashboard.html" class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M19 12H5"></path>
+          <path d="m12 19-7-7 7-7"></path>
+        </svg>
+        Back
+      </a>
+      <div class="logo">
+        <img src="belissima-logo.png" alt="Belissima" />
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="Allura.html" class="nav__link">Allura</a>
+        <a href="dashboard.html#services" class="nav__link nav__link--active">Services</a>
+        <a href="about_us.html" class="nav__link">About Us</a>
+        <a href="become_provider.html" class="nav__link">Become a Provider</a>
+        <a href="favorites.html" class="nav__icon" aria-label="Favorites">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z"></path>
+          </svg>
+        </a>
+        <a href="account.html" class="nav__icon" aria-label="Profile">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"></path>
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- BANNER with glass effect -->
+  <div class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__inner">
+      <div class="hero__glass">
+        <p class="hero__eyebrow" id="heroEyebrow">Beauty Services · Kingston & Portmore</p>
+        <h1 class="hero__title">
+          <span class="hero__title-top" id="heroTitle">Service Providers</span>
+          <span class="hero__title-mid" id="heroSubtitle">discover excellence</span>
+        </h1>
+        <p class="hero__count" id="heroCount">Loading providers...</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="main">
+    <div class="search-wrap" onclick="window.location.href='Allura.html'">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search providers... or ask Allura" readonly />
+    </div>
+
+    <!-- DYNAMIC FILTERS -->
+    <div class="filters" id="filtersBar">
+      <span class="filters__label">Filter by:</span>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <div class="cards-list" id="cards">
+      <div class="loading-state">✨ Loading beauty providers... ✨</div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <section>
+        <h3>Belissima</h3>
+        <p>Your one-stop hub for beauty services. Discover hairstylists, nail technicians, make-up artists, and wax
+          specialists near you.</p>
+      </section>
+      <section>
+        <h3>Services</h3>
+        <ul>
+          <li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li>
+          <li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li>
+          <li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li>
+          <li><a href="services_page.html?type=nail-artists">Nail Artists</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="dashboard.html">Home</a></li>
+          <li><a href="about_us.html">About Us</a></li>
+          <li><a href="become_provider.html">Become a Provider</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Support/Contact</h3>
+        <ul>
+          <li><a href="mailto:belissima3901@yahoo.com">belissima3901@yahoo.com</a></li>
+        </ul>
+      </section>
+    </div>
+  </footer>
+
+  <script>
+    // Service mapping
+    const SERVICE_CONFIG = {
+      'nail-artists': { apiType: 'NAIL ARTIST', displayName: 'Nail Artists', eyebrow: 'Nail Services · Kingston & Portmore', sub: 'mani & pedi' },
+      'hair-stylists': { apiType: 'HAIRSTYLIST', displayName: 'Hairstylists', eyebrow: 'Hair Services · Kingston & Portmore', sub: 'slayed & laid' },
+      'makeup-artists': { apiType: 'MAKE-UP ARTIST', displayName: 'Makeup Artists', eyebrow: 'Makeup Services · Kingston & Portmore', sub: 'flawless beat' },
+      'wax-specialists': { apiType: 'WAX SPECIALIST', displayName: 'Wax Specialists', eyebrow: 'Waxing Services · Kingston & Portmore', sub: 'get smooth' }
+    };
+    const urlParams = new URLSearchParams(window.location.search);
+    let serviceType = urlParams.get('type');
+    if (!serviceType || !SERVICE_CONFIG[serviceType]) serviceType = 'hair-stylists';
+    const config = SERVICE_CONFIG[serviceType];
+    document.title = `${config.displayName} — Belissima`;
+    document.getElementById('heroEyebrow').textContent = config.eyebrow;
+    document.getElementById('heroTitle').textContent = config.displayName;
+    document.getElementById('heroSubtitle').textContent = config.sub;
+
+    let allProviders = [];
+    let filteredProviders = [];
+    let activeFilters = new Set();
+    let currentPage = 1;
+    const ITEMS_PER_PAGE = 10;
+
+    // Helper: check if a value means "YES" (handles "Yes", "YES", "yes", 1, true)
+    function isYes(value) {
+      if (value === 1 || value === true) return true;
+      if (typeof value === 'string') {
+        const lower = value.trim().toLowerCase();
+        return lower.startsWith('yes') || lower === 'true' || lower === 'y';
+      }
+      return false;
+      }
+
+    // Helper: check if a value means "NO" (handles "No", "NO", "no", 0, false)
+    function isNo(value) {
+      if (value === 0 || value === false) return true;
+      if (typeof value === 'string') {
+        const lower = value.toLowerCase();
+        return lower === 'no' || lower === 'false' || lower === 'n';
+      }
+      return false;
+    }
+
+    // Extract tags from provider data (handles both number flags AND string "Yes"/"No")
+    function getProviderTags(provider) {
+      const tags = [];
+      
+      // Kid Friendly - check for "Yes", "YES", "yes", 1, true
+      if (provider.kid_friendly !== undefined && isYes(provider.kid_friendly)) {
+        tags.push({key:'kid', label:'👶 Kid Friendly'});
+      }
+      
+      // Walk-ins Allowed
+      if (provider.walkins_allowed !== undefined && isYes(provider.walkins_allowed)) {
+        tags.push({key:'walkins', label:'🚶 Walk-ins'});
+      }
+      
+      // Mobile Service
+      if (provider.mobile_service !== undefined && isYes(provider.mobile_service)) {
+        tags.push({key:'mobile', label:'🚗 Mobile'});
+      }
+      
+      // Disabled Friendly / Accessible
+      if (provider.disabled_friendly !== undefined && isYes(provider.disabled_friendly)) {
+        tags.push({key:'accessible', label:'♿ Accessible'});
+      }
+      
+      // Board Certified
+      if (provider.board_certified !== undefined && isYes(provider.board_certified)) {
+        tags.push({key:'certified', label:'✅ Certified'});
+      }
+
+      // Deposit required
+      if (provider.deposit_required !== undefined && isYes(provider.deposit_required)) {
+        tags.push({key:'deposit', label:'💰 Deposit Req.'});
+      }
+
+      
+      // Parish filters
+      if (provider.parish === 'Kingston') tags.push({key:'kingston', label:'Kingston'});
+      if (provider.parish === 'Portmore') tags.push({key:'portmore', label:'Portmore'});
+      
+      // Payment methods - handle various formats
+      let payments = [];
+      if (provider.payment_methods) {
+        if (Array.isArray(provider.payment_methods)) {
+          payments = provider.payment_methods.map(p => String(p).trim().toLowerCase());
+        } else if (typeof provider.payment_methods === 'string') {
+          payments = provider.payment_methods
+            .split(',')
+            .map(p => p.trim().toLowerCase());
+        }
+      }
+
+      if (payments.some(p => p.includes('card'))) {
+        tags.push({ key: 'card', label: '💳 Card' });
+      }
+      if (payments.some(p => p.includes('transfer') || p.includes('bank'))) {
+        tags.push({ key: 'transfer', label: '🏦 Bank Transfer' });
+      }
+      if (payments.some(p => p.includes('cash'))) {
+        tags.push({ key: 'cash', label: '💵 Cash' });
+      }
+      
+      return tags;
+    }
+
+    // Build set of all tag keys from providers
+    function buildGlobalTagSet(providers) {
+      const set = new Set();
+      for (const prov of providers) {
+        const tags = getProviderTags(prov);
+        for (const t of tags) set.add(t.key);
+      }
+      // Include defaults for UI consistency
+      ['kingston','portmore','walkins','mobile','kid','accessible','certified','deposit','card','transfer','cash'].forEach(k => set.add(k));
+      return set;
+    }
+
+    // Render filter pills
+    function renderFilterPills(availableSet) {
+      const container = document.getElementById('filtersBar');
+      if (!container) return;
+      const labelSpan = container.querySelector('.filters__label');
+      const resultsSpan = container.querySelector('.results-count');
+      if (!labelSpan || !resultsSpan) return;
+      const existingPills = container.querySelectorAll('.filter-pill');
+      existingPills.forEach(p => p.remove());
+      
+      const order = ['kingston','portmore','walkins','mobile','kid','accessible','certified','deposit','card','transfer','cash'];
+      const orderedKeys = order.filter(k => availableSet.has(k));
+      for (let key of orderedKeys) {
+        let display = key;
+        switch(key){
+          case 'kingston': display='Kingston'; break;
+          case 'portmore': display='Portmore'; break;
+          case 'walkins': display='Walk-ins'; break;
+          case 'mobile': display='Mobile'; break;
+          case 'kid': display='Kid Friendly'; break;
+          case 'accessible': display='Accessible'; break;
+          case 'certified': display='Certified'; break;
+          case 'deposit': display='Deposit Req.'; break;
+          case 'card': display='Card'; break;
+          case 'transfer': display='Bank Transfer'; break;
+          case 'cash': display='Cash'; break;
+          default: display=key.charAt(0).toUpperCase()+key.slice(1);
+        }
+        const btn = document.createElement('button');
+        btn.className = `filter-pill ${activeFilters.has(key) ? 'active' : ''}`;
+        btn.setAttribute('data-filter', key);
+        btn.textContent = display;
+        btn.onclick = () => toggleFilter(btn, key);
+        container.insertBefore(btn, resultsSpan);
+      }
+    }
+
+    function matchesFilters(provider) {
+      const providerTagKeys = getProviderTags(provider).map(t => t.key);
+      for (let filter of activeFilters) {
+        if (!providerTagKeys.includes(filter)) return false;
+      }
+      return true;
+    }
+
+    function applyFilters() {
+      filteredProviders = allProviders.filter(p => matchesFilters(p));
+      currentPage = 1;
+      renderCards();
+    }
+
+    function toggleFilter(btn, key) {
+      if (activeFilters.has(key)) {
+        activeFilters.delete(key);
+        btn.classList.remove('active');
+      } else {
+        activeFilters.add(key);
+        btn.classList.add('active');
+      }
+      applyFilters();
+    }
+
+    const USD_TO_JMD = 157; // 1 USD ≈ J$157
+
+    function formatPrice(price) {
+      if (price === null || price === undefined || price === '' || price === 'NA') return 'Price on request';
+      if (price === 'Price on request') return price;
+
+      const str = String(price).trim();
+
+      // Already a plain number from DB (e.g. 65 or 7500)
+      if (typeof price === 'number' || /^\d[\d.]*$/.test(str)) {
+        const num = parseFloat(str);
+        if (isNaN(num)) return 'Price on request';
+        // Values under 500 were stored from a "USD" price in the JSON populator
+        if (num < 500) {
+          const jmd = Math.round(num * USD_TO_JMD / 100) * 100; // round to nearest 100
+          return `J$${jmd.toLocaleString()} up`;
+        }
+        return `J$${Math.round(num).toLocaleString()} up`;
+      }
+
+      // Text string — check for explicit USD marker
+      if (/usd/i.test(str)) {
+        const match = str.match(/[\d,]+(\.\d+)?/);
+        if (match) {
+          const usdAmount = parseFloat(match[0].replace(/,/g, ''));
+          if (!isNaN(usdAmount)) {
+            const jmd = Math.round(usdAmount * USD_TO_JMD / 100) * 100;
+            return `J$${jmd.toLocaleString()} up`;
+          }
+        }
+      }
+
+      // J$ or plain $ string (e.g. "$7,500 up", "J$2,000 up")
+      const match = str.match(/[\d,]+(\.\d+)?/);
+      if (match) {
+        const num = parseFloat(match[0].replace(/,/g, ''));
+        if (!isNaN(num)) {
+          if (num < 500) {
+            const jmd = Math.round(num * USD_TO_JMD / 100) * 100;
+            return `J$${jmd.toLocaleString()} up`;
+          }
+          return `J$${Math.round(num).toLocaleString()} up`;
+        }
+      }
+
+      return 'Price on request';
+    }
+
+    function formatTime(timeStr) {
+      if (timeStr === null || timeStr === undefined || timeStr === '') return '';
+      // Handle integer minutes from DB (e.g. 120 → "2 hrs")
+      if (typeof timeStr === 'number' || /^\d+$/.test(String(timeStr).trim())) {
+        const totalMins = parseInt(timeStr);
+        if (isNaN(totalMins)) return String(timeStr);
+        const hours = Math.floor(totalMins / 60);
+        const mins = totalMins % 60;
+        if (hours === 0) return `${mins} min`;
+        if (mins === 0) return `${hours} hr${hours > 1 ? 's' : ''}`;
+        return `${hours} hr ${mins} min`;
+      }
+      // Handle text strings like "2 hours and 30 minutes" or "1 hour"
+      const hoursMatch = timeStr.match(/(\d+)\s*hours?/i);
+      const minsMatch = timeStr.match(/(\d+)\s*minutes?/i);
+      if (hoursMatch || minsMatch) {
+        const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+        const mins = minsMatch ? parseInt(minsMatch[1]) : 0;
+        if (hours === 0) return `${mins} min`;
+        if (mins === 0) return `${hours} hr${hours > 1 ? 's' : ''}`;
+        return `${hours} hr ${mins} min`;
+      }
+      return String(timeStr);
+    }
+
+    function escapeHtml(str) {
+      if(!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cards');
+      if (!container) return;
+      if (filteredProviders.length === 0) {
+        container.innerHTML = '<div class="error-state">🌸 No providers found matching your filters. Try adjusting your search! 🌸</div>';
+        document.getElementById('results-count').textContent = '0 results';
+        const pagDiv = document.getElementById('pagination');
+        if(pagDiv) pagDiv.innerHTML='';
+        return;
+      }
+      const start = (currentPage-1)*ITEMS_PER_PAGE;
+      const pageItems = filteredProviders.slice(start, start+ITEMS_PER_PAGE);
+      container.innerHTML = pageItems.map(provider => {
+        const tags = getProviderTags(provider);
+        const tagsHtml = tags.length ? 
+          `<div class="row-card__tags">${tags.map(t => `<span class="rtag">${t.label}</span>`).join('')}</div>` : 
+          '<div class="row-card__tags"><span class="rtag">✨ No special tags</span></div>';
+        
+        // Format opening hours display
+        let hoursDisplay = '📅 By appointment';
+        if (provider.opening_hours && typeof provider.opening_hours === 'object') {
+          const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+          for (let day of days) {
+            if (provider.opening_hours[day] && provider.opening_hours[day].open) {
+              hoursDisplay = `🕐 ${day.charAt(0).toUpperCase() + day.slice(1)} ${provider.opening_hours[day].open}–${provider.opening_hours[day].close}`;
+              break;
+            }
+          }
+        }
+        
+        const paymentTags = tags.filter(t => ['card','transfer','cash'].includes(t.key)).map(t=>t.label).join(' · ');
+        const worktimeHtml = provider.average_worktime ? `<div class="row-card__worktime">⏱ Avg. ${formatTime(provider.average_worktime)}</div>` : '';
+        
+        return `
+          <a href="provider.html?id=${provider.businessID}" class="row-card" style="text-decoration:none;">
+            <div class="row-card__photo"><img
+              data-businessid="${provider.businessID}"
+              data-logo="${provider.logo_url || ''}"
+              data-name="${encodeURIComponent((provider.business_name || 'Provider').substring(0,12))}"
+              src="https://placehold.co/160x110/f8d0dd/661731?text=${encodeURIComponent((provider.business_name || 'Provider').substring(0,12))}"
+              alt="${provider.business_name}"/></div>
+            <div class="row-card__left">
+              <div class="row-card__name">${escapeHtml(provider.business_name || 'Beauty Provider')}</div>
+              <div class="row-card__address">📍 ${escapeHtml(provider.address || provider.parish || 'Jamaica')}</div>
+              <div class="row-card__phone">📞 ${provider.phone_number || 'Contact for number'}</div>
+              ${hoursDisplay}
+            </div>
+            <div class="row-card__mid">
+              ${tagsHtml}
+              ${worktimeHtml}
+            </div>
+            <div class="row-card__right">
+              <div class="row-card__price">${formatPrice(provider.starting_price)}</div>
+              <div class="row-card__pay">${paymentTags || '—'}</div>
+              <span class="row-card__parish">${provider.parish || 'Jamaica'}</span>
+              <span class="row-card__book">View →</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+
+      // Smart image fallback — try logo, then other provider photos, then placeholder
+      container.querySelectorAll('img[data-logo]').forEach(img => {
+        const logo = img.dataset.logo;
+        const name = decodeURIComponent(img.dataset.name);
+        const bid  = img.dataset.businessid;
+        const placeholder = `https://placehold.co/160x110/f8d0dd/661731?text=${encodeURIComponent(name)}`;
+        if (logo) {
+          img.onerror = async function() {
+            img.onerror = null;
+            try {
+              const res = await fetch(`/api/provider/${bid}/photos`);
+              const data = await res.json();
+              const urls = (data.photos || []).map(p => p.photo_url).filter(Boolean);
+              let tried = 0;
+              function tryNext() {
+                if (tried >= urls.length) { img.onerror = null; img.src = placeholder; return; }
+                const url = urls[tried++];
+                img.onerror = tryNext;
+                img.src = url;
+              }
+              tryNext();
+            } catch { img.src = placeholder; }
+          };
+          img.src = logo;
+        }
+      });
+
+      const total = filteredProviders.length;
+      const totalPages = Math.ceil(total/ITEMS_PER_PAGE);
+      document.getElementById('results-count').textContent = `${total} result${total!==1?'s':''}${totalPages>1?` · Page ${currentPage} of ${totalPages}`:''}`;
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      let pag = document.getElementById('pagination');
+      if(!pag) { pag = document.createElement('div'); pag.id='pagination'; pag.className='pagination'; document.querySelector('.main').appendChild(pag); }
+      if(totalPages<=1) { pag.innerHTML=''; return; }
+      let html = `<button class="page-btn arrow" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+      const delta=2;
+      let range=[];
+      for(let i=Math.max(1, currentPage-delta); i<=Math.min(totalPages, currentPage+delta); i++) range.push(i);
+      if(range[0]>1){ html+=`<button class="page-btn" onclick="goPage(1)">1</button>`; if(range[0]>2) html+=`<span style="padding:0 4px;">…</span>`; }
+      range.forEach(p=>{ html+=`<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`; });
+      if(range[range.length-1]<totalPages){ if(range[range.length-1]<totalPages-1) html+=`<span style="padding:0 4px;">…</span>`; html+=`<button class="page-btn" onclick="goPage(${totalPages})">${totalPages}</button>`; }
+      html+=`<button class="page-btn arrow" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+      pag.innerHTML=html;
+    }
+    window.goPage = function(p){
+      const totalPages = Math.ceil(filteredProviders.length/ITEMS_PER_PAGE);
+      if(p<1 || p>totalPages) return;
+      currentPage=p;
+      renderCards();
+      document.querySelector('.main').scrollIntoView({behavior:'smooth'});
+    };
+
+    async function loadProviders() {
+      const container = document.getElementById('cards');
+      container.innerHTML = '<div class="loading-state">✨ Loading beauty providers... ✨</div>';
+      try {
+        const res = await fetch(`/api/providers/all/${config.apiType}`);
+        const data = await res.json();
+        console.log('Providers loaded:', data.results?.length || 0);
+        
+        if(data.results && data.results.length){
+          allProviders = data.results;
+          filteredProviders = [...allProviders];
+          document.getElementById('heroCount').textContent = `${allProviders.length} provider${allProviders.length!==1?'s':''} listed`;
+          const tagSet = buildGlobalTagSet(allProviders);
+          renderFilterPills(tagSet);
+          renderCards();
+        } else {
+          container.innerHTML = '<div class="error-state">🌸 No providers found for this service type yet. Check back soon! 🌸</div>';
+          document.getElementById('heroCount').textContent = '0 providers';
+          const defaultSet = new Set(['kingston','portmore','walkins','mobile','kid','accessible','certified','card','transfer','cash']);
+          renderFilterPills(defaultSet);
+        }
+      } catch(err){
+        console.error('Error loading providers:', err);
+        container.innerHTML = '<div class="error-state">❌ Unable to load providers. Please try again later.</div>';
+        document.getElementById('heroCount').textContent = 'Error loading';
+        const defaultSet = new Set(['kingston','portmore','walkins','mobile','kid','accessible','certified','card','transfer','cash']);
+        renderFilterPills(defaultSet);
+      }
+    }
+
+    // scroll + auth
+    const topbar = document.getElementById('topbar');
+    window.addEventListener('scroll', () => topbar.classList.toggle('scrolled', window.scrollY > 80));
+    function checkAuth() {
+      const isLoggedIn = sessionStorage.getItem('belissimaLoggedIn') === 'true';
+      if (!isLoggedIn) window.location.href = 'index.html';
+    }
+
+    function setupAdminButton() {
+      const user = JSON.parse(sessionStorage.getItem('belissimaUser') || '{}');
+      const nav = document.querySelector('.nav');
+      if (user.role === 'admin' && nav) {
+        if (!document.querySelector('.requests-btn')) {
+          const requestsBtn = document.createElement('a');
+          requestsBtn.href = 'request_forms_admin.html';
+          requestsBtn.className = 'nav__link requests-btn';
+          requestsBtn.style.cssText = 'background:var(--brand);color:white;border:1px solid var(--brand-dark);';
+          requestsBtn.textContent = '📋 Requests';
+          const heartIcon = nav.querySelector('.nav__icon[aria-label="Favorites"]');
+          if (heartIcon) nav.insertBefore(requestsBtn, heartIcon);
+          else nav.appendChild(requestsBtn);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      setupAdminButton();
+      loadProviders();
+    });
+  </script>
+</body>
+</html>

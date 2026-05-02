@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Belissima · Become a Provider</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display+SC:wght@400;700&family=Reem+Kufi+Fun:wght@500;600&display=swap"
+    rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #FFE9F0;
+      --panel: #ffffff;
+      --text: #181114;
+      --muted: #6a5760;
+      --brand: #8a2347;
+      --brand-dark: #661731;
+      --soft: #efadc5;
+      --soft-2: #f8d0dd;
+      --border: #9c3e5c;
+      --shadow: 0 12px 32px rgba(111, 29, 57, 0.12);
+      --radius: 24px;
+      --radius-sm: 18px;
+      --content-width: min(100%, 1450px);
+      --gutter: clamp(16px, 3vw, 32px);
+      --gold: #9a1534;
+      --gold-light: #9a3a50;
+      --coral: #F1A2B7;
+      --text-dim: #6b3a46;
+      --text-muted: rgba(0,0,0,0.40);
+      --error: #c0392b;
+      --success: #27ae60;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Chivo", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.4;
+    }
+
+    img { display: block; width: 100%; height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    /* ===== TOPBAR ===== */
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      pointer-events: auto;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease, top 0.25s ease;
+    }
+
+    #topbar.scrolled {
+      top: 14px;
+    }
+
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 26px;
+      position: relative;
+      z-index: 10000;
+      background: transparent;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
+    }
+
+    #topbar.scrolled .topbar__inner {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo img {
+      height: 97px;
+      width: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+
+    .nav__link,
+    .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav__link {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .nav__link--active {
+      background: rgba(138, 35, 71, 0.12);
+      border-color: rgba(138, 35, 71, 0.35);
+    }
+
+    .nav__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .back-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-family: "Chivo", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back-btn:hover { background: var(--brand-dark); }
+
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      min-height: 85vh;
+      padding: 20px var(--gutter) 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(90deg, rgba(241, 233, 236, 0.96) 0%, rgba(255, 248, 250, 0.82) 38%, rgba(255, 248, 250, 0.08) 72%),
+        url("https://esmalteriacapricho.com.br/assets/img/esmaltaria-bg.jpg") center / cover no-repeat;
+      background-size: cover;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 76% 32%, rgba(255,255,255,0.74) 0 10%, transparent 11%),
+        radial-gradient(circle at 70% 44%, rgba(255,255,255,0.55) 0 12%, transparent 13%),
+        radial-gradient(circle at 84% 58%, rgba(255,255,255,0.62) 0 9%, transparent 10%),
+        radial-gradient(circle at 73% 70%, rgba(255,255,255,0.52) 0 11%, transparent 12%),
+        radial-gradient(circle at 88% 28%, rgba(255,255,255,0.5) 0 8%, transparent 9%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 150px;
+      background: linear-gradient(to bottom, rgba(248, 243, 246, 0) 0%, rgba(248, 243, 246, 0.95) 70%, rgba(248, 243, 246, 1) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(90deg, rgba(248,243,246,0.96) 0%, rgba(248,243,246,0.88) 38%, rgba(248,243,246,0.45) 65%, rgba(248,243,246,0.05) 100%);
+    }
+    .hero__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      padding-top: 190px;
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      min-height: 70vh;
+    }
+    .hero__glass {
+      max-width: 580px;
+      padding: clamp(24px, 4vw, 42px);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 45px rgba(138, 35, 71, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    .hero__eyebrow {
+      font-family: "Reem Kufi Fun", sans-serif;
+      font-size: clamp(0.72rem, 0.58rem + 0.35vw, 0.94rem);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin: 0 0 14px;
+      color: var(--brand-dark);
+    }
+    .hero__title { margin: 0; line-height: 0.95; text-transform: uppercase; letter-spacing: 0.03em; }
+    .hero__title-top { display: block; font-family: "Cinzel", serif; font-size: clamp(2.2rem, 1.4rem + 2.2vw, 4.2rem); font-weight: 600; }
+    .hero__title-mid { display: block; font-family: "Dancing Script", cursive; font-size: clamp(2.1rem, 1.35rem + 2vw, 3.65rem); font-weight: 700; text-transform: none; margin: 0.08em 0; color: var(--brand); }
+    .hero__title-bottom { display: block; font-family: "Cinzel", serif; font-size: clamp(2.4rem, 1.55rem + 2.6vw, 4.5rem); font-weight: 700; }
+    .hero__copy { margin: 18px 0 0; max-width: 44ch; font-size: clamp(0.98rem, 0.9rem + 0.25vw, 1.1rem); letter-spacing: 0.01em; color: var(--brand-dark); }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .form-card {
+      background: var(--panel);
+      border: 1px solid rgba(115,40,57,0.12);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 22px 91px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 6px; }
+    .section-desc { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 28px; line-height: 1.5; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .span-2 { grid-column: span 2; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
+    .field label .req { color: var(--gold); margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      background: rgba(217,217,217,0.25);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+    .field .hint { font-size: 0.7rem; color: var(--text-muted); line-height: 1.4; }
+    .field .err { font-size: 0.7rem; color: var(--error); display: none; }
+    .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--error); }
+    .field.invalid .err { display: block; }
+
+    .check-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .check-pill { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border); background: rgba(217,217,217,0.25); cursor: pointer; font-size: 0.8rem; color: var(--text-dim); transition: all 0.15s; user-select: none; }
+    .check-pill input { display: none; }
+    .check-pill:has(input:checked) { border-color: var(--gold); background: rgba(115,40,57,0.08); color: var(--gold); }
+
+    .hours-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .hour-row { display: grid; grid-template-columns: 90px 1fr 1fr 80px; gap: 8px; align-items: center; }
+    .day-label { font-size: 0.78rem; color: var(--text-dim); font-weight: 500; }
+    .hour-row input[type="time"] { background: rgba(217,217,217,0.25); border: 1px solid rgba(115,40,57,0.15); border-radius: 8px; padding: 8px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; width: 100%; }
+    .closed-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); cursor: pointer; }
+    .closed-toggle input { accent-color: var(--gold); }
+
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-pill { display: flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border); background: rgba(217,217,217,0.25); cursor: pointer; font-size: 0.82rem; color: var(--text-dim); user-select: none; }
+    .radio-pill input { display: none; }
+    .radio-pill:has(input:checked) { border-color: var(--gold); background: rgba(115,40,57,0.08); color: var(--gold); }
+
+    .form-nav { display: flex; justify-content: space-between; margin-top: 32px; gap: 12px; }
+    .btn { font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; padding: 12px 28px; border-radius: 12px; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: #732839; color: white; flex: 1; justify-content: center; }
+    .btn-primary:hover { background: #5a1e2a; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #FFE9F0; color: #732839; border: 1px solid rgba(115,40,57,0.25); }
+    .btn-secondary:hover { border-color: #732839; background: #F1A2B7; color: white; }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+    .steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 20px; flex-wrap: wrap; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .step-dot { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border); background: var(--panel); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+    .step.active .step-dot { border-color: var(--gold); background: var(--gold); color: white; }
+    .step.done .step-dot { border-color: var(--success); background: var(--success); color: white; }
+    .step-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+    .step.active .step-label { color: var(--gold); }
+    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 8px; margin-bottom: 22px; min-width: 30px; }
+    .step-line.done { background: var(--success); }
+
+    .success-screen { text-align: center; padding: 40px 20px; }
+    .success-icon { font-size: 4rem; margin-bottom: 20px; }
+    .success-screen h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #732839; margin-bottom: 12px; }
+
+    #depositDetails { display: none; }
+    #depositDetails.visible { display: grid; }
+
+    /* Photo Upload Styles */
+    .photo-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      background: rgba(217,217,217,0.15);
+      transition: all 0.2s;
+      cursor: pointer;
+      text-align: center;
+    }
+    .photo-upload-area:hover { border-color: var(--gold); background: rgba(217,217,217,0.25); }
+    .photo-upload-label { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+    .photo-upload-label span:first-child { font-size: 2rem; }
+    .photo-upload-label .upload-text { font-size: 0.8rem; font-weight: 500; color: var(--gold); }
+    .photo-upload-label .upload-hint { font-size: 0.7rem; color: var(--text-muted); }
+    .photo-preview { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; border: 2px solid var(--soft); }
+    .remove-photo { background: rgba(192,57,43,0.8); color: white; border: none; border-radius: 20px; padding: 4px 10px; font-size: 0.7rem; cursor: pointer; margin-left: 8px; }
+    .landscape-note { font-size: 0.7rem; color: var(--gold); background: rgba(154,21,52,0.08); display: inline-block; padding: 4px 10px; border-radius: 20px; margin-top: 6px; }
+
+    .footer {
+      margin-top: clamp(36px, 6vw, 80px);
+      background: var(--brand-dark);
+      color: #fff6fa;
+      padding: 36px var(--gutter);
+    }
+    .footer__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, 1fr);
+      gap: 28px;
+    }
+    .footer h3 { margin: 0 0 12px; font-size: 1rem; font-family: "Cinzel", serif; }
+    .footer p, .footer li { margin: 0; color: rgba(255, 246, 250, 0.85); font-size: 0.92rem; }
+    .footer ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+
+    @media (max-width: 960px) { .footer__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 760px) {
+      .hero__inner { padding-top: 170px; min-height: 72vh; }
+      .hero__glass { max-width: 100%; border-radius: 24px; padding: 24px; }
+      .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+      .nav__link { width: 100%; }
+      .topbar__inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .span-2 { grid-column: span 1; }
+      .form-card { padding: 24px 18px; }
+      .hour-row { grid-template-columns: 70px 1fr 1fr; }
+      .hour-row .closed-toggle { grid-column: span 3; }
+      .footer__inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="topbar">
+    <div class="topbar__inner">
+      <a href="dashboard.html" class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M19 12H5"></path>
+          <path d="m12 19-7-7 7-7"></path>
+        </svg>
+        Back
+      </a>
+      <div class="logo"><img src="belissima-logo.png" alt="Belissima" /></div>
+      <nav class="nav" aria-label="Primary">
+        <a href="Allura.html" class="nav__link">Allura</a>
+        <a href="dashboard.html#services" class="nav__link">Services</a>
+        <a href="about_us.html" class="nav__link">About Us</a>
+        <a href="become_provider.html" class="nav__link nav__link--active">Become a Provider</a>
+        <a href="favorites.html" class="nav__icon" aria-label="Favorites">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z"></path></svg>
+        </a>
+        <a href="account.html" class="nav__icon" aria-label="Profile">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"></path></svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="hero-banner">
+    <div class="hero__overlay"></div>
+    <div class="hero__inner">
+      <div class="hero__glass">
+        <p class="hero__eyebrow">✦ Join the platform ✦</p>
+        <h1 class="hero__title">
+          <span class="hero__title-top">Become a</span>
+          <span class="hero__title-mid">Belissima</span>
+          <span class="hero__title-bottom">provider</span>
+        </h1>
+        <p class="hero__copy">Fill out the form below and our team will review your application. Approved providers are listed on the platform and matched with clients.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="steps" id="stepsBar">
+      <div class="step active" id="step-ind-1"><div class="step-dot">1</div><div class="step-label">Business</div></div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" id="step-ind-2"><div class="step-dot">2</div><div class="step-label">Services</div></div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" id="step-ind-3"><div class="step-dot">3</div><div class="step-label">Hours</div></div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step" id="step-ind-4"><div class="step-dot">4</div><div class="step-label">Review</div></div>
+    </div>
+
+    <div class="form-card">
+      <!-- STEP 1: Business Info with Photo Uploads (ALL PHOTOS REQUIRED) -->
+      <div class="step-panel active" id="panel-1">
+        <div class="section-title">Business information</div>
+        <div class="section-desc">Tell us about your business and how clients can reach you.</div>
+        <div class="form-grid">
+          <div class="field span-2"><label>Name of business <span class="req">*</span></label><input type="text" id="business_name" placeholder="e.g. Glam by Kezia"/><span class="err">Business name is required</span></div>
+          <div class="field"><label>Service type <span class="req">*</span></label><select id="service_type"><option value="">Select a service...</option><option value="NAIL ARTIST">💅 Nail Artist</option><option value="MAKE-UP ARTIST">💄 Makeup Artist</option><option value="HAIRSTYLIST">💇 Hairstylist</option><option value="WAX SPECIALIST">✨ Wax Specialist</option></select><span class="err">Please select a service type</span></div>
+          <div class="field"><label>Parish <span class="req">*</span></label><select id="parish"><option value="">Select parish...</option><option value="Kingston">Kingston</option><option value="Portmore">Portmore</option></select><span class="err">Please select a parish</span></div>
+          <div class="field span-2"><label>Business address</label><input type="text" id="address" placeholder="e.g. 12 Constant Spring Rd, Kingston"/></div>
+          <div class="field"><label>Phone number <span class="req">*</span></label><input type="tel" id="phone_number" placeholder="876-XXX-XXXX"/><span class="err">Valid phone number required</span></div>
+          <div class="field"><label>Other contact</label><input type="text" id="other_contact" placeholder="e.g. WhatsApp, Signal"/></div>
+          <div class="field"><label>Email address <span class="req">*</span></label><input type="email" id="email" placeholder="you@example.com"/><span class="hint">Used to notify you of your application status</span><span class="err">Valid email is required</span></div>
+          <div class="field"><label>Instagram link</label><input type="url" id="insta_link" placeholder="https://instagram.com/..."/></div>
+          <div class="field"><label>TikTok link</label><input type="url" id="tiktok_link" placeholder="https://tiktok.com/@..."/></div>
+          <div class="field"><label>Facebook link</label><input type="url" id="facebook_link" placeholder="https://facebook.com/..."/></div>
+          <div class="field"><label>Booking link</label><input type="url" id="booking_link" placeholder="https://..."/></div>
+          <div class="field"><label>Other booking method</label><input type="text" id="other_booking" placeholder="e.g. Call, WhatsApp DM"/></div>
+
+          <!-- PHOTO UPLOAD SECTION - ALL THREE ARE REQUIRED -->
+        <div class="field span-2">
+          <label>Business Logo URL <span class="req">*</span></label>
+          <input type="url" id="logo_url" placeholder="https://example.com/logo.jpg"/>
+          <span class="hint">Paste a direct image URL.</span>
+          <span class="err" id="logoError">Logo URL is required</span>
+        </div>
+
+        <div class="field span-2">
+          <label>Supplementary Image 1 URL <span class="req">*</span></label>
+          <input type="url" id="supplementary_image_1_url" placeholder="https://example.com/photo1.jpg"/>
+          <span class="hint">Paste a direct image URL.</span>
+          <span class="err" id="supp1Error">Supplementary image 1 URL is required</span>
+        </div>
+
+        <div class="field span-2">
+          <label>Supplementary Image 2 URL <span class="req">*</span></label>
+          <input type="url" id="supplementary_image_2_url" placeholder="https://example.com/photo2.jpg"/>
+          <span class="hint">Paste a direct image URL.</span>
+          <span class="err" id="supp2Error">Supplementary image 2 URL is required</span>
+        </div>
+        </div>
+        <div class="form-nav"><span></span><button class="btn btn-primary" onclick="goTo(2)">Next: Services →</button></div>
+      </div>
+
+      <!-- STEP 2: Service Details -->
+      <div class="step-panel" id="panel-2">
+        <div class="section-title">Service details</div>
+        <div class="section-desc">Help clients understand your pricing, experience, and what you offer.</div>
+        <div class="form-grid">
+          <div class="field"><label>Starting price (JMD) <span class="req">*</span></label><input type="number" id="starting_price" placeholder="e.g. 3500" min="0" step="1"/><span class="hint">Minimum price for your services in Jamaican dollars</span><span class="err">Starting price must be at least 100 JMD</span></div>
+          <div class="field"><label>Average work time (minutes) <span class="req">*</span></label><input type="number" id="average_worktime" placeholder="e.g. 90" min="15" step="1"/><span class="hint">Typical session length in minutes</span><span class="err">Work time must be between 15 and 480 minutes</span></div>
+          <div class="field"><label>Gender of provider</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="provider_gender" value="female"/> Female</label><label class="radio-pill"><input type="radio" name="provider_gender" value="male"/> Male</label><label class="radio-pill"><input type="radio" name="provider_gender" value=""/> Prefer not to say</label></div></div>
+          <div class="field"><label>Payment methods accepted <span class="req">*</span></label><div class="check-group"><label class="check-pill"><input type="checkbox" name="payment" value="cash"/> 💵 Cash</label><label class="check-pill"><input type="checkbox" name="payment" value="card"/> 💳 Card</label><label class="check-pill"><input type="checkbox" name="payment" value="transfer"/> 🏦 Bank Transfer</label></div><span class="err">Select at least one payment method</span></div>
+          <div class="field"><label>Board certified?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="board_certified" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="board_certified" value="0"/> No</label></div></div>
+          <div class="field"><label>Accepts company / group bookings?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="company_allowed" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="company_allowed" value="0"/> No</label></div></div>
+          <div class="field"><label>Walk-ins allowed?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="walkins_allowed" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="walkins_allowed" value="0"/> No</label></div></div>
+          <div class="field"><label>Mobile service available?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="mobile_service" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="mobile_service" value="0"/> No</label></div></div>
+          <div class="field"><label>Kid friendly?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="kid_friendly" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="kid_friendly" value="0"/> No</label></div></div>
+          <div class="field"><label>Disabled / accessibility friendly?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="disabled_friendly" value="1"/> Yes</label><label class="radio-pill"><input type="radio" name="disabled_friendly" value="0"/> No</label></div></div>
+          <div class="field"><label>Deposit required?</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="deposit_required" value="1" onclick="toggleDeposit(true)"/> Yes</label><label class="radio-pill"><input type="radio" name="deposit_required" value="0" onclick="toggleDeposit(false)"/> No</label></div></div>
+          <div class="form-grid" id="depositDetails"><div class="field"><label>Deposit type</label><div class="radio-group"><label class="radio-pill"><input type="radio" name="deposit_type" value="percentage"/> % of service</label><label class="radio-pill"><input type="radio" name="deposit_type" value="fixed"/> Fixed amount (JMD)</label></div></div><div class="field"><label>Deposit value</label><input type="number" id="deposit_value" placeholder="e.g. 50 or 2000" min="0" step="1"/></div></div>
+        </div>
+        <div class="form-nav"><button class="btn btn-secondary" onclick="goTo(1)">← Back</button><button class="btn btn-primary" onclick="goTo(3)">Next: Hours →</button></div>
+      </div>
+
+      <!-- STEP 3: Opening Hours -->
+      <div class="step-panel" id="panel-3">
+        <div class="section-title">Opening hours</div>
+        <div class="section-desc">Set your typical weekly schedule. Mark days you're closed.</div>
+        <div class="hours-grid" id="hoursGrid"></div>
+        <div class="form-nav"><button class="btn btn-secondary" onclick="goTo(2)">← Back</button><button class="btn btn-primary" onclick="goTo(4)">Next: Review →</button></div>
+      </div>
+
+      <!-- STEP 4: Review -->
+      <div class="step-panel" id="panel-4">
+        <div class="section-title">Review your application</div>
+        <div class="section-desc">Check your details before submitting.</div>
+        <div id="reviewContent"></div>
+        <div class="divider"></div>
+        <div class="field"><label>Anything else you'd like us to know?</label><textarea id="extra_notes" placeholder="Additional info..." rows="3"></textarea></div>
+        <div class="form-nav"><button class="btn btn-secondary" onclick="goTo(3)">← Back</button><button class="btn btn-primary" id="submitBtn" onclick="submitForm()">✦ Submit application</button></div>
+      </div>
+
+      <!-- SUCCESS PANEL -->
+      <div class="step-panel" id="panel-success">
+        <div class="success-screen"><div class="success-icon"></div><h2>Application submitted!</h2><p>Thank you for applying! Our team will review your details within 3–5 business days.</p><a href="dashboard.html" class="btn btn-primary" style="text-decoration:none;display:inline-flex">← Back to Dashboard</a></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <section><h3>Belissima</h3><p>Your one-stop hub for beauty services.</p></section>
+      <section><h3>Services</h3><ul><li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li><li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li><li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li><li><a href="services_page.html?type=nail-artists">Nail Artists</a></li></ul></section>
+      <section><h3>Company</h3><ul><li><a href="about_us.html">About Us</a></li><li><a href="become_provider.html">Become a Provider</a></li></ul></section>
+      <section><h3>Support/Contact</h3><ul><li>support@belissima.com</li></ul></section>
+    </div>
+  </footer>
+
+  <script>
+    const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    let currentStep = 1;
+
+    function buildHoursGrid() {
+      const grid = document.getElementById('hoursGrid');
+      if (!grid) return;
+      grid.innerHTML = DAYS.map(day => `<div class="hour-row"><span class="day-label">${day}</span><input type="time" id="open-${day}" value="09:00"/><input type="time" id="close-${day}" value="17:00"/><label class="closed-toggle"><input type="checkbox" id="closed-${day}" onchange="toggleDay('${day}')"/> Closed</label></div>`).join('');
+    }
+    function toggleDay(day) { const closed = document.getElementById('closed-'+day).checked; ['open','close'].forEach(t => { const inp = document.getElementById(`${t}-${day}`); if(inp) { inp.disabled = closed; inp.style.opacity = closed ? '0.3' : '1'; } }); }
+    buildHoursGrid();
+    function toggleDeposit(show) { document.getElementById('depositDetails')?.classList.toggle('visible', show); }
+
+
+    function validatePhone(value) { return /^[\+\d\s\-\(\)]{7,20}$/.test(value) && /\d/.test(value); }
+
+    function validateStep(step) {
+      let ok = true;
+      const clearInvalid = (id) => { const f = document.getElementById(id)?.closest('.field'); if(f) f.classList.remove('invalid'); };
+      const setInvalid = (id) => { const f = document.getElementById(id)?.closest('.field'); if(f) f.classList.add('invalid'); ok = false; };
+      if(step === 1) {
+        if(!document.getElementById('business_name')?.value.trim()) setInvalid('business_name'); else clearInvalid('business_name');
+        if(!document.getElementById('service_type')?.value) setInvalid('service_type'); else clearInvalid('service_type');
+        if(!document.getElementById('parish')?.value) setInvalid('parish'); else clearInvalid('parish');
+        const phone = document.getElementById('phone_number')?.value.trim();
+        if(!phone || !validatePhone(phone)) setInvalid('phone_number'); else clearInvalid('phone_number');
+        const email = document.getElementById('email')?.value.trim();
+        if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) setInvalid('email'); else clearInvalid('email');
+        
+        // Validate all three photos are uploaded
+        const logoUrl = document.getElementById('logo_url')?.value.trim();
+        const supp1Url = document.getElementById('supplementary_image_1_url')?.value.trim();
+        const supp2Url = document.getElementById('supplementary_image_2_url')?.value.trim();
+
+        if(!logoUrl){
+          document.getElementById('logoError').style.display = 'block';
+          ok = false;
+        } else {
+          document.getElementById('logoError').style.display = 'none';
+        }
+
+        if(!supp1Url){
+          document.getElementById('supp1Error').style.display = 'block';
+          ok = false;
+        } else {
+          document.getElementById('supp1Error').style.display = 'none';
+        }
+
+        if(!supp2Url){
+          document.getElementById('supp2Error').style.display = 'block';
+          ok = false;
+        } else {
+          document.getElementById('supp2Error').style.display = 'none';
+        }
+      }
+      if(step === 2) {
+        const price = parseFloat(document.getElementById('starting_price')?.value);
+        if(!price || price < 100) setInvalid('starting_price'); else clearInvalid('starting_price');
+        const time = parseInt(document.getElementById('average_worktime')?.value);
+        if(!time || time < 15 || time > 480) setInvalid('average_worktime'); else clearInvalid('average_worktime');
+        const payments = [...document.querySelectorAll('input[name="payment"]:checked')];
+        const payField = document.querySelector('input[name="payment"]')?.closest('.field');
+        if(payments.length === 0) { if(payField) payField.classList.add('invalid'); ok = false; } else if(payField) payField.classList.remove('invalid');
+      }
+      return ok;
+    }
+
+    function goTo(step) {
+      if(step > currentStep && !validateStep(currentStep)) return;
+      if(step === 4) buildReview();
+      document.getElementById(`panel-${currentStep}`)?.classList.remove('active');
+      document.getElementById(`panel-${step}`)?.classList.add('active');
+      for(let i=1;i<=4;i++) {
+        const ind = document.getElementById(`step-ind-${i}`);
+        if(ind) { ind.classList.remove('active','done'); if(i<step) ind.classList.add('done'); else if(i===step) ind.classList.add('active'); }
+      }
+      for(let i=1;i<=3;i++) document.getElementById(`line-${i}`)?.classList.toggle('done', i<step);
+      currentStep = step;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildReview() {
+      const payments = [...document.querySelectorAll('input[name="payment"]:checked')].map(i=>i.value);
+      const gender = document.querySelector('input[name="provider_gender"]:checked')?.value || '—';
+      const deposit = document.querySelector('input[name="deposit_required"]:checked')?.value;
+      const hours = DAYS.map(day => { const closed = document.getElementById('closed-'+day)?.checked; const open = document.getElementById('open-'+day)?.value; const close = document.getElementById('close-'+day)?.value; return `<tr><td style="padding:4px 12px 4px 0;color:var(--text-dim);font-size:0.82rem">${day}</td><td style="font-size:0.82rem">${closed?'Closed':open+' – '+close}</td></tr>`; }).join('');
+      const reviewDiv = document.getElementById('reviewContent');
+      if(reviewDiv) reviewDiv.innerHTML = `<table style="width:100%">${row('Business name', document.getElementById('business_name')?.value)}${row('Service type', document.getElementById('service_type')?.value)}${row('Parish', document.getElementById('parish')?.value)}${row('Address', document.getElementById('address')?.value||'—')}${row('Phone', document.getElementById('phone_number')?.value)}${row('Email', document.getElementById('email')?.value)}${row('Starting price', 'J$'+Number(document.getElementById('starting_price')?.value||0).toLocaleString())}${row('Avg work time', (document.getElementById('average_worktime')?.value||0)+' mins')}${row('Payment methods', payments.join(', ')||'—')}${row('Gender', gender)}${row('Board certified', radioVal('board_certified'))}${row('Company bookings', radioVal('company_allowed'))}${row('Walk-ins', radioVal('walkins_allowed'))}${row('Mobile service', radioVal('mobile_service'))}${row('Kid friendly', radioVal('kid_friendly'))}${row('Disability friendly', radioVal('disabled_friendly'))}${row('Deposit required', deposit==='1'?'Yes':'No')}</table><div style="margin-top:16px"><div style="font-size:0.72rem;margin-bottom:8px">Opening hours</div><table>${hours}</table></div><div style="margin-top:16px"><div style="font-size:0.72rem;margin-bottom:8px">Photos</div><div>✓ Logo uploaded</div><div>✓ Supplementary image 1 uploaded</div><div>✓ Supplementary image 2 uploaded</div></div>`;
+    }
+    function row(l,v){return `<tr><td style="padding:8px 12px 8px 0;font-size:0.72rem;color:var(--text-muted);white-space:nowrap">${l}</td><td style="padding:8px 0;font-size:0.88rem">${v||'—'}</td></tr>`;}
+    function radioVal(name){const v=document.querySelector(`input[name="${name}"]:checked`)?.value; return v==='1'?'Yes':v==='0'?'No':'—';}
+
+    async function submitForm() {
+      if(!validateStep(1) || !validateStep(2)) { alert('Please complete all required fields correctly, including all three photo URLs.'); return; }
+      const btn = document.getElementById('submitBtn');
+      if(btn){ btn.disabled=true; btn.textContent='Submitting...'; }
+      const opening_hours={}; let days_open=0, weekly_hours=0;
+      DAYS.forEach(day=>{
+        const closed=document.getElementById('closed-'+day)?.checked;
+        if(!closed){
+          const open=document.getElementById('open-'+day)?.value, close=document.getElementById('close-'+day)?.value;
+          opening_hours[day.toLowerCase()]={open,close};
+          days_open++;
+          const [oh,om]=(open||'09:00').split(':').map(Number),[ch,cm]=(close||'17:00').split(':').map(Number);
+          weekly_hours+=((ch*60+cm)-(oh*60+om))/60;
+        } else { opening_hours[day.toLowerCase()]={open:null,close:null}; }
+      });
+      const formData = new FormData();
+      formData.append('business_name', document.getElementById('business_name')?.value.trim()||'');
+      formData.append('service_type', document.getElementById('service_type')?.value||'');
+      formData.append('parish', document.getElementById('parish')?.value||'');
+      formData.append('address', document.getElementById('address')?.value.trim()||'');
+      formData.append('phone_number', document.getElementById('phone_number')?.value.trim()||'');
+      formData.append('other_contact', document.getElementById('other_contact')?.value.trim()||'');
+      formData.append('email', document.getElementById('email')?.value.trim()||'');
+      formData.append('insta_link', document.getElementById('insta_link')?.value.trim()||'');
+      formData.append('tiktok_link', document.getElementById('tiktok_link')?.value.trim()||'');
+      formData.append('facebook_link', document.getElementById('facebook_link')?.value.trim()||'');
+      formData.append('booking_link', document.getElementById('booking_link')?.value.trim()||'');
+      formData.append('other_booking', document.getElementById('other_booking')?.value.trim()||'');
+      formData.append('starting_price', document.getElementById('starting_price')?.value||'');
+      formData.append('average_worktime', document.getElementById('average_worktime')?.value||'');
+      formData.append('provider_gender', document.querySelector('input[name="provider_gender"]:checked')?.value||'');
+      formData.append('payment_methods', JSON.stringify([...document.querySelectorAll('input[name="payment"]:checked')].map(i=>i.value)));
+      formData.append('board_certified', document.querySelector('input[name="board_certified"]:checked')?.value||'');
+      formData.append('company_allowed', document.querySelector('input[name="company_allowed"]:checked')?.value||'');
+      formData.append('walkins_allowed', document.querySelector('input[name="walkins_allowed"]:checked')?.value||'');
+      formData.append('mobile_service', document.querySelector('input[name="mobile_service"]:checked')?.value||'');
+      formData.append('kid_friendly', document.querySelector('input[name="kid_friendly"]:checked')?.value||'');
+      formData.append('disabled_friendly', document.querySelector('input[name="disabled_friendly"]:checked')?.value||'');
+      formData.append('deposit_required', document.querySelector('input[name="deposit_required"]:checked')?.value||'');
+      formData.append('deposit_type', document.querySelector('input[name="deposit_type"]:checked')?.value||'');
+      formData.append('deposit_value', document.getElementById('deposit_value')?.value||'');
+      formData.append('opening_hours', JSON.stringify(opening_hours));
+      formData.append('days_open', days_open);
+      formData.append('weekly_hours', Math.round(weekly_hours*10)/10);
+      formData.append('extra_notes', document.getElementById('extra_notes')?.value.trim()||'');
+      formData.append('logo_url', document.getElementById('logo_url')?.value.trim() || '');
+      formData.append('supplementary_image_1_url', document.getElementById('supplementary_image_1_url')?.value.trim() || '');
+      formData.append('supplementary_image_2_url', document.getElementById('supplementary_image_2_url')?.value.trim() || '');
+      try{
+        const res=await fetch('/api/register',{method:'POST',body:formData});
+        const data=await res.json();
+        if(res.ok&&data.success){ document.getElementById('panel-4')?.classList.remove('active'); document.getElementById('panel-success')?.classList.add('active'); document.getElementById('stepsBar').style.display='none'; }
+        else{ alert(data.error||'Something went wrong. Please try again.'); if(btn){ btn.disabled=false; btn.textContent='✦ Submit application'; } }
+      }catch(err){ alert('Connection error. Please check the server is running.'); if(btn){ btn.disabled=false; btn.textContent='✦ Submit application'; } }
+    }
+
+    const topbar=document.getElementById("topbar");
+    function updateTopbar(){ if(topbar) topbar.classList.toggle("scrolled", window.scrollY>80); }
+    window.addEventListener("scroll", updateTopbar); window.addEventListener("load", updateTopbar);
+  </script>
+</body>
+</html>

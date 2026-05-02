@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belissima · About Us</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display+SC:wght@400;700&family=Reem+Kufi+Fun:wght@500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f3f6;
+      --panel: #ffffff;
+      --text: #181114;
+      --muted: #6a5760;
+      --brand: #8a2347;
+      --brand-dark: #661731;
+      --soft: #efadc5;
+      --soft-2: #f8d0dd;
+      --border: #9c3e5c;
+      --shadow: 0 12px 32px rgba(111, 29, 57, 0.12);
+      --content-width: min(100%, 1450px);
+      --gutter: clamp(16px, 3vw, 32px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Chivo", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: 100%;
+      overflow-x: hidden;
+      isolation: isolate;
+      background: var(--bg);
+    }
+
+    /* ===== TOPBAR (EXACTLY MATCHES DASHBOARD) ===== */
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      pointer-events: auto;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease, top 0.25s ease;
+    }
+
+    #topbar.scrolled {
+      top: 14px;
+    }
+
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 26px;
+      position: relative;
+      z-index: 10000;
+      background: transparent;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
+    }
+
+    #topbar.scrolled .topbar__inner {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo img {
+      height: 97px;
+      width: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+
+    .nav__link,
+    .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav__link {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .nav__link--active {
+      background: rgba(138, 35, 71, 0.12);
+      border-color: rgba(138, 35, 71, 0.35);
+    }
+
+    .nav__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Back button specific */
+    .back-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-family: "Chivo", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      background: var(--brand-dark);
+    }
+
+    /* Hero & rest of the beautiful about page */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding: 20px var(--gutter) 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(90deg, rgba(241, 233, 236, 0.96) 0%, rgba(255, 248, 250, 0.82) 38%, rgba(255, 248, 250, 0.08) 72%),
+        url("https://esmalteriacapricho.com.br/assets/img/esmaltaria-bg.jpg") center / cover no-repeat;
+      background-size: cover;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 76% 32%, rgba(255, 255, 255, 0.74) 0 10%, transparent 11%),
+        radial-gradient(circle at 70% 44%, rgba(255, 255, 255, 0.55) 0 12%, transparent 13%),
+        radial-gradient(circle at 84% 58%, rgba(255, 255, 255, 0.62) 0 9%, transparent 10%),
+        radial-gradient(circle at 73% 70%, rgba(255, 255, 255, 0.52) 0 11%, transparent 12%),
+        radial-gradient(circle at 88% 28%, rgba(255, 255, 255, 0.5) 0 8%, transparent 9%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 150px;
+      background: linear-gradient(to bottom, rgba(248, 243, 246, 0) 0%, rgba(248, 243, 246, 0.95) 70%, rgba(248, 243, 246, 1) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(90deg, rgba(248, 243, 246, 0.96) 0%, rgba(248, 243, 246, 0.88) 38%, rgba(248, 243, 246, 0.45) 65%, rgba(248, 243, 246, 0.05) 100%);
+    }
+
+    .hero__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      padding-top: 190px;
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      min-height: 78vh;
+    }
+
+    .hero__glass {
+      max-width: 580px;
+      padding: clamp(24px, 4vw, 42px);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 45px rgba(138, 35, 71, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .hero__eyebrow {
+      font-family: "Reem Kufi Fun", sans-serif;
+      font-size: clamp(0.72rem, 0.58rem + 0.35vw, 0.94rem);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin: 0 0 14px;
+      color: var(--brand-dark);
+    }
+
+    .hero__title {
+      margin: 0;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .hero__title-top {
+      display: block;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.2rem, 1.4rem + 2.2vw, 4.2rem);
+      font-weight: 600;
+    }
+
+    .hero__title-mid {
+      display: block;
+      font-family: "Dancing Script", cursive;
+      font-size: clamp(2.1rem, 1.35rem + 2vw, 3.65rem);
+      font-weight: 700;
+      text-transform: none;
+      margin: 0.08em 0;
+      color: var(--brand);
+    }
+
+    .hero__title-bottom {
+      display: block;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.4rem, 1.55rem + 2.6vw, 4.5rem);
+      font-weight: 700;
+    }
+
+    .hero__copy {
+      margin: 18px 0 0;
+      max-width: 44ch;
+      font-size: clamp(0.98rem, 0.9rem + 0.25vw, 1.1rem);
+      letter-spacing: 0.01em;
+      color: var(--brand-dark);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn--primary {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(138, 35, 71, 0.22);
+    }
+
+    .btn--secondary {
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--brand-dark);
+      border-color: rgba(156, 62, 92, 0.22);
+    }
+
+    main {
+      width: 100%;
+      padding: 34px clamp(24px, 6vw, 80px) 64px;
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+    }
+
+    .main-content {
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      border-radius: 20px;
+      background: linear-gradient(to bottom, rgba(248, 243, 246, 1) 0%, rgba(248, 243, 246, 0.98) 20%, rgba(255, 255, 255, 0.96) 60%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    .section-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 42px 16px;
+      scroll-margin-top: 18vh;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .section-shell.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .about-card,
+    .highlight-card,
+    .value-card,
+    .team-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(156, 62, 92, 0.14);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .about-card,
+    .highlight-card {
+      padding: clamp(24px, 3.5vw, 36px);
+    }
+
+    .about-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
+      border: 1px solid rgba(156, 62, 92, 0.16);
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--brand), var(--soft));
+    }
+
+    .about-card .section-title {
+      margin-bottom: 14px;
+    }
+
+    .about-lead {
+      margin: 0 0 16px;
+      font-size: 1.04rem;
+      line-height: 1.65;
+      color: var(--brand-dark);
+      font-weight: 600;
+    }
+
+    .about-divider {
+      width: 64px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), var(--soft));
+      margin: 0 0 18px;
+    }
+
+    .about-card .section-text {
+      line-height: 1.75;
+    }
+
+    .highlight-card {
+      display: grid;
+      gap: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 208, 221, 0.55) 100%);
+    }
+
+    .stat {
+      padding: 18px 20px;
+      background: rgba(255, 255, 255, 0.72);
+      border-radius: 22px;
+      border: 1px solid rgba(156, 62, 92, 0.12);
+    }
+
+    .stat__number {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+      font-family: "Playfair Display SC", serif;
+    }
+
+    .stat__label {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .values {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 18px;
+    }
+
+    .value-card {
+      padding: 28px 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 36px rgba(111, 29, 57, 0.14);
+    }
+
+    .value-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(138, 35, 71, 0.1);
+      color: var(--brand);
+      margin-bottom: 16px;
+    }
+
+    .value-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .value-title {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      color: var(--brand-dark);
+      font-family: "Playfair Display SC", serif;
+      letter-spacing: 0.04em;
+    }
+
+    .value-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .team-wrap {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .team-card {
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .team-avatar {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--soft), var(--soft-2));
+      display: grid;
+      place-items: center;
+      font-family: "Playfair Display SC", serif;
+      color: var(--brand-dark);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .team-name {
+      margin: 0 0 4px;
+      color: var(--brand-dark);
+      font-size: 1.08rem;
+      font-family: "Playfair Display SC", serif;
+      letter-spacing: 0.05em;
+    }
+
+    .team-role {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .footer {
+      margin-top: clamp(36px, 6vw, 80px);
+      background: var(--brand-dark);
+      color: #fff6fa;
+      padding: 36px var(--gutter);
+    }
+
+    .footer__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .footer h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      font-family: "Cinzel", serif;
+    }
+
+    .footer p,
+    .footer li {
+      margin: 0;
+      color: rgba(255, 246, 250, 0.85);
+      font-size: 0.92rem;
+    }
+
+    .footer ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    @media (max-width: 980px) {
+
+      .about-grid,
+      .footer__inner {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .values {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .team-wrap {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero__overlay {
+        background: linear-gradient(180deg, rgba(248, 243, 246, 0.92) 0%, rgba(248, 243, 246, 0.74) 42%, rgba(248, 243, 246, 0.3) 100%);
+      }
+
+      .hero__inner {
+        padding-top: 170px;
+        min-height: 72vh;
+      }
+
+      .hero__glass {
+        max-width: 100%;
+        border-radius: 24px;
+        padding: 24px;
+      }
+
+      .nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      .nav__link {
+        width: 100%;
+      }
+
+      .topbar__inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .values,
+      .team-wrap,
+      .footer__inner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header class="hero">
+      <!-- FIXED TOPBAR WITH LOGO + FULL NAV (heart, profile, back button) -->
+      <div id="topbar">
+        <div class="topbar__inner">
+          <a href="dashboard.html" class="back-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M19 12H5"></path>
+              <path d="m12 19-7-7 7-7"></path>
+            </svg>
+            Back
+          </a>
+          <div class="logo">
+            <img src="belissima-logo.png" alt="Belissima" />
+          </div>
+          <nav class="nav" aria-label="Primary">
+            <a href="Allura.html" class="nav__link">Allura</a>
+            <a href="#services" class="nav__link">Services</a>
+            <a href="#" class="nav__link nav__link--active">About Us</a>
+            <a href="become_provider.html" class="nav__link">Become a Provider</a>
+            <!-- Heart icon (favorites) -->
+            <a href="favorites.html" class="nav__icon" aria-label="Favorites">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z">
+                </path>
+              </svg>
+            </a>
+            <!-- Profile icon -->
+            <a href="account.html" class="nav__icon" aria-label="Profile">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"></path>
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="hero__overlay"></div>
+
+      <div class="hero__inner">
+        <div class="hero__glass">
+          <p class="hero__eyebrow">About Belissima</p>
+          <h1 class="hero__title">
+            <span class="hero__title-top">Beauty,</span>
+            <span class="hero__title-mid">elevated</span>
+            <span class="hero__title-bottom">for Jamaica</span>
+          </h1>
+          <p class="hero__copy">
+            Belissima is a centralized beauty service platform designed to help clients across Jamaica discover trusted
+            professionals, compare services with confidence, and connect with providers who match their style, location,
+            and needs.
+          </p>
+          <div class="hero__actions">
+            <a href="#our-story" class="btn btn--primary hero-scroll-link">Our Story</a>
+            <a href="#our-values" class="btn btn--secondary hero-scroll-link">Why Belissima</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="main-content">
+        <section class="section-shell" id="our-story">
+          <div class="about-grid">
+            <article class="about-card">
+              <p class="section-kicker">Who We Are</p>
+              <h2 class="section-title">A smarter way to find beauty professionals</h2>
+              <p class="about-lead">
+                Belissima brings beauty discovery into one elegant, reliable space designed for modern users.
+              </p>
+              <div class="about-divider"></div>
+              <p class="section-text">
+                Belissima was created to make beauty discovery feel easy, elegant, and reliable. Instead of scrolling
+                endlessly through scattered social pages, clients can explore providers in one place, view options
+                clearly, and find services that suit their preferences.
+              </p>
+              <p class="section-text" style="margin-top: 16px;">
+                Our mission is to connect beauty seekers with quality providers while giving professionals a polished
+                space to showcase their work, grow their visibility, and build trust with new clients.
+              </p>
+            </article>
+
+            <aside class="highlight-card">
+              <div class="stat">
+                <p class="stat__number">1 platform</p>
+                <p class="stat__label">For discovering beauty services across Jamaica</p>
+              </div>
+              <div class="stat">
+                <p class="stat__number">Trusted</p>
+                <p class="stat__label">A polished space built to support both clients and providers</p>
+              </div>
+              <div class="stat">
+                <p class="stat__number">AI-powered</p>
+                <p class="stat__label">Helping users find better beauty matches, faster</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section-shell" id="our-values">
+          <p class="section-kicker">What We Value</p>
+          <h2 class="section-title">Built around confidence, convenience, and connection</h2>
+          <div class="values">
+            <article class="value-card">
+              <div class="value-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z">
+                  </path>
+                </svg>
+              </div>
+              <h3 class="value-title">Trust</h3>
+              <p class="value-copy">We want every user to feel more confident when choosing a provider, with a platform
+                that feels curated and dependable.</p>
+            </article>
+
+            <article class="value-card">
+              <div class="value-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 12h18"></path>
+                  <path d="M12 3v18"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+              </div>
+              <h3 class="value-title">Accessibility</h3>
+              <p class="value-copy">Beauty services should be easier to discover. Belissima helps clients browse by
+                need, style, and location in one place.</p>
+            </article>
+
+            <article class="value-card">
+              <div class="value-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12l4 4L19 6"></path>
+                </svg>
+              </div>
+              <h3 class="value-title">Growth</h3>
+              <p class="value-copy">We support providers by giving them a refined digital space to highlight their
+                services and stand out professionally.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-shell" id="our-team">
+          <p class="section-kicker">Our Team</p>
+          <h2 class="section-title">The people behind the Belissima vision</h2>
+          <div class="team-wrap">
+            <article class="team-card">
+              <div class="team-avatar">R</div>
+              <h3 class="team-name">Raeanna Warren</h3>
+              <p class="team-role">Project Manager</p>
+            </article>
+            <article class="team-card">
+              <div class="team-avatar">V</div>
+              <h3 class="team-name">Victoria Whyte</h3>
+              <p class="team-role">Backend Developer</p>
+            </article>
+            <article class="team-card">
+              <div class="team-avatar">J</div>
+              <h3 class="team-name">Jhanoi Samuels</h3>
+              <p class="team-role">Backend Developer</p>
+            </article>
+            <article class="team-card">
+              <div class="team-avatar">A</div>
+              <h3 class="team-name">Alex Campbell</h3>
+              <p class="team-role">Frontend Developer</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <section>
+          <h3>Belissima</h3>
+          <p>Your one-stop hub for beauty services. Discover hairstylists, nail technicians, make-up artists, and wax
+            specialists near you.</p>
+        </section>
+        <section>
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li>
+            <li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li>
+            <li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li>
+            <li><a href="services_page.html?type=nail-artists">Nail Artists</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="become_provider.html">Become A Provider</a></li>
+            
+          </ul>
+        </section>
+        <section>
+          <h3>Support/Contact</h3>
+          <ul>
+            <li><a href="mailto:belissima3901@yahoo.com">belissima3901@yahoo.com</a></li>
+          </ul>
+        </section>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // topbar scroll effect
+    const topbar = document.getElementById('topbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) topbar.classList.add('scrolled');
+      else topbar.classList.remove('scrolled');
+    });
+
+    // smooth scroll for hero buttons + footer links
+    const scrollLinks = document.querySelectorAll('.hero-scroll-link, .footer-link');
+    scrollLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
+        const absoluteTop = window.pageYOffset + rect.top;
+        const targetCenter = absoluteTop - (window.innerHeight / 2) + (target.offsetHeight / 2);
+
+        window.scrollTo({
+          top: Math.max(targetCenter, 0),
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // intersection observer for sections
+    const revealSections = document.querySelectorAll('.section-shell');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.18 });
+    revealSections.forEach(section => observer.observe(section));
+  </script>
+</body>
+
+</html>

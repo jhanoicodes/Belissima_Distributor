@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Allura · Belissima AI Beauty Assistant</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #f8f3f6;
+      --surface: #ffffff;
+      --text-primary: #181114;
+      --text-secondary: #6a5760;
+      --brand-deep: #8a2347;
+      --brand-dark: #661731;
+      --brand-soft: #f4e2e8;
+      --soft-2: #f8d0dd;
+      --border-light: #e9d9df;
+      --shadow-sm: 0 8px 20px rgba(86,29,51,0.06);
+      --shadow-md: 0 18px 36px -12px rgba(86,29,51,0.12);
+      --radius-bubble: 24px;
+    }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-primary); height:100vh; overflow:hidden; line-height:1.5; }
+
+    .topbar { position:fixed; top:18px; left:0; width:100%; z-index:110; background:transparent; transition:all 0.25s ease; }
+    .topbar.scrolled { top:14px; }
+    .topbar__inner { width:min(100% - 32px,1450px); margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:10px 18px; border-radius:26px; background:transparent; transition:background-color 0.25s ease,box-shadow 0.25s ease,backdrop-filter 0.25s ease; }
+    .topbar.scrolled .topbar__inner { background:rgba(255,255,255,0.9); backdrop-filter:blur(14px); box-shadow:0 12px 32px rgba(0,0,0,0.08); }
+    .back-dashboard { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.75); border:1px solid rgba(156,62,92,0.25); backdrop-filter:blur(8px); padding:8px 20px; border-radius:100px; font-weight:500; font-size:0.85rem; color:var(--brand-deep); cursor:pointer; transition:all 0.2s ease; text-decoration:none; }
+    .back-dashboard:hover { background:var(--brand-deep); color:white; border-color:var(--brand-deep); }
+    .logo img { height:60px; width:auto; }
+    .spacer { width:110px; }
+
+    .chat-container { display:flex; flex-direction:column; height:100vh; padding-top:100px; }
+    .messages-area { flex:1; overflow-y:auto; padding:24px 28px 20px; display:flex; flex-direction:column; gap:20px; scroll-behavior:smooth; }
+    .messages-area::-webkit-scrollbar { width:5px; }
+    .messages-area::-webkit-scrollbar-track { background:#f1e6eb; border-radius:6px; }
+    .messages-area::-webkit-scrollbar-thumb { background:var(--brand-deep); border-radius:6px; }
+
+    .message { display:flex; gap:12px; max-width:82%; animation:fadeSlideUp 0.35s ease; }
+    @keyframes fadeSlideUp { 0% { opacity:0; transform:translateY(14px); } 100% { opacity:1; transform:translateY(0); } }
+    .message.user { align-self:flex-end; flex-direction:row-reverse; }
+    .message.bot  { align-self:flex-start; }
+    .avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .message.user .avatar { background:var(--brand-deep); box-shadow:0 4px 10px rgba(138,35,71,0.2); }
+    .message.bot  .avatar { background:white; border:1px solid var(--border-light); box-shadow:var(--shadow-sm); }
+    .avatar svg { width:20px; height:20px; }
+    .message.user .avatar svg { stroke:white; }
+    .message.bot  .avatar svg { stroke:var(--brand-deep); }
+    .bubble { padding:14px 20px; font-size:0.9rem; line-height:1.6; font-weight:450; max-width:100%; }
+    .message.user .bubble { background:var(--brand-deep); color:white; border-radius:var(--radius-bubble); border-bottom-right-radius:6px; box-shadow:0 6px 14px rgba(138,35,71,0.15); }
+    .message.bot  .bubble { background:var(--surface); color:var(--text-primary); border-radius:var(--radius-bubble); border-bottom-left-radius:6px; box-shadow:var(--shadow-sm); border:1px solid var(--border-light); }
+
+    .service-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
+      color: white;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .service-view-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(138,35,71,0.3); }
+    .service-view-btn svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; }
+
+    .business-preview-panel {
+      background: white;
+      border-radius: 20px;
+      margin: 8px 0;
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .preview-header {
+      background: var(--brand-soft);
+      padding: 8px 16px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--brand-dark);
+    }
+    .business-preview-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .business-preview-card:last-child { border-bottom: none; }
+    .business-preview-card:hover { background: var(--brand-soft); }
+    .preview-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--brand-deep); margin-bottom: 2px; }
+    .preview-info p { font-size: 0.7rem; color: var(--text-secondary); }
+    .preview-view-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--brand-deep);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .preview-view-btn:hover { background: var(--brand-deep); color: white; border-color: var(--brand-deep); }
+
+    .detailed-business-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      margin: 12px 0;
+      box-shadow: var(--shadow-md);
+    }
+    .card-header {
+      background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
+      padding: 24px 22px;
+      color: white;
+      text-align: center;
+    }
+    .card-header h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .card-header .service-badge-large {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+    .card-body { padding: 20px; }
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .detail-row:last-of-type { border-bottom: none; }
+    .detail-icon { width: 24px; font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .detail-content { flex: 1; color: var(--text-primary); font-size: 0.85rem; line-height: 1.5; }
+    .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .tag-pill { background: rgba(138,35,71,0.08); border-radius: 30px; padding: 4px 14px; font-size: 0.7rem; font-weight: 500; color: var(--brand-dark); }
+    .card-footer { padding: 16px 20px 24px; border-top: 1px solid var(--border-light); text-align: center; }
+    .view-full-profile-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: 0.2s;
+      box-shadow: 0 2px 8px rgba(138,35,71,0.2);
+    }
+    .view-full-profile-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(138,35,71,0.3); }
+
+    .tag-summary {
+      background: #f8f0f3;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 8px 0;
+      border-left: 4px solid var(--brand-deep);
+    }
+    .tag-summary h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--brand-deep);
+      margin-bottom: 10px;
+    }
+    .detected-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .detected-tag { background: white; border: 1px solid var(--border-light); border-radius: 30px; padding: 4px 12px; font-size: 0.75rem; font-weight: 500; color: var(--brand-dark); }
+    .hard-requirement-badge {
+      display: inline-block;
+      background: #e65100;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .ranking-widget {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 12px 0;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+    .ranking-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--brand-deep);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .ranking-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ranking-option:last-child { border-bottom: none; }
+    .ranking-label { font-weight: 500; font-size: 0.85rem; color: var(--text-primary); }
+    .ranking-select {
+      background: var(--brand-soft);
+      border: 1px solid var(--border-light);
+      border-radius: 30px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--brand-deep);
+      cursor: pointer;
+      outline: none;
+    }
+    .submit-rank-btn {
+      background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark));
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 16px;
+      transition: 0.2s;
+    }
+
+    .provider-card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--brand-deep);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .provider-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .provider-rank { font-size: 1.3rem; font-weight: 800; color: var(--brand-deep); font-family: 'Cinzel', serif; }
+    .provider-name { font-weight: 700; font-size: 1rem; color: var(--text-primary); margin: 2px 0 6px; }
+    .provider-meta { font-size: 0.74rem; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+    .provider-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .tag-badge { background: rgba(138,35,71,0.09); padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; color: var(--brand-dark); }
+    .reason-box { background: #f8f0f3; border-radius: 12px; padding: 10px 14px; margin: 10px 0; border-left: 3px solid var(--brand-deep); }
+    .reason-text { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+    .view-profile-btn { display: inline-block; background: linear-gradient(135deg, var(--brand-deep), var(--brand-dark)); color: white; padding: 8px 18px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; text-decoration: none; margin-top: 10px; transition: 0.2s; }
+
+    .close-confirm-box { background: #fff8f9; border: 1px solid var(--border-light); border-radius: 14px; padding: 12px 14px; margin-top: 12px; }
+    .close-confirm-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-confirm-yes { background: #c62828; color: white; border: none; padding: 6px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .btn-confirm-no { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-light); padding: 6px 16px; border-radius: 30px; font-size: 0.75rem; cursor: pointer; }
+
+    .crisis-message {
+      background: #fff3e0;
+      border-left: 4px solid #e65100;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+    }
+    .crisis-message h4 { color: #e65100; font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
+    .crisis-message p { color: var(--text-primary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 12px; }
+    .hotline-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+    .hotline-item { background: white; border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 14px; font-size: 0.75rem; font-weight: 500; color: var(--brand-dark); }
+    .back-to-beauty { background: transparent; border: 1px solid var(--border-light); border-radius: 30px; padding: 6px 14px; font-size: 0.7rem; cursor: pointer; margin-top: 10px; color: var(--brand-deep); }
+    .back-to-beauty:hover { background: var(--brand-deep); color: white; }
+
+    .typing-indicator { display: flex; gap: 5px; padding: 4px 0; }
+    .typing-indicator span { width: 8px; height: 8px; background: var(--brand-deep); border-radius: 50%; opacity: 0.5; animation: pulseWave 1.2s infinite; }
+    @keyframes pulseWave { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-5px); opacity:1; } }
+
+    .input-area { padding: 16px 28px 28px; background: var(--bg); border-top: 1px solid var(--border-light); }
+    .input-wrapper { display:flex; gap:12px; max-width:900px; margin:0 auto; background:white; border-radius:80px; padding:4px 4px 4px 22px; box-shadow:var(--shadow-sm); border:1px solid var(--border-light); }
+    .input-wrapper:focus-within { border-color:var(--brand-deep); box-shadow:0 0 0 4px rgba(138,35,71,0.08); }
+    .input-wrapper input { flex:1; padding:14px 0; border:none; background:transparent; outline:none; font-size:0.95rem; }
+    .input-wrapper button { background:var(--brand-deep); color:white; border:none; padding:0 34px; border-radius:60px; font-weight:600; cursor:pointer; transition:0.2s; min-height:48px; }
+
+    .welcome-card { text-align:center; background:var(--surface); border-radius:32px; padding:42px 32px; box-shadow:var(--shadow-md); border:1px solid rgba(198,162,122,0.2); }
+    .welcome-card h2 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:500; color:var(--brand-deep); margin-bottom:12px; }
+    .welcome-card p { color:var(--text-secondary); max-width:480px; margin:0 auto 28px; line-height:1.6; font-size:0.9rem; }
+    .suggestion-chips { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+    .suggestion-chip { background:#f5edf0; border:none; padding:10px 22px; border-radius:100px; font-weight:500; font-size:0.8rem; cursor:pointer; color:var(--brand-deep); transition:0.2s; }
+
+    .info-message {
+      background: #e8f0fe;
+      border-left: 4px solid var(--brand-deep);
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin: 8px 0;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .location-prompt-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .location-btn {
+      background: white;
+      border: 1.5px solid var(--brand-deep);
+      color: var(--brand-deep);
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .location-btn:hover {
+      background: var(--brand-deep);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width:780px) {
+      .message { max-width:94%; }
+      .topbar__inner { padding:8px 16px; }
+      .logo img { height:48px; }
+      .spacer { width:40px; }
+      .back-dashboard span { display:none; }
+    }
+  </style>
+</head>
+<body>
+<div class="topbar" id="topbar">
+  <div class="topbar__inner">
+    <a href="#" id="backDashboardBtn" class="back-dashboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg><span>Back</span></a>
+    <div class="logo"><img src="belissima-logo.png" alt="Belissima"><div style="display:none; font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:600; color:var(--brand-deep);">Belissima</div></div>
+    <div class="spacer"></div>
+  </div>
+</div>
+<div class="chat-container">
+  <div class="messages-area" id="messagesArea">
+    <div class="welcome-card" id="welcomeCard">
+      <h2>Hey, I'm Allura · Your Beauty Assistant</h2>
+      <p>Type a business name for instant preview, or describe what you need — I'll find your top 5 matches.</p>
+      <div class="suggestion-chips">
+        <button class="suggestion-chip" data-suggestion="Enhance U">Search: Enhance U</button>
+        <button class="suggestion-chip" data-suggestion="I am a single mother so I need a hairstylist that is okay with me bringing my kids. I only have Sunday off from work. I live in Kingston. I need to be done in less than 3 hours">Single mom · Sunday only · under 3 hours</button>
+        <button class="suggestion-chip" data-suggestion="Find me a cheap nail artist in Portmore that's open on Saturdays">Cheap nails · Saturday · Portmore</button>
+      </div>
+    </div>
+  </div>
+  <div class="input-area">
+    <div class="input-wrapper">
+      <input type="text" id="userInput" placeholder="Type a business name or describe your needs..." autocomplete="off" />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STORAGE ─────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'allura_chat_v19';
+let chatHistory = [];
+let isWaiting = false;
+let businessPreviewTimeout = null;
+let allBusinessesCache = [];
+let currentRankingContext = null;
+
+const messagesArea = document.getElementById('messagesArea');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const welcomeCard = document.getElementById('welcomeCard');
+
+// ── CRISIS KEYWORDS ─────────────────────────────────────────────────────
+const CRISIS_KEYWORDS = [
+  'suicide', 'kill myself', 'end my life', 'want to die', 'better off dead',
+  'depressed', 'depression', 'anxiety', 'panic attack', 'mental health',
+  'self harm', 'cutting', 'hurt myself', 'harming myself',
+  'crisis', 'hopeless', 'worthless', 'can\'t go on', 'no reason to live',
+  'sick', 'illness', 'dying', 'cancer', 'terminal', 'diagnosed',
+  'abuse', 'trauma', 'ptsd', 'grief', 'bereavement', 'loss',
+  'lonely', 'isolated', 'overwhelmed', 'struggling', 'not okay'
+];
+
+function isCrisisMessage(message) {
+  const lower = message.toLowerCase();
+  return CRISIS_KEYWORDS.some(keyword => lower.includes(keyword));
+}
+
+function getCrisisResponse() {
+  return `<div class="crisis-message">
+    <h4>You are not alone. Help is available.</h4>
+    <p>I notice you might be going through a difficult time. While I'm here to help with beauty services, your wellbeing is the most important thing. Please consider reaching out:</p>
+    <div class="hotline-list">
+      <span class="hotline-item">Jamaica Mental Health Helpline: 888-991-4146</span>
+      <span class="hotline-item">International Crisis Helpline: 988</span>
+      <span class="hotline-item">Jamaica LifeLine: 876-929-0918</span>
+      <span class="hotline-item">Visit your nearest hospital or health centre</span>
+    </div>
+    <p>There are people who care about you. You deserve support.</p>
+    <button class="back-to-beauty" onclick="dismissCrisisAndContinue()">← I'm okay, continue with beauty services</button>
+  </div>`;
+}
+
+window.dismissCrisisAndContinue = function() {
+  const crisisDiv = document.querySelector('.crisis-message');
+  if (crisisDiv) crisisDiv.remove();
+  renderMessage('bot', "Let's get back to finding the perfect beauty professional. What service are you looking for?", false, true);
+};
+
+// ── VALIDATION ──────────────────────────────────────────────────────────
+const VALID_SERVICES = ['nail', 'hairstylist', 'hair', 'makeup', 'wax', 'nail artist', 'makeup artist', 'wax specialist'];
+const VALID_SERVICE_TYPES = {
+  'nail': 'NAIL ARTIST', 'nails': 'NAIL ARTIST', 'nail artist': 'NAIL ARTIST',
+  'hairstylist': 'HAIRSTYLIST', 'hair': 'HAIRSTYLIST',
+  'makeup': 'MAKE-UP ARTIST', 'makeup artist': 'MAKE-UP ARTIST',
+  'wax': 'WAX SPECIALIST', 'wax specialist': 'WAX SPECIALIST'
+};
+const VALID_PARISHES = ['kingston', 'portmore', 'kingston & st andrew'];
+const INVALID_COUNTRIES = ['usa', 'united states', 'america', 'canada', 'uk', 'united kingdom', 'england', 
+  'france', 'germany', 'italy', 'spain', 'australia', 'new zealand', 'china', 
+  'japan', 'korea', 'india', 'brazil', 'mexico', 'south africa', 'nigeria', 
+  'ghana', 'kenya', 'trinidad', 'barbados', 'bahamas', 'cayman', 'turks', 'caicos',
+  'europe', 'asia', 'africa', 'london', 'paris', 'new york',
+  'miami', 'toronto', 'vancouver', 'sydney', 'melbourne', 'browns town', 'spanish town', 'montego bay',
+  'mobay', 'ocho rios', 'negril', 'mandeville', 'may pen', 'falmouth'];
+
+function saveChat() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ history: chatHistory, ts: Date.now() })); }
+function loadChat() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    chatHistory = data.history || [];
+    if (chatHistory.length > 0) {
+      welcomeCard.style.display = 'none';
+      chatHistory.forEach(m => renderMessage(m.role, m.content, m.isHtml || false, false));
+    }
+  } catch(e) { console.warn(e); }
+}
+function clearChat() {
+  chatHistory = [];
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('.message').forEach(m => m.remove());
+  welcomeCard.style.display = 'block';
+}
+
+function renderMessage(role, content, isHtml = false, save = true) {
+  welcomeCard.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = `message ${role}`;
+  const av = document.createElement('div');
+  av.className = 'avatar';
+  av.innerHTML = role === 'user'
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm.5 5H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (isHtml) bubble.innerHTML = content;
+  else bubble.textContent = content;
+  wrap.appendChild(av);
+  wrap.appendChild(bubble);
+  messagesArea.appendChild(wrap);
+  messagesArea.scrollTo({ top: messagesArea.scrollHeight, behavior: 'smooth' });
+  if (save) {
+    chatHistory.push({ role, content, isHtml, ts: Date.now() });
+    saveChat();
+  }
+  return wrap;
+}
+function showTyping() {
+  hideTyping();
+  const d = document.createElement('div');
+  d.className = 'message bot';
+  d.id = 'typingMsg';
+  d.innerHTML = `<div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm.5 5H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+  messagesArea.appendChild(d);
+  messagesArea.scrollTo({ top: messagesArea.scrollHeight, behavior: 'smooth' });
+}
+function hideTyping() { document.getElementById('typingMsg')?.remove(); }
+
+const USD_TO_JMD = 157;
+function formatPriceJMD(price) {
+  if (!price && price !== 0) return 'Contact for price';
+  const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.-]/g, ''));
+  if (isNaN(num)) return 'Contact for price';
+  const jmd = num < 500 ? Math.round(num * USD_TO_JMD / 100) * 100 : Math.round(num);
+  return `J$${jmd.toLocaleString()} up`;
+}
+
+// ── FETCH BUSINESSES FOR CACHE ──────────────────────────────────────────
+async function loadAllBusinesses() {
+  try {
+    const types = ['NAIL ARTIST', 'HAIRSTYLIST', 'MAKE-UP ARTIST', 'WAX SPECIALIST'];
+    let all = [];
+    for (const type of types) {
+      const res = await fetch(`/api/providers/all/${type}`);
+      const data = await res.json();
+      if (data.success && data.results) all.push(...data.results);
+    }
+    allBusinessesCache = all;
+  } catch(e) { console.warn('Could not load businesses for preview'); }
+}
+loadAllBusinesses();
+
+function getBusinessPreviewHtml(matches) {
+  if (!matches.length) return null;
+  let html = `<div class="business-preview-panel"><div class="preview-header">Matching businesses — click to view instantly</div>`;
+  matches.slice(0, 5).forEach(biz => {
+    html += `
+      <div class="business-preview-card" data-biz-id="${biz.businessID}" data-biz-name="${escapeHtml(biz.business_name)}">
+        <div class="preview-info">
+          <h4>${escapeHtml(biz.business_name)}</h4>
+          <p>${biz.service_type?.replace('_', ' ') || ''} · ${biz.parish || 'Jamaica'}</p>
+        </div>
+        <button class="preview-view-btn">View →</button>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function getDetailedBusinessCard(provider) {
+  const tags = [];
+  if (provider.kid_friendly === 1) tags.push('Kid Friendly');
+  if (provider.walkins_allowed === 1) tags.push('Walk-ins Welcome');
+  if (provider.mobile_service === 1) tags.push('Mobile Service');
+  if (provider.board_certified === 1) tags.push('Board Certified');
+  if (provider.disabled_friendly === 1) tags.push('Accessible');
+  const tagsHtml = tags.length ? `<div class="tag-group">${tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}</div>` : '';
+
+  return `
+    <div class="detailed-business-card">
+      <div class="card-header">
+        <h3>${escapeHtml(provider.business_name)}</h3>
+        <span class="service-badge-large">${provider.service_type?.replace('_', ' ') || 'Beauty Provider'}</span>
+      </div>
+      <div class="card-body">
+        <div class="detail-row"><span class="detail-icon">📍</span><div class="detail-content">${escapeHtml(provider.address || provider.parish || 'Jamaica')}</div></div>
+        <div class="detail-row"><span class="detail-icon">📞</span><div class="detail-content">${provider.phone_number || 'Contact for number'}</div></div>
+        <div class="detail-row"><span class="detail-icon">💰</span><div class="detail-content">${formatPriceJMD(provider.starting_price)}</div></div>
+        ${provider.average_worktime ? `<div class="detail-row"><span class="detail-icon">⏱️</span><div class="detail-content">~${provider.average_worktime} minutes per session</div></div>` : ''}
+        ${tagsHtml ? `<div class="detail-row"><span class="detail-icon">🏷️</span><div class="detail-content">${tagsHtml}</div></div>` : ''}
+      </div>
+      <div class="card-footer">
+        <a href="provider.html?id=${provider.businessID}" class="view-full-profile-btn">View Full Profile →</a>
+      </div>
+    </div>
+  `;
+}
+
+function attachPreviewClickHandlers() {
+  document.querySelectorAll('.business-preview-card').forEach(card => {
+    card.removeEventListener('click', card._previewHandler);
+    const handler = (e) => {
+      const bizId = card.getAttribute('data-biz-id');
+      if (bizId) window.location.href = `provider.html?id=${bizId}`;
+    };
+    card.addEventListener('click', handler);
+    card._previewHandler = handler;
+  });
+}
+
+function searchBusinessesInCache(query) {
+  if (!query || query.length < 2) return [];
+  const lower = query.toLowerCase();
+  return allBusinessesCache.filter(biz => biz.business_name.toLowerCase().includes(lower));
+}
+
+async function searchBusinessByNameExact(query) {
+  try {
+    const res = await fetch(`/api/provider/search?name=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    if (data.success && data.provider) return data.provider;
+    return null;
+  } catch(e) { return null; }
+}
+
+function checkCountry(message) {
+  const lower = message.toLowerCase();
+  for (const country of INVALID_COUNTRIES) {
+    if (lower.includes(country)) return { valid: false, detected: country };
+  }
+  return { valid: true, detected: null };
+}
+
+function checkParish(message) {
+  const lower = message.toLowerCase();
+  for (const parish of VALID_PARISHES) {
+    if (lower.includes(parish)) {
+      return { valid: true, parish: parish === 'kingston & st andrew' ? 'Kingston' : parish.charAt(0).toUpperCase() + parish.slice(1) };
+    }
+  }
+  return { valid: false, detected: null };
+}
+
+function checkServiceType(message) {
+  const lower = message.toLowerCase();
+  for (const service of VALID_SERVICES) {
+    if (lower.includes(service)) {
+      const mapped = VALID_SERVICE_TYPES[service] || (service === 'nail' ? 'NAIL ARTIST' : 
+                   service === 'hairstylist' || service === 'hair' ? 'HAIRSTYLIST' :
+                   service === 'makeup' ? 'MAKE-UP ARTIST' : 'WAX SPECIALIST');
+      return { valid: true, service: mapped, displayService: service };
+    }
+  }
+  return { valid: false, detected: null };
+}
+
+function getServiceUrlParam(serviceType) {
+  const mapping = {
+    'NAIL ARTIST': 'nail-artists',
+    'HAIRSTYLIST': 'hair-stylists',
+    'MAKE-UP ARTIST': 'makeup-artists',
+    'WAX SPECIALIST': 'wax-specialists'
+  };
+  return mapping[serviceType] || 'hair-stylists';
+}
+
+function getViewAllServiceButton(serviceType) {
+  if (!serviceType) return '';
+  const urlParam = getServiceUrlParam(serviceType);
+  const displayName = serviceType.replace('_', ' ');
+  return `<a href="services_page.html?type=${urlParam}" class="service-view-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9h12M6 15h12M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>View All ${displayName} →</a>`;
+}
+
+function getInvalidLocationMessage(detected) {
+  return `<div class="info-message"><strong>Service Area Notice</strong><br><br>Belissima currently only operates in <strong>Kingston and Portmore, Jamaica</strong>.<br><br>Available locations: Kingston and Portmore</div>`;
+}
+
+function getInvalidServiceMessage() {
+  return `<div class="info-message"><strong>Service Type Notice</strong><br><br>Belissima currently only houses: Nail Artists, Hairstylists, Makeup Artists, and Wax Specialists.<br><br>Please try searching for one of these services instead.</div>`;
+}
+
+function getMissingParishMessage(serviceType) {
+  const displayService = serviceType?.replace('_', ' ') || 'beauty service';
+  return `<div class="info-message" style="background:#fff3e0; border-left-color:#e65100;">
+    <strong>📍 Location needed</strong><br><br>
+    I see you're looking for ${displayService}, but I need to know which area in Jamaica you'd like to search.<br><br>
+    Belissima currently operates in:<br>
+    • Kingston<br>
+    • Portmore<br><br>
+    Please tell me which area you're interested in!
+    <div class="location-prompt-buttons">
+      <button class="location-btn" onclick="sendLocationReply('Kingston')">📍 Kingston</button>
+      <button class="location-btn" onclick="sendLocationReply('Portmore')">📍 Portmore</button>
+    </div>
+  </div>`;
+}
+
+function getMissingServiceMessage(parish) {
+  return `<div class="info-message" style="background:#fff3e0; border-left-color:#e65100;">
+    <strong>💅 Service type needed</strong><br><br>
+    I see you're interested in ${parish}, but I need to know what type of beauty service you're looking for.<br><br>
+    Belissima offers:<br>
+    • Nail Artists<br>
+    • Hairstylists<br>
+    • Makeup Artists<br>
+    • Wax Specialists<br><br>
+    Please tell me which service you'd like to find in ${parish}!
+  </div>`;
+}
+
+function getMissingServiceAndParishMessage() {
+  return `<div class="info-message" style="background:#fff3e0; border-left-color:#e65100;">
+    <strong>💅 Information needed</strong><br><br>
+    I need to know two things to help you find the perfect beauty professional:<br><br>
+    <strong>1. What service are you looking for?</strong><br>
+    • Nail Artists<br>
+    • Hairstylists<br>
+    • Makeup Artists<br>
+    • Wax Specialists<br><br>
+    <strong>2. Which area in Jamaica?</strong><br>
+    • Kingston<br>
+    • Portmore<br><br>
+    For example: "Find me a cheap nail artist in Portmore" or "Hairstylist in Kingston"
+  </div>`;
+}
+
+window.sendLocationReply = function(location) {
+  const originalMessage = sessionStorage.getItem('pendingServiceQuery') || '';
+  sessionStorage.removeItem('pendingServiceQuery');
+  const fullMessage = originalMessage + ` in ${location}`;
+  userInput.value = fullMessage;
+  sendMessage();
+};
+
+function extractTagsFromMessage(text) {
+  const lower = text.toLowerCase();
+  const tags = {};
+  const serviceCheck = checkServiceType(text);
+  const parishCheck = checkParish(text);
+  
+  // Store detection results
+  tags.hasService = serviceCheck.valid;
+  tags.hasParish = parishCheck.valid;
+  
+  if (!serviceCheck.valid && !parishCheck.valid) {
+    tags.missingBoth = true;
+    return tags;
+  }
+  
+  if (!serviceCheck.valid && parishCheck.valid) {
+    tags.missingService = true;
+    tags.detectedParish = parishCheck.parish;
+    return tags;
+  }
+  
+  if (serviceCheck.valid && !parishCheck.valid) {
+    tags.missingParish = true;
+    tags.pendingService = serviceCheck.service;
+    tags.displayService = serviceCheck.displayService;
+    return tags;
+  }
+  
+  // Both service and parish are present
+  tags.service = serviceCheck.service;
+  tags.displayService = serviceCheck.displayService;
+  tags.parish = parishCheck.parish;
+  tags.requirements = [];
+  tags.priceSortOnly = false;
+  
+  if (lower.includes('kid') || lower.includes('child') || lower.includes('children') || lower.includes('single mother')) {
+    tags.kidFriendly = true;
+    tags.requirements.push('kid-friendly');
+  }
+  
+  if (lower.includes('walk in') || lower.includes('walk-in') || lower.includes('walkins') || lower.includes('walk ins') || lower.includes('no appointment')) {
+    tags.wantsWalkins = true;
+    tags.requirements.push('walk-ins welcome');
+  }
+  
+  if (lower.includes('mobile') || lower.includes('come to me') || lower.includes('at home') || lower.includes('mobile service')) {
+    tags.wantsMobile = true;
+    tags.requirements.push('mobile service');
+  }
+  
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  for (let day of days) { 
+    if (lower.includes(day)) { 
+      tags.preferredDay = day; 
+      tags.requirements.push(`open on ${day}`);
+      break; 
+    } 
+  }
+  
+  const timePattern = /(\d+)\s*(hour|hr|minute|min)/i;
+  const match = text.match(timePattern);
+  if (match) {
+    let value = parseInt(match[1]);
+    const unit = match[2].toLowerCase();
+    tags.maxTimeMinutes = unit.startsWith('hour') || unit === 'hr' ? value * 60 : value;
+    tags.requirements.push(`under ${value} ${unit}`);
+  }
+  const underPattern = /(?:under|less than|<)\s*(\d+)\s*(hour|hr|minute|min)/i;
+  const underMatch = text.match(underPattern);
+  if (underMatch && !tags.maxTimeMinutes) {
+    let value = parseInt(underMatch[1]);
+    const unit = underMatch[2].toLowerCase();
+    tags.maxTimeMinutes = unit.startsWith('hour') || unit === 'hr' ? value * 60 : value;
+    tags.requirements.push(`under ${value} ${unit}`);
+  }
+  
+  if (lower.includes('cheap') || lower.includes('affordable') || lower.includes('budget') || lower.includes('budget-friendly')) {
+    tags.wantsCheapest = true;
+    tags.priceSortOrder = 'asc';
+    tags.priceSortOnly = true;
+  }
+  if (lower.includes('expensive') || lower.includes('luxury') || lower.includes('high end') || lower.includes('premium')) {
+    tags.wantsMostExpensive = true;
+    tags.priceSortOrder = 'desc';
+    tags.priceSortOnly = true;
+  }
+  
+  if (lower.includes('fast') || lower.includes('quick')) {
+    tags.wantsFastest = true;
+    tags.requirements.push('fast service');
+  }
+  
+  return tags;
+}
+
+async function fetchProviders(service, parish) {
+  try {
+    const res = await fetch('/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ service_type: service, parish: parish })
+    });
+    const data = await res.json();
+    return data.success && data.results ? data.results : [];
+  } catch(e) { return []; }
+}
+
+function applyHardRequirements(providers, extractedTags) {
+  const filtersToApply = extractedTags.requirements || [];
+  if (filtersToApply.length === 0) return providers;
+  
+  return providers.filter(p => {
+    let passes = true;
+    
+    if (extractedTags.kidFriendly && p.kid_friendly !== 1) passes = false;
+    if (extractedTags.wantsWalkins && passes && p.walkins_allowed !== 1) passes = false;
+    if (extractedTags.wantsMobile && passes && p.mobile_service !== 1) passes = false;
+    if (extractedTags.preferredDay && passes) {
+      if (!p.opening_hours || !p.opening_hours[extractedTags.preferredDay]?.open) passes = false;
+    }
+    if (extractedTags.maxTimeMinutes && passes) {
+      const worktime = p.average_worktime ? parseInt(p.average_worktime) : null;
+      if (!worktime || worktime > extractedTags.maxTimeMinutes) passes = false;
+    }
+    
+    return passes;
+  });
+}
+
+function sortProvidersByPrice(providers, extractedTags) {
+  if (extractedTags.wantsCheapest) {
+    return [...providers].sort((a, b) => {
+      const priceA = a.starting_price ? parseFloat(a.starting_price) : Infinity;
+      const priceB = b.starting_price ? parseFloat(b.starting_price) : Infinity;
+      return priceA - priceB;
+    });
+  }
+  if (extractedTags.wantsMostExpensive) {
+    return [...providers].sort((a, b) => {
+      const priceA = a.starting_price ? parseFloat(a.starting_price) : 0;
+      const priceB = b.starting_price ? parseFloat(b.starting_price) : 0;
+      return priceB - priceA;
+    });
+  }
+  return providers;
+}
+
+function scoreProviderWithTags(provider, extractedTags, weights) {
+  let score = 0;
+  const price = provider.starting_price ? parseFloat(provider.starting_price) : null;
+  const worktime = provider.average_worktime ? parseInt(provider.average_worktime) : null;
+  
+  let kidScore = (provider.kid_friendly === 1) ? 100 : 0;
+  let walkinScore = (provider.walkins_allowed === 1) ? 100 : 0;
+  let mobileScore = (provider.mobile_service === 1) ? 100 : 0;
+  let certifiedScore = (provider.board_certified === 1) ? 100 : 0;
+  
+  let dayScore = 0;
+  if (extractedTags.preferredDay && provider.opening_hours) {
+    const dayHours = provider.opening_hours[extractedTags.preferredDay];
+    if (dayHours && dayHours.open && dayHours.close) dayScore = 100;
+  }
+  
+  let timeScore = 0;
+  if (extractedTags.maxTimeMinutes && worktime) {
+    if (worktime <= extractedTags.maxTimeMinutes) timeScore = 100;
+    else timeScore = Math.max(0, 100 - ((worktime - extractedTags.maxTimeMinutes) / extractedTags.maxTimeMinutes) * 100);
+  } else if (extractedTags.wantsFastest && worktime) {
+    if (worktime <= 30) timeScore = 100;
+    else if (worktime <= 60) timeScore = 80;
+    else if (worktime <= 90) timeScore = 60;
+    else if (worktime <= 120) timeScore = 40;
+    else timeScore = 20;
+  }
+  
+  let priceScore = 0;
+  if (price) {
+    if (price <= 2000) priceScore = 80;
+    else if (price <= 5000) priceScore = 60;
+    else if (price <= 9000) priceScore = 40;
+    else priceScore = 20;
+  }
+  
+  score = (priceScore * (weights.price / 10)) + (timeScore * (weights.speed / 10)) +
+          (kidScore * (weights.kid / 10)) + (walkinScore * (weights.walkins / 10)) +
+          (mobileScore * (weights.mobile / 10)) + (certifiedScore * (weights.certified / 10)) + (dayScore * (weights.day / 10));
+  
+  return Math.round(score);
+}
+
+function buildRankingWidget(extractedTags, service, parish, providers) {
+  currentRankingContext = {
+    extractedTags: {
+      service: extractedTags.service,
+      parish: extractedTags.parish,
+      kidFriendly: extractedTags.kidFriendly || false,
+      preferredDay: extractedTags.preferredDay || null,
+      maxTimeMinutes: extractedTags.maxTimeMinutes || null,
+      wantsCheapest: extractedTags.wantsCheapest || false,
+      wantsMostExpensive: extractedTags.wantsMostExpensive || false,
+      wantsFastest: extractedTags.wantsFastest || false,
+      wantsWalkins: extractedTags.wantsWalkins || false,
+      wantsMobile: extractedTags.wantsMobile || false,
+      priceSortOrder: extractedTags.priceSortOrder || null,
+      priceSortOnly: extractedTags.priceSortOnly || false,
+      requirements: extractedTags.requirements || []
+    }
+  };
+  
+  let tagSummaryHtml = `<div class="tag-summary"><h4>I detected these requirements from your message:</h4><div class="detected-tags">`;
+  if (extractedTags.kidFriendly) tagSummaryHtml += `<span class="detected-tag">👶 Kid-friendly <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.wantsWalkins) tagSummaryHtml += `<span class="detected-tag">🚶 Walk-ins welcome <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.wantsMobile) tagSummaryHtml += `<span class="detected-tag">🚗 Mobile service <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.preferredDay) tagSummaryHtml += `<span class="detected-tag">📅 Open on ${extractedTags.preferredDay.charAt(0).toUpperCase() + extractedTags.preferredDay.slice(1)} <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.maxTimeMinutes) tagSummaryHtml += `<span class="detected-tag">⏱️ Under ${extractedTags.maxTimeMinutes / 60} hours <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.wantsFastest) tagSummaryHtml += `<span class="detected-tag">⚡ Fast service <span class="hard-requirement-badge">REQUIRED</span></span>`;
+  if (extractedTags.wantsCheapest) tagSummaryHtml += `<span class="detected-tag">💰 Price sorting: lowest to highest</span>`;
+  if (extractedTags.wantsMostExpensive) tagSummaryHtml += `<span class="detected-tag">💎 Price sorting: highest to lowest</span>`;
+  tagSummaryHtml += `</div><p>Now rank your preferences (these will affect the order):</p></div>`;
+  
+  return `<div class="ranking-widget" id="rankingWidget">${tagSummaryHtml}
+    <div class="ranking-option"><span class="ranking-label">👶 Kid-friendly</span><select id="rankKid" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">📅 Day availability</span><select id="rankDay" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">⚡ Speed</span><select id="rankSpeed" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">💰 Price</span><select id="rankPrice" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">🚶 Walk-ins</span><select id="rankWalkins" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">🚗 Mobile service</span><select id="rankMobile" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <div class="ranking-option"><span class="ranking-label">✅ Certified</span><select id="rankCertified" class="ranking-select"><option value="30">Most important</option><option value="20">Very important</option><option value="10">Important</option><option value="5">Somewhat</option><option value="0" selected>Not important</option></select></div>
+    <button class="submit-rank-btn" onclick="submitRanking()">Get My Top 5 Matches</button>
+  </div>`;
+}
+
+function generateResultsHTML(providers, weights, extractedTags, service, parish) {
+  let filteredProviders = applyHardRequirements(providers, extractedTags);
+  
+  if (filteredProviders.length === 0) {
+    const reqList = (extractedTags.requirements || []).join(', ');
+    return `<div class="info-message" style="background:#fff3e0; border-left-color:#e65100;">
+      <strong>⚠️ No providers match ALL your requirements</strong><br><br>
+      I found ${providers.length} ${service.replace('_', ' ')} in ${parish}, but none match:<br>
+      <strong>${reqList}</strong><br><br>
+      Would you like to try different preferences or remove some requirements?
+    </div>`;
+  }
+  
+  let sortedProviders = sortProvidersByPrice(filteredProviders, extractedTags);
+  
+  let finalProviders;
+  if (extractedTags.wantsCheapest || extractedTags.wantsMostExpensive) {
+    finalProviders = sortedProviders.slice(0, 5);
+  } else {
+    const scored = sortedProviders.map(p => ({ ...p, weightedScore: scoreProviderWithTags(p, extractedTags, weights) }));
+    scored.sort((a,b) => b.weightedScore - a.weightedScore);
+    finalProviders = scored.slice(0, 5);
+  }
+  
+  let requirementText = (extractedTags.requirements || []).length > 0 
+    ? `✅ Showing only providers that match: ${(extractedTags.requirements || []).join(', ')}` 
+    : '';
+  
+  let priceSortText = '';
+  if (extractedTags.wantsCheapest) priceSortText = '💰 Sorted by price (lowest to highest)';
+  if (extractedTags.wantsMostExpensive) priceSortText = '💎 Sorted by price (highest to lowest)';
+  
+  let html = `<div style="background:linear-gradient(135deg,#8a2347,#661731); border-radius:16px; padding:16px; margin-bottom:16px; color:white; text-align:center;">
+    <h3>Top ${finalProviders.length} ${service.replace('_', ' ')} in ${parish}</h3>`;
+  if (requirementText) {
+    html += `<p style="margin-top:8px; font-size:12px;">${requirementText}</p>`;
+  }
+  if (priceSortText) {
+    html += `<p style="margin-top:4px; font-size:11px; opacity:0.9;">${priceSortText}</p>`;
+  }
+  html += `</div>`;
+  html += getViewAllServiceButton(service);
+  
+  finalProviders.forEach((p, idx) => {
+    const tags = [];
+    if (p.kid_friendly === 1) tags.push('Kid Friendly');
+    if (p.walkins_allowed === 1) tags.push('Walk-ins');
+    if (p.mobile_service === 1) tags.push('Mobile');
+    if (p.board_certified === 1) tags.push('Certified');
+    const tagsHtml = tags.length ? `<div class="provider-tags">${tags.map(t => `<span class="tag-badge">${t}</span>`).join('')}</div>` : '';
+    
+    let reason = '';
+    if (extractedTags.preferredDay && p.opening_hours?.[extractedTags.preferredDay]?.open) {
+      const dayHours = p.opening_hours[extractedTags.preferredDay];
+      reason = `📅 Open on ${extractedTags.preferredDay.charAt(0).toUpperCase() + extractedTags.preferredDay.slice(1)} (${dayHours.open}–${dayHours.close}) — matches your requested day! ✨`;
+    } else if (extractedTags.wantsWalkins && p.walkins_allowed === 1) reason = `🚶 Walk-ins welcome — no appointment needed! ✨`;
+    else if (extractedTags.wantsMobile && p.mobile_service === 1) reason = `🚗 Mobile service — they come to you! ✨`;
+    else if (extractedTags.wantsCheapest && p.starting_price) reason = `💰 ${formatPriceJMD(p.starting_price)} — budget-friendly option! ✨`;
+    else if (extractedTags.wantsMostExpensive && p.starting_price) reason = `💎 ${formatPriceJMD(p.starting_price)} — premium/luxury choice! ✨`;
+    else if (extractedTags.kidFriendly && p.kid_friendly === 1) reason = `👶 Kid-friendly — perfect for families! ✨`;
+    else if (extractedTags.wantsFastest && p.average_worktime) reason = `⚡ Fast service — ~${p.average_worktime} min session! ✨`;
+    else if (p.walkins_allowed === 1) reason = `🚶 Walk-ins welcome`;
+    else if (p.mobile_service === 1) reason = `🚗 Mobile service available`;
+    else if (p.kid_friendly === 1) reason = `👶 Kid-friendly environment`;
+    else reason = `💫 High-quality provider recommended for you`;
+    
+    html += `<div class="provider-card"><div class="provider-rank">#${idx+1}</div><div class="provider-name">${escapeHtml(p.business_name)}</div><div class="provider-meta">📍 ${escapeHtml(p.address || p.parish)} &nbsp;|&nbsp; 💰 ${formatPriceJMD(p.starting_price)}</div>${p.average_worktime ? `<div class="provider-meta">⏱️ ~${p.average_worktime} min</div>` : ''}${tagsHtml}<div class="reason-box"><div class="reason-text">💡 ${reason}</div></div><a href="provider.html?id=${p.businessID}" class="view-profile-btn">View Profile →</a></div>`;
+  });
+  html += `<div class="close-confirm-box"><p>Would you like to clear this chat?</p><div class="close-confirm-btns"><button class="btn-confirm-yes" onclick="window.confirmClearChat()">Yes, clear chat</button><button class="btn-confirm-no" onclick="dismissCloseChat()">No, keep it</button></div></div>`;
+  return html;
+}
+
+window.submitRanking = async function() {
+  if (!currentRankingContext) {
+    console.error('No ranking context found');
+    renderMessage('bot', 'Sorry, something went wrong. Please try your search again.', false, true);
+    return;
+  }
+  
+  const weights = {
+    kid: parseInt(document.getElementById('rankKid')?.value || 0),
+    day: parseInt(document.getElementById('rankDay')?.value || 0),
+    speed: parseInt(document.getElementById('rankSpeed')?.value || 0),
+    price: parseInt(document.getElementById('rankPrice')?.value || 0),
+    walkins: parseInt(document.getElementById('rankWalkins')?.value || 0),
+    mobile: parseInt(document.getElementById('rankMobile')?.value || 0),
+    certified: parseInt(document.getElementById('rankCertified')?.value || 0)
+  };
+  
+  const { extractedTags } = currentRankingContext;
+  const service = extractedTags.service;
+  const parish = extractedTags.parish;
+  
+  showTyping();
+  try {
+    const providers = await fetchProviders(service, parish);
+    hideTyping();
+    if (providers.length) {
+      const resultsHtml = generateResultsHTML(providers, weights, extractedTags, service, parish);
+      renderMessage('bot', resultsHtml, true, true);
+    } else {
+      renderMessage('bot', `I couldn't find any ${service.replace('_', ' ')} in ${parish}. Would you like to try a different service or location?`, false, true);
+    }
+  } catch(err) {
+    hideTyping();
+    console.error(err);
+    renderMessage('bot', 'Sorry, I encountered an error. Please try again.', false, true);
+  }
+};
+
+window.confirmClearChat = function() { clearChat(); renderMessage('bot', 'Chat cleared. Start a new conversation anytime.', false, true); };
+window.dismissCloseChat = function() { const box = document.querySelector('.close-confirm-box'); if (box) box.remove(); };
+
+// ── MAIN HANDLER ────────────────────────────────────────────────────────
+async function handleUserMessage(userMessage) {
+  if (isCrisisMessage(userMessage)) return { type: 'crisis', html: getCrisisResponse() };
+  
+  const exactBusiness = await searchBusinessByNameExact(userMessage);
+  if (exactBusiness) {
+    return { type: 'business', html: `<div>${getDetailedBusinessCard(exactBusiness)}<div class="close-confirm-box"><p>Would you like to clear this chat?</p><div class="close-confirm-btns"><button class="btn-confirm-yes" onclick="window.confirmClearChat()">Yes, clear chat</button><button class="btn-confirm-no" onclick="dismissCloseChat()">No, keep it</button></div></div></div>` };
+  }
+  
+  const countryCheck = checkCountry(userMessage);
+  if (!countryCheck.valid) return { type: 'info', html: getInvalidLocationMessage(countryCheck.detected) };
+  
+  const extractedTags = extractTagsFromMessage(userMessage);
+  
+  // Case 1: Missing both service and parish (just a tag or random text)
+  if (extractedTags.missingBoth) {
+    return { type: 'info', html: getMissingServiceAndParishMessage() };
+  }
+  
+  // Case 2: Has parish but missing service
+  if (extractedTags.missingService) {
+    return { type: 'info', html: getMissingServiceMessage(extractedTags.detectedParish) };
+  }
+  
+  // Case 3: Has service but missing parish
+  if (extractedTags.missingParish) {
+    sessionStorage.setItem('pendingServiceQuery', userMessage);
+    return { type: 'info', html: getMissingParishMessage(extractedTags.pendingService) };
+  }
+  
+  // Case 4: Has both service and parish - proceed with search
+  if (!extractedTags.service || !extractedTags.parish) {
+    return { type: 'text', text: "Please tell me what service you're looking for (nails, hair, makeup, or wax) and your parish (Kingston or Portmore)." };
+  }
+  
+  const providers = await fetchProviders(extractedTags.service, extractedTags.parish);
+  if (!providers.length) {
+    return { type: 'text', text: `I couldn't find any ${extractedTags.service.toLowerCase().replace('_', ' ')} in ${extractedTags.parish}. Would you like to try a different service or location?` };
+  }
+  const rankingHtml = buildRankingWidget(extractedTags, extractedTags.service, extractedTags.parish, providers);
+  return { type: 'ranking', html: rankingHtml };
+}
+
+function onUserInputChange() {
+  if (businessPreviewTimeout) clearTimeout(businessPreviewTimeout);
+  businessPreviewTimeout = setTimeout(() => {
+    const query = userInput.value.trim();
+    if (query.length < 2) return;
+    const matches = searchBusinessesInCache(query);
+    if (matches.length === 0) return;
+    const previewHtml = getBusinessPreviewHtml(matches);
+    if (previewHtml) {
+      const existingPreview = document.getElementById('instantPreview');
+      if (existingPreview) existingPreview.remove();
+      const previewDiv = document.createElement('div');
+      previewDiv.id = 'instantPreview';
+      previewDiv.className = 'message bot';
+      previewDiv.innerHTML = `<div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm.5 5H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div><div class="bubble">${previewHtml}</div>`;
+      messagesArea.appendChild(previewDiv);
+      messagesArea.scrollTo({ top: messagesArea.scrollHeight, behavior: 'smooth' });
+      attachPreviewClickHandlers();
+    }
+  }, 300);
+}
+
+userInput.addEventListener('input', onUserInputChange);
+
+async function sendMessage() {
+  const msg = userInput.value.trim();
+  if (!msg || isWaiting) return;
+  const preview = document.getElementById('instantPreview');
+  if (preview) preview.remove();
+  userInput.value = '';
+  renderMessage('user', msg, false, true);
+  showTyping();
+  isWaiting = true;
+  sendBtn.disabled = true;
+  userInput.disabled = true;
+  try {
+    const result = await handleUserMessage(msg);
+    hideTyping();
+    if (result.type === 'text') renderMessage('bot', result.text, false, true);
+    else if (result.type === 'info') renderMessage('bot', result.html, true, true);
+    else if (result.type === 'crisis') renderMessage('bot', result.html, true, true);
+    else if (result.type === 'business') renderMessage('bot', result.html, true, true);
+    else if (result.type === 'ranking') renderMessage('bot', result.html, true, true);
+  } catch(err) {
+    console.error(err);
+    hideTyping();
+    renderMessage('bot', 'Sorry, I encountered an error. Please try again.', false, true);
+  } finally {
+    isWaiting = false;
+    sendBtn.disabled = false;
+    userInput.disabled = false;
+    userInput.focus();
+  }
+}
+
+function escapeHtml(str) { if (!str) return ''; return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+userInput.addEventListener('keypress', e => { if (e.key === 'Enter' && !e.shiftKey && !isWaiting) { e.preventDefault(); sendMessage(); } });
+sendBtn.addEventListener('click', sendMessage);
+document.querySelectorAll('.suggestion-chip').forEach(chip => {
+  chip.addEventListener('click', () => { if (!isWaiting) { userInput.value = chip.getAttribute('data-suggestion') || chip.innerText; sendMessage(); } });
+});
+document.getElementById('backDashboardBtn').addEventListener('click', e => { e.preventDefault(); window.location.href = 'dashboard.html'; });
+const topbarEl = document.getElementById('topbar');
+window.addEventListener('scroll', () => topbarEl.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+
+loadChat();
+userInput.focus();
+</script>
+</body>
+</html>

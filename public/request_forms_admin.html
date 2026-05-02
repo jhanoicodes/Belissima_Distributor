@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin · Provider Requests · Belissima</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,400&family=Reem+Kufi+Fun:wght@500;600&display=swap');
+    :root {
+      --bg: #FFE9F0;
+      --panel: #ffffff;
+      --text: #181114;
+      --muted: #6a5760;
+      --brand: #8a2347;
+      --brand-dark: #661731;
+      --soft: #efadc5;
+      --soft-2: #f8d0dd;
+      --border: rgba(156, 62, 92, 0.22);
+      --border-strong: #9c3e5c;
+      --shadow: 0 22px 91px rgba(0,0,0,0.08);
+      --shadow-soft: 0 18px 45px rgba(138, 35, 71, 0.14);
+      --radius: 24px;
+      --radius-sm: 18px;
+      --content-width: min(100%, 1450px);
+      --gutter: clamp(16px, 3vw, 32px);
+      --gold: #9a1534;
+      --gold-light: #9a3a50;
+      --coral: #F1A2B7;
+      --text-dim: #6b3a46;
+      --text-muted: rgba(0,0,0,0.40);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      margin: 0;
+      font-family: 'Chivo', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      line-height: 1.4;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    /* ===== TOPBAR: matched to Become a Provider ===== */
+    .topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      pointer-events: auto;
+      background: transparent;
+      box-shadow: none;
+    }
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(156, 62, 92, 0.16);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+    .topbar__left { display: flex; align-items: center; gap: 14px; }
+    .topbar h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1rem, 0.85rem + 0.45vw, 1.35rem);
+      color: var(--brand-dark);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .topbar__badge {
+      background: rgba(138, 35, 71, 0.12);
+      color: var(--brand-dark);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(138, 35, 71, 0.24);
+      white-space: nowrap;
+    }
+    .logo img { height: 90px; width: auto; display: block; }
+    .nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; justify-content: flex-end; }
+    .nav__link,
+    .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav__link {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .nav__link:hover { background: rgba(138, 35, 71, 0.12); transform: translateY(-1px); }
+    .nav__link--active { background: rgba(138, 35, 71, 0.12); border-color: rgba(138, 35, 71, 0.35); }
+    .nav__icon {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .nav__icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -3px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 18px;
+      text-align: center;
+      border: 2px solid #fff;
+    }
+    .back-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-family: 'Chivo', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .back-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+    /* ===== HERO ===== */
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      min-height: 64vh;
+      padding: 20px var(--gutter) 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(90deg, rgba(241, 233, 236, 0.96) 0%, rgba(255, 248, 250, 0.82) 38%, rgba(255, 248, 250, 0.08) 72%),
+        url('https://esmalteriacapricho.com.br/assets/img/esmaltaria-bg.jpg') center / cover no-repeat;
+      background-position: right center;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 76% 32%, rgba(255,255,255,0.74) 0 10%, transparent 11%),
+        radial-gradient(circle at 70% 44%, rgba(255,255,255,0.55) 0 12%, transparent 13%),
+        radial-gradient(circle at 84% 58%, rgba(255,255,255,0.62) 0 9%, transparent 10%),
+        radial-gradient(circle at 73% 70%, rgba(255,255,255,0.52) 0 11%, transparent 12%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 150px;
+      background: linear-gradient(to bottom, rgba(255,233,240,0) 0%, rgba(255,233,240,0.95) 70%, rgba(255,233,240,1) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hero__overlay {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(90deg, rgba(255,233,240,0.96) 0%, rgba(255,233,240,0.88) 38%, rgba(255,233,240,0.45) 65%, rgba(255,233,240,0.05) 100%);
+    }
+    .hero__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      padding-top: 145px;
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      min-height: 50vh;
+    }
+    .hero__glass {
+      max-width: 610px;
+      padding: clamp(24px, 4vw, 42px);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    .hero__eyebrow {
+      font-family: 'Reem Kufi Fun', sans-serif;
+      font-size: clamp(0.72rem, 0.58rem + 0.35vw, 0.94rem);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin: 0 0 14px;
+      color: var(--brand-dark);
+    }
+    .hero__title { margin: 0; line-height: 0.95; text-transform: uppercase; letter-spacing: 0.03em; }
+    .hero__title-top { display: block; font-family: 'Cinzel', serif; font-size: clamp(2rem, 1.25rem + 2.1vw, 4rem); font-weight: 600; color: var(--text); }
+    .hero__title-mid { display: block; font-family: 'Dancing Script', cursive; font-size: clamp(2.1rem, 1.35rem + 2vw, 3.65rem); font-weight: 700; text-transform: none; margin: 0.08em 0; color: var(--brand); }
+    .hero__title-bottom { display: block; font-family: 'Cinzel', serif; font-size: clamp(2.1rem, 1.35rem + 2.4vw, 4.2rem); font-weight: 700; color: var(--text); }
+    .hero__copy { margin: 18px 0 0; max-width: 50ch; font-size: clamp(0.98rem, 0.9rem + 0.25vw, 1.1rem); letter-spacing: 0.01em; color: var(--brand-dark); }
+
+    /* ===== TABS ===== */
+    .tabs-bar {
+      width: min(100% - 32px, var(--content-width));
+      margin: -28px auto 0;
+      position: relative;
+      z-index: 5;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(115,40,57,0.12);
+      border-radius: 999px;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .tab-btn.active { color: white; background: var(--brand); border-color: var(--brand); box-shadow: 0 10px 22px rgba(138,35,71,0.18); }
+    .tab-btn .count { background: rgba(138, 35, 71, 0.10); color: var(--brand-dark); font-size: 11px; padding: 3px 9px; border-radius: 20px; font-family: 'DM Sans', sans-serif; }
+    .tab-btn.active .count { background: rgba(255,255,255,0.2); color: white; }
+
+    .container { width: min(100% - 32px, var(--content-width)); margin: 0 auto; padding: 34px 0 80px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 28px; }
+    .stat-card {
+      background: rgba(255,255,255,0.88);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      border: 1px solid rgba(115,40,57,0.12);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .stat-card__icon { width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 23px; flex-shrink: 0; border: 1px solid rgba(156,62,92,0.14); }
+    .stat-card__icon.pending { background: #fff3e0;}
+    .stat-card__icon.update { background: #e3f2fd; }
+    .stat-card__icon.total { background: rgba(241,162,183,0.35); }
+    .stat-card__num { font-size: 30px; font-weight: 700; font-family: 'Cinzel', serif; color: var(--brand-dark); }
+    .stat-card__label { font-size: 12px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+    .table-card { background: var(--panel); border-radius: var(--radius); border: 1px solid rgba(115,40,57,0.12); box-shadow: var(--shadow); overflow: hidden; }
+    .table-card__header { padding: 22px 26px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-card__title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--gold); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: rgba(255,233,240,0.72); color: var(--brand); font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 16px; text-align: left; white-space: nowrap; }
+    td { padding: 16px; border-bottom: 1px solid rgba(156,62,92,0.14); font-family: 'DM Sans', sans-serif; font-size: 14px; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,233,240,0.42); }
+
+    .badge { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge--pending { background: #fff3e0; color: #e65100; }
+    .badge--update { background: #e3f2fd; color: #1565c0; }
+    .badge--new { background: rgba(39,174,96,0.12); color: #2e7d32; }
+
+    .action-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 15px; border-radius: 999px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; border: none; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--view { background: #FFE9F0; color: #732839; border: 1px solid rgba(115,40,57,0.25); }
+    .btn--approve { background: rgba(39,174,96,0.12); color: #2e7d32; border: 1px solid rgba(46,125,50,0.28); }
+    .btn--reject { background: rgba(192,57,43,0.10); color: #c62828; border: 1px solid rgba(198,40,40,0.24); }
+    .btn--view:hover { background: var(--coral); color: white; }
+    .btn--approve:hover { background: rgba(39,174,96,0.22); }
+    .btn--reject:hover { background: rgba(192,57,43,0.18); }
+
+    .empty-state { text-align: center; padding: 64px 24px; color: var(--text-dim); }
+    .empty-state__icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state p { font-size: 15px; }
+    .loading-state { text-align: center; padding: 48px; color: var(--text-dim); font-size: 15px; }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,4,14,0.55); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--panel); border-radius: 28px; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; box-shadow: 0 32px 80px rgba(102,23,49,0.25); display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.55); }
+    .modal__header { padding: 24px 28px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; position: sticky; top: 0; background: rgba(255,255,255,0.95); border-radius: 28px 28px 0 0; z-index: 1; backdrop-filter: blur(12px); }
+    .modal__title { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--gold); }
+    .modal__subtitle { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+    .modal__close { width: 38px; height: 38px; border-radius: 50%; background: #FFE9F0; border: 1px solid rgba(115,40,57,0.12); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); flex-shrink: 0; transition: all 0.2s; }
+    .modal__close:hover { background: var(--soft-2); color: var(--brand-dark); }
+    .modal__body { padding: 24px 28px; flex: 1; }
+    .modal__footer { padding: 20px 28px; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; position: sticky; bottom: 0; background: rgba(255,255,255,0.96); border-radius: 0 0 28px 28px; backdrop-filter: blur(12px); }
+    .modal__footer .btn { padding: 10px 22px; font-size: 14px; }
+    .btn--primary-solid { background: var(--brand); color: white; border: none; }
+    .btn--primary-solid:hover { background: var(--brand-dark); }
+    .btn--danger-solid { background: #c62828; color: white; border: none; }
+    .btn--danger-solid:hover { background: #b71c1c; }
+    .btn--ghost { background: #FFE9F0; color: var(--text-dim); border: 1px solid rgba(115,40,57,0.18); }
+    .btn--ghost:hover { color: white; background: var(--coral); }
+
+    .detail-section { margin-bottom: 24px; }
+    .detail-section__title { font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .detail-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+    .detail-item__label { font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+    .detail-item__value { font-size: 14px; font-weight: 500; color: var(--text); word-break: break-word; }
+    .detail-item__value a { color: var(--brand); font-weight: 700; }
+    .detail-item--full { grid-column: 1 / -1; }
+    .notes-box { background: #FFE9F0; border-radius: 14px; padding: 14px 16px; font-size: 13px; color: var(--text-dim); font-style: italic; }
+    .hours-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 8px; }
+    .hour-day { background: #FFE9F0; border-radius: 12px; padding: 9px 5px; text-align: center; border: 1px solid rgba(156,62,92,0.12); }
+    .hour-day__name { font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
+    .hour-day__time { font-size: 10px; color: var(--text); }
+    .hour-day.closed { opacity: 0.45; }
+    .notes-label { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; display: block; }
+    .notes-textarea { width: 100%; padding: 12px 14px; border: 1px solid rgba(115,40,57,0.22); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: rgba(217,217,217,0.25); resize: vertical; min-height: 80px; transition: border-color 0.2s, background 0.2s; }
+    .notes-textarea:focus { outline: none; border-color: var(--gold); background: white; }
+
+    .footer { margin-top: 0; background: var(--brand-dark); color: #fff6fa; padding: 36px var(--gutter); }
+    .footer__inner { width: var(--content-width); margin: 0 auto; display: grid; grid-template-columns: 1.1fr repeat(3, 1fr); gap: 28px; }
+    .footer h3 { margin: 0 0 12px; font-size: 1rem; font-family: 'Cinzel', serif; }
+    .footer p, .footer li { margin: 0; color: rgba(255, 246, 250, 0.85); font-size: 0.92rem; }
+    .footer ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+
+    @media (max-width: 1100px) { .nav .optional-nav { display: none; } }
+    @media (max-width: 960px) { .stats-row { grid-template-columns: 1fr; } .footer__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 760px) {
+      .topbar__inner { align-items: flex-start; flex-direction: column; }
+      .topbar__left { width: 100%; justify-content: space-between; }
+      .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+      .nav__link { width: 100%; }
+      .hero__inner { padding-top: 220px; min-height: 62vh; }
+      .hero__glass { max-width: 100%; border-radius: 24px; padding: 24px; }
+      .tabs-bar { flex-direction: column; border-radius: 24px; }
+      .modal__footer { flex-direction: column; align-items: stretch; }
+      .detail-grid, .detail-grid--3 { grid-template-columns: 1fr; }
+      .hours-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) { .footer__inner { grid-template-columns: 1fr; } }
+
+    .tab-btn {
+      font-family: 'Chivo', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .table-card__title {
+      font-family: 'Chivo', sans-serif;
+      font-weight: 700;
+    }
+    .stat-card__num {
+      font-family: 'Chivo', sans-serif;
+    }
+    .stat-card__label {
+      font-family: 'Chivo', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar__inner">
+      <a href="dashboard.html" class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M19 12H5"></path>
+          <path d="m12 19-7-7 7-7"></path>
+        </svg>
+        Back to Dashboard
+      </a>
+      <div class="topbar__left">
+        <div class="logo"><img src="belissima-logo.png" alt="Belissima" /></div>
+      </div>
+      <nav class="nav" aria-label="Admin navigation">
+        <a href="Allura.html" class="nav__link optional-nav">Allura</a>
+        <a href="dashboard.html#services" class="nav__link optional-nav">Services</a>
+        <a href="about_us.html" class="nav__link optional-nav">About Us</a>
+        <a href="become_provider.html" class="nav__link">Become a Provider</a>
+        <a href="request_forms_admin.html" class="nav__link nav__link--active">Requests</a>
+        <div class="nav__icon" id="notificationBell" aria-label="Notifications" style="position:relative;">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              <span id="notificationBadge" class="notification-badge" style="display:none;">0</span>
+        </div>
+        <a href="favorites.html" class="nav__icon" aria-label="Favorites">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z"></path></svg>
+        </a>
+        <a href="account.html" class="nav__icon" aria-label="Profile">
+          <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"></path>
+              </svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hero__overlay"></div>
+    <div class="hero__inner">
+      <div class="hero__glass">
+        <p class="hero__eyebrow">✦ Admin review ✦</p>
+        <h1 class="hero__title">
+          <span class="hero__title-top">Provider</span>
+          <span class="hero__title-mid">Request</span>
+          <span class="hero__title-bottom">Forms</span>
+        </h1>
+        <p class="hero__copy">Review new provider applications and information update requests in the same polished Belissima style.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('new')" id="tab-new">
+      New Applications <span class="count" id="count-new">–</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('update')" id="tab-update">
+      Information Updates <span class="count" id="count-update">–</span>
+    </button>
+  </div>
+
+  <div class="container">
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card__icon pending">🖂</div>
+        <div>
+          <div class="stat-card__num" id="statPending">–</div>
+          <div class="stat-card__label">New Provider Applications</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__icon update">🖆</div>
+        <div>
+          <div class="stat-card__num" id="statUpdates">–</div>
+          <div class="stat-card__label">Information Update Requests</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__icon total">🖅</div>
+        <div>
+          <div class="stat-card__num" id="statTotal">–</div>
+          <div class="stat-card__label">Total Awaiting Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-card__header">
+        <span class="table-card__title" id="tableTitle">New Applications</span>
+      </div>
+      <div class="table-wrap">
+        <div id="tableContainer" class="loading-state">Loading requests...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal__header">
+        <div>
+          <div class="modal__title" id="modalTitle">Application Details</div>
+          <div class="modal__subtitle" id="modalSubtitle"></div>
+        </div>
+        <button class="modal__close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal__body" id="modalBody">Loading...</div>
+      <div class="modal__footer">
+        <label class="notes-label" style="margin:0;align-self:center;">Admin notes:</label>
+        <textarea class="notes-textarea" id="modalNotes" rows="2" placeholder="Optional internal notes..." style="flex:1;min-height:0;height:40px;"></textarea>
+        <button class="btn btn--danger-solid" id="modalRejectBtn" onclick="confirmAction('reject')">Reject</button>
+        <button class="btn btn--primary-solid" id="modalApproveBtn" onclick="confirmAction('approve')">Approve</button>
+        <button class="btn btn--ghost" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <section><h3>Belissima</h3><p>Your one-stop hub for beauty services.</p></section>
+      <section><h3>Services</h3><ul><li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li><li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li><li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li><li><a href="services_page.html?type=nail-artists">Nail Artists</a></li></ul></section>
+      <section><h3>Company</h3><ul><li><a href="about_us.html">About Us</a></li><li><a href="become_provider.html">Become a Provider</a></li></ul></section>
+      <section><h3>Support/Contact</h3><ul><li>support@belissima.com</li></ul></section>
+    </div>
+  </footer>
+
+  <script>
+    // ── AUTH CHECK ──
+    const currentUser = JSON.parse(sessionStorage.getItem('belissimaUser') || '{}');
+    if (currentUser.role !== 'admin') window.location.href = 'dashboard.html';
+
+    let allRequests = [];
+    let currentTab = 'new';
+    let activeRequestID = null;
+    let activeRequestType = null;
+
+    // ── TABS ──
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('tableTitle').textContent = tab === 'new' ? 'New Applications' : 'Info Update Requests';
+      renderTable();
+    }
+
+    // ── LOAD REQUESTS ──
+    async function loadRequests() {
+      try {
+        const res = await fetch('/api/admin/requests');
+        const data = await res.json();
+        allRequests = data.requests || [];
+
+        const newReqs    = allRequests.filter(r => !r.request_type || r.request_type === 'new');
+        const updateReqs = allRequests.filter(r => r.request_type === 'update');
+
+        // Stats
+        document.getElementById('statPending').textContent  = newReqs.length;
+        document.getElementById('statUpdates').textContent  = updateReqs.length;
+        document.getElementById('statTotal').textContent    = allRequests.length;
+
+        // Tab counts
+        document.getElementById('count-new').textContent    = newReqs.length;
+        document.getElementById('count-update').textContent = updateReqs.length;
+
+        renderTable();
+      } catch (err) {
+        document.getElementById('tableContainer').innerHTML = '<div class="empty-state"><div class="empty-state__icon">⚠️</div><p>Error loading requests. Is the server running?</p></div>';
+      }
+    }
+
+    // ── RENDER TABLE ──
+    function renderTable() {
+      const filtered = currentTab === 'new'
+        ? allRequests.filter(r => !r.request_type || r.request_type === 'new')
+        : allRequests.filter(r => r.request_type === 'update');
+
+      if (!filtered.length) {
+        document.getElementById('tableContainer').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state__icon">${currentTab === 'new' ? '' : ''}</div>
+            <p>${currentTab === 'new' ? 'No new applications pending.' : 'No info update requests pending.'}</p>
+          </div>`;
+        return;
+      }
+
+      document.getElementById('tableContainer').innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Business Name</th>
+              <th>Service Type</th>
+              <th>Parish</th>
+              <th>Contact</th>
+              <th>Submitted</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(req => `
+              <tr>
+                <td style="color:var(--muted);font-size:12px;">#${req.requestID}</td>
+                <td style="font-weight:700;">${esc(req.business_name)}</td>
+                <td>${esc(req.service_type)}</td>
+                <td>${esc(req.parish)}</td>
+                <td>
+                  <div style="font-size:13px;">${esc(req.email)}</div>
+                  <div style="font-size:12px;color:var(--muted);">${esc(req.phone_number)}</div>
+                </td>
+                <td style="font-size:13px;color:var(--muted);">${formatDate(req.submitted_at)}</td>
+                <td>
+                  ${req.request_type === 'update'
+                    ? '<span class="badge badge--update">✏️ Update</span>'
+                    : '<span class="badge badge--new">🆕 New</span>'}
+                </td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn btn--view" onclick="viewDetails(${req.requestID})">📋 View</button>
+                    <button class="btn btn--approve" onclick="quickAction('approve', ${req.requestID}, '${req.request_type || 'new'}')">✅ Approve</button>
+                    <button class="btn btn--reject"  onclick="quickAction('reject', ${req.requestID}, '${req.request_type || 'new'}')">❌ Reject</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    // ── VIEW DETAILS ──
+    async function viewDetails(requestID) {
+      activeRequestID = requestID;
+      document.getElementById('modalBody').innerHTML = '<div class="loading-state">Loading details...</div>';
+      document.getElementById('modalNotes').value = '';
+      document.getElementById('detailModal').classList.add('open');
+
+      try {
+        const res  = await fetch(`/api/admin/request/${requestID}`);
+        const data = await res.json();
+        const req  = data.request;
+        activeRequestType = req.request_type || 'new';
+
+        document.getElementById('modalTitle').textContent    = req.business_name;
+        document.getElementById('modalSubtitle').textContent = `${req.service_type} · ${req.parish} · Submitted ${formatDate(req.submitted_at)}`;
+        document.getElementById('modalApproveBtn').textContent = req.request_type === 'update' ? '✅ Apply Update' : '✅ Approve';
+
+        // Build hours display
+        let hoursHtml = '<em style="color:var(--muted)">Not provided</em>';
+        if (req.opening_hours && typeof req.opening_hours === 'object') {
+          const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+          const shorts = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+          hoursHtml = `<div class="hours-grid">${days.map((d,i) => {
+            const h = req.opening_hours[d];
+            const open = h && h.open && h.close;
+            return `<div class="hour-day ${open ? '' : 'closed'}">
+              <div class="hour-day__name">${shorts[i]}</div>
+              <div class="hour-day__time">${open ? h.open + '<br>' + h.close : 'Closed'}</div>
+            </div>`;
+          }).join('')}</div>`;
+        }
+
+        // Payment methods
+        let payHtml = '—';
+        if (req.payment_methods) {
+          const arr = Array.isArray(req.payment_methods) ? req.payment_methods : [req.payment_methods];
+          payHtml = arr.map(p => `<span class="badge badge--new" style="margin:2px;">${p}</span>`).join('');
+        }
+
+        // Deposit
+        let depositHtml = req.deposit_required ? `Yes — ${req.deposit_type || ''} ${req.deposit_value ? `(${req.deposit_value})` : ''}` : 'No';
+
+        document.getElementById('modalBody').innerHTML = `
+          <div class="detail-section">
+            <div class="detail-section__title">Business Info</div>
+            <div class="detail-grid">
+              <div class="detail-item"><div class="detail-item__label">Business Name</div><div class="detail-item__value">${esc(req.business_name)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Service Type</div><div class="detail-item__value">${esc(req.service_type)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Parish</div><div class="detail-item__value">${esc(req.parish)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Provider Gender</div><div class="detail-item__value">${esc(req.provider_gender) || '—'}</div></div>
+              <div class="detail-item detail-item--full"><div class="detail-item__label">Address</div><div class="detail-item__value">${esc(req.address) || '—'}</div></div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section__title">Contact</div>
+            <div class="detail-grid">
+              <div class="detail-item"><div class="detail-item__label">Email</div><div class="detail-item__value">${esc(req.email)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Phone</div><div class="detail-item__value">${esc(req.phone_number)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Other Contact</div><div class="detail-item__value">${esc(req.other_contact) || '—'}</div></div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section__title">Social & Booking Links</div>
+            <div class="detail-grid">
+              ${req.insta_link    ? `<div class="detail-item"><div class="detail-item__label">Instagram</div><div class="detail-item__value"><a href="${esc(req.insta_link)}" target="_blank">View ↗</a></div></div>` : ''}
+              ${req.tiktok_link   ? `<div class="detail-item"><div class="detail-item__label">TikTok</div><div class="detail-item__value"><a href="${esc(req.tiktok_link)}" target="_blank">View ↗</a></div></div>` : ''}
+              ${req.facebook_link ? `<div class="detail-item"><div class="detail-item__label">Facebook</div><div class="detail-item__value"><a href="${esc(req.facebook_link)}" target="_blank">View ↗</a></div></div>` : ''}
+              ${req.booking_link  ? `<div class="detail-item"><div class="detail-item__label">Booking</div><div class="detail-item__value"><a href="${esc(req.booking_link)}" target="_blank">View ↗</a></div></div>` : ''}
+              <div class="detail-item"><div class="detail-item__label">Other Booking</div><div class="detail-item__value">${esc(req.other_booking) || '—'}</div></div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section__title">Pricing & Tags</div>
+            <div class="detail-grid detail-grid--3">
+              <div class="detail-item"><div class="detail-item__label">Starting Price</div><div class="detail-item__value">${req.starting_price ? 'J$' + Number(req.starting_price).toLocaleString() : '—'}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Avg. Work Time</div><div class="detail-item__value">${req.average_worktime ? req.average_worktime + ' min' : '—'}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Board Certified</div><div class="detail-item__value">${boolVal(req.board_certified)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Walk-ins</div><div class="detail-item__value">${boolVal(req.walkins_allowed)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Mobile Service</div><div class="detail-item__value">${boolVal(req.mobile_service)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Kid Friendly</div><div class="detail-item__value">${boolVal(req.kid_friendly)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Accessible</div><div class="detail-item__value">${boolVal(req.disabled_friendly)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Company Allowed</div><div class="detail-item__value">${boolVal(req.company_allowed)}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Deposit</div><div class="detail-item__value">${depositHtml}</div></div>
+              <div class="detail-item detail-item--full"><div class="detail-item__label">Payment Methods</div><div class="detail-item__value">${payHtml}</div></div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section__title">Opening Hours</div>
+            ${hoursHtml}
+            <div class="detail-grid" style="margin-top:12px;">
+              <div class="detail-item"><div class="detail-item__label">Days Open</div><div class="detail-item__value">${req.days_open ?? '—'}</div></div>
+              <div class="detail-item"><div class="detail-item__label">Weekly Hours</div><div class="detail-item__value">${req.weekly_hours ?? '—'}</div></div>
+            </div>
+          </div>
+
+          ${req.extra_notes ? `
+          <div class="detail-section">
+            <div class="detail-section__title">Applicant Notes</div>
+            <div class="notes-box">${esc(req.extra_notes)}</div>
+          </div>` : ''}
+        `;
+      } catch (err) {
+        document.getElementById('modalBody').innerHTML = '<div class="empty-state"><div class="empty-state__icon">⚠️</div><p>Failed to load details.</p></div>';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.remove('open');
+      activeRequestID = null;
+      activeRequestType = null;
+    }
+
+    // ── ACTIONS ──
+    async function confirmAction(action) {
+      if (!activeRequestID) return;
+      await performAction(action, activeRequestID, activeRequestType);
+    }
+
+    async function quickAction(action, requestID, requestType) {
+      await performAction(action, requestID, requestType);
+    }
+
+    async function performAction(action, requestID, requestType) {
+      const notes = document.getElementById('modalNotes')?.value || '';
+      let endpoint = action === 'approve'
+        ? (requestType === 'update' ? '/api/admin/apply-update' : '/api/admin/approve')
+        : '/api/admin/reject';
+
+      try {
+        const res  = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ requestID, admin_notes: notes })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showToast(data.message || 'Done!', 'success');
+          closeModal();
+          loadRequests();
+        } else {
+          showToast(data.error || 'Something went wrong.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error. Check server.', 'error');
+      }
+    }
+
+    // ── TOAST ──
+    function showToast(msg, type) {
+      const t = document.createElement('div');
+      t.style.cssText = `position:fixed;bottom:28px;right:28px;z-index:9999;padding:14px 22px;border-radius:14px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,0.15);color:white;background:${type==='success'?'#2e7d32':'#c62828'};transition:opacity 0.4s;`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(), 400); }, 3000);
+    }
+
+    // ── HELPERS ──
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function formatDate(str) {
+      if (!str) return '—';
+      return new Date(str).toLocaleDateString('en-JM', { day:'numeric', month:'short', year:'numeric' });
+    }
+    function boolVal(val) {
+      if (val === 1 || val === true) return '<span style="color:#2e7d32;font-weight:700;">✅ Yes</span>';
+      if (val === 0 || val === false) return '<span style="color:#c62828;">❌ No</span>';
+      return '—';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    loadRequests();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belissima · Provider Profile</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Chivo:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8f3f6;
+      --text: #181114;
+      --muted: #6a5760;
+      --brand: #8a2347;
+      --brand-dark: #661731;
+      --soft: #efadc5;
+      --soft-2: #f8d0dd;
+      --border: rgba(156, 62, 92, 0.18);
+      --shadow: 0 12px 32px rgba(111, 29, 57, 0.12);
+      --content-width: min(100%, 1300px);
+      --gutter: clamp(16px, 3vw, 32px);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ===== TOPBAR ===== */
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background: transparent;
+      transition: all 0.25s ease;
+    }
+
+    #topbar.scrolled {
+      top: 14px;
+    }
+
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 18px;
+      border-radius: 26px;
+      background: transparent;
+      transition: all 0.25s;
+    }
+
+    #topbar.scrolled .topbar__inner {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .back-btn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--brand-dark);
+    }
+
+    .logo {
+      justify-self: center;
+    }
+
+    .logo img {
+      height: 80px;
+      width: auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-self: end;
+    }
+
+    .nav__link,
+    .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.18s;
+    }
+
+    .nav__link:hover,
+    .nav__icon:hover {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .nav__link--active {
+      background: linear-gradient(135deg, #8a2347, #661731);
+      color: white;
+      border: none;
+    }
+
+    .nav__icon {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    @media (max-width: 800px) {
+      .topbar__inner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .logo {
+        justify-self: center;
+      }
+
+      .nav {
+        justify-self: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .back-btn {
+        justify-self: start;
+      }
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 130px var(--gutter) 60px;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+      color: var(--brand-dark);
+      font-weight: 600;
+    }
+
+    .breadcrumb span {
+      opacity: 0.5;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .profile-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      color: var(--brand-dark);
+      margin-bottom: 8px;
+    }
+
+    .profile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .open-badge {
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .profile-actions button {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .profile-actions button:hover {
+      background: var(--soft-2);
+      border-color: var(--brand);
+    }
+
+    .profile-actions button.saved {
+      background: var(--brand-dark);
+      color: white;
+      border-color: var(--brand-dark);
+    }
+
+    .profile-actions button.saved:hover {
+      background: var(--brand);
+    }
+
+    .report-btn {
+      background: #fff3e0 !important;
+      border-color: #e65100 !important;
+      color: #e65100 !important;
+    }
+
+    .report-btn:hover {
+      background: #e65100 !important;
+      color: white !important;
+      border-color: #e65100 !important;
+    }
+
+    /* Photo Gallery */
+    .photo-gallery {
+      margin-bottom: 40px;
+    }
+
+    .main-photo-container {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #e8d4db;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .thumbnail-strip {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 8px 4px;
+      scrollbar-width: thin;
+    }
+
+    .thumbnail-wrap {
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .thumbnail-wrap.active {
+      border-color: var(--brand);
+      transform: scale(1.02);
+    }
+
+    .thumbnail-wrap:hover {
+      border-color: var(--soft);
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(115, 40, 57, 0.82);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      padding: 3px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .photo-type-badge {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(115, 40, 57, 0.85);
+      color: white;
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+    }
+
+    .photo-count {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .about-section h2,
+    .details-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--brand-dark);
+      margin-bottom: 16px;
+      border-left: 4px solid var(--brand);
+      padding-left: 14px;
+    }
+
+    .about-text {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .tags-table {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .tags-table .table-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tags-table .table-row:last-child {
+      border-bottom: none;
+    }
+
+    .table-label {
+      background: rgba(138, 35, 71, 0.04);
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--brand-dark);
+      font-family: 'Cinzel', serif;
+    }
+
+    .table-value {
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--text);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag-badge {
+      background: rgba(138, 35, 71, 0.1);
+      border: 1px solid rgba(138, 35, 71, 0.25);
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(138, 35, 71, 0.08);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      background: var(--soft-2);
+      transform: translateY(-1px);
+    }
+
+    .tiktok-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(138, 35, 71, 0.08);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      transition: all 0.2s;
+    }
+
+    .tiktok-link:hover {
+      background: var(--soft-2);
+      transform: translateY(-1px);
+    }
+
+    /* Google Map Section */
+    .location-section {
+      margin-top: 28px;
+      margin-bottom: 28px;
+    }
+
+    .location-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--brand-dark);
+      margin-bottom: 16px;
+      border-left: 4px solid var(--brand);
+      padding-left: 14px;
+    }
+
+    .map-container {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .map-frame {
+      width: 100%;
+      height: 250px;
+      border: none;
+    }
+
+    .address-text {
+      padding: 12px 16px;
+      background: var(--brand-soft);
+      font-size: 13px;
+      color: var(--brand-dark);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Report Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 90%;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--brand-dark);
+      margin-bottom: 16px;
+    }
+
+    .modal textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 100px;
+      margin-bottom: 16px;
+    }
+
+    .modal textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal-submit {
+      background: var(--brand);
+      color: white;
+      border: none;
+    }
+
+    .modal-submit:hover {
+      background: var(--brand-dark);
+    }
+
+    .modal-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .modal-cancel:hover {
+      background: var(--soft-2);
+    }
+
+    .booking-card {
+      background: white;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      position: sticky;
+      top: 120px;
+      box-shadow: var(--shadow);
+    }
+
+    .booking-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 16px;
+      color: var(--brand-dark);
+    }
+
+    .disclaimer {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(106, 87, 96, 0.06);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .disclaimer svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    .book-btn {
+      display: block;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: white;
+      text-align: center;
+      padding: 14px;
+      border-radius: 50px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .book-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 35, 71, 0.3);
+    }
+
+    .hours-table {
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed rgba(156, 62, 92, 0.1);
+    }
+
+    .hours-row:last-child {
+      border-bottom: none;
+    }
+
+    .hours-day {
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .hours-time {
+      color: var(--text);
+    }
+
+    .hours-row.today .hours-day {
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .hours-row.closed .hours-time {
+      color: var(--muted);
+    }
+
+    .nearby-section {
+      margin-top: 40px;
+    }
+
+    .nearby-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .nearby-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--brand-dark);
+    }
+
+    .nearby-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .nearby-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      .nearby-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .nearby-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .nearby-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .nearby-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .nearby-info {
+      padding: 16px;
+    }
+
+    .nearby-name {
+      font-weight: 800;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .nearby-address {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .visit-btn {
+      background: var(--soft-2);
+      border: none;
+      padding: 8px;
+      width: 100%;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 12px;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .visit-btn:hover {
+      background: var(--soft);
+    }
+
+    .footer {
+      margin-top: 60px;
+      background: var(--brand-dark);
+      color: #fff6fa;
+      padding: 40px var(--gutter);
+    }
+
+    .footer__inner {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .footer h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .footer p,
+    .footer li {
+      font-size: 12px;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .footer ul {
+      list-style: none;
+    }
+
+    .footer a {
+      color: inherit;
+    }
+
+    @media (max-width: 700px) {
+      .footer__inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 80px;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--brand-dark);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: transform 0.3s;
+      z-index: 10001;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="topbar">
+    <div class="topbar__inner">
+      <a href="dashboard.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <path d="M19 12H5"></path>
+          <path d="m12 19-7-7 7-7"></path>
+        </svg>
+        Back
+      </a>
+      <a href="dashboard.html" class="logo"><img src="belissima-logo.png" alt="Belissima" /></a>
+      <nav class="nav">
+        <a href="Allura.html" class="nav__link">Allura</a>
+        <a href="dashboard.html#services" class="nav__link">Services</a>
+        <a href="about_us.html" class="nav__link">About Us</a>
+        <a href="become_provider.html" class="nav__link">Become a Provider</a>
+        <a href="favorites.html" class="nav__icon"><svg viewBox="0 0 24 24">
+            <path
+              d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z" />
+          </svg></a>
+        <a href="account.html" class="nav__icon"><svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5" />
+          </svg></a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="page" id="providerPage">
+    <div class="loading">Loading provider details... ✨</div>
+  </div>
+
+  <!-- Report Modal -->
+  <div id="reportModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Report Provider</h3>
+      <p style="font-size: 13px; color: #6a5760; margin-bottom: 12px;">Please let us know why you're reporting this
+        provider. We'll review this promptly.</p>
+      <textarea id="reportReason"
+        placeholder="Describe the issue... (e.g., incorrect information, inappropriate behavior, spam, etc.)"></textarea>
+      <div class="modal-buttons">
+        <button class="modal-cancel" onclick="closeReportModal()">Cancel</button>
+        <button class="modal-submit" onclick="submitReport()">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div>
+        <h3>Belissima</h3>
+        <p>Your one-stop hub for beauty services in Jamaica. Discover top-rated professionals.</p>
+      </div>
+      <div>
+        <h3>Services</h3>
+        <ul>
+          <li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li>
+          <li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li>
+          <li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li>
+          <li><a href="services_page.html?type=nail-artists">Nail Artists</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about_us.html">About Us</a></li>
+          <li><a href="become_provider.html">Become a Provider</a></li>
+          <li><a href="dashboard.html">Home</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul>
+          <li><a href="mailto:belissima3901@yahoo.com">belissima3901@yahoo.com</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const USD_TO_JMD = 157;
+    const FAV_STORAGE_KEY = 'belissima_favourites';
+    let currentProviderId = null;
+    let currentProviderName = '';
+    let currentPhotos = [];
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function shareProfile() {
+      navigator.clipboard.writeText(window.location.href);
+      showToast('Link copied to clipboard!');
+    }
+
+    // Report functions
+    function openReportModal() {
+      document.getElementById('reportModal').classList.add('active');
+    }
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.remove('active');
+      document.getElementById('reportReason').value = '';
+    }
+    async function submitReport() {
+      const reason = document.getElementById('reportReason').value.trim();
+      if (!reason) {
+        showToast('Please provide a reason for reporting');
+        return;
+      }
+      try {
+        const response = await fetch('/api/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            providerId: currentProviderId,
+            providerName: currentProviderName,
+            reason: reason,
+            timestamp: new Date().toISOString()
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          showToast('Thank you for your report. We will review it shortly.');
+          closeReportModal();
+        } else {
+          showToast('Failed to submit report. Please try again.');
+        }
+      } catch (err) {
+        console.error('Report error:', err);
+        showToast('Unable to submit report. Please try again later.');
+      }
+    }
+
+    function getFavourites() {
+      try { return JSON.parse(localStorage.getItem(FAV_STORAGE_KEY)) || []; } catch { return []; }
+    }
+    function saveFavourites(favs) { localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(favs)); }
+    function isFavourite(providerId) { return getFavourites().some(f => f.id === providerId); }
+    function addToFavourites(provider) {
+      const favs = getFavourites();
+      if (!favs.some(f => f.id === provider.id)) {
+        favs.push(provider);
+        saveFavourites(favs);
+        showToast(`❤️ ${provider.name} added to favourites!`);
+        return true;
+      }
+      return false;
+    }
+    function removeFromFavourites(providerId) {
+      const favs = getFavourites().filter(f => f.id !== providerId);
+      saveFavourites(favs);
+      showToast(`🤍 Removed from favourites`);
+      return true;
+    }
+    function toggleFavourite(provider, buttonElement) {
+      if (isFavourite(provider.id)) {
+        removeFromFavourites(provider.id);
+        if (buttonElement) {
+          buttonElement.classList.remove('saved');
+          buttonElement.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save';
+        }
+      } else {
+        addToFavourites(provider);
+        if (buttonElement) {
+          buttonElement.classList.add('saved');
+          buttonElement.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Saved';
+        }
+      }
+    }
+
+    function formatPrice(price) {
+      if (!price) return 'Price on request';
+      if (typeof price === 'number') {
+        const jmd = price < 500 ? Math.round(price * USD_TO_JMD / 100) * 100 : Math.round(price);
+        return `J$${jmd.toLocaleString()} up`;
+      }
+      const str = String(price);
+      const match = str.match(/\d[\d,]*\.?\d*/);
+      if (match) {
+        let num = parseFloat(match[0].replace(/,/g, ''));
+        if (!isNaN(num)) {
+          const jmd = num < 500 ? Math.round(num * USD_TO_JMD / 100) * 100 : Math.round(num);
+          return `J$${jmd.toLocaleString()} up`;
+        }
+      }
+      return str;
+    }
+
+    function formatTime(minutes) {
+      if (!minutes) return '';
+      if (typeof minutes === 'number') {
+        const hrs = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (hrs === 0) return `${mins} min`;
+        if (mins === 0) return `${hrs} hr${hrs > 1 ? 's' : ''}`;
+        return `${hrs} hr ${mins} min`;
+      }
+      const str = String(minutes);
+      const hoursMatch = str.match(/(\d+)\s*hours?/i);
+      const minsMatch = str.match(/(\d+)\s*minutes?/i);
+      if (hoursMatch || minsMatch) {
+        const hrs = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+        const mins = minsMatch ? parseInt(minsMatch[1]) : 0;
+        if (hrs === 0) return `${mins} min`;
+        if (mins === 0) return `${hrs} hr${hrs > 1 ? 's' : ''}`;
+        return `${hrs} hr ${mins} min`;
+      }
+      return str;
+    }
+
+    function isYes(val) {
+      if (val === 1 || val === true) return true;
+      if (typeof val === 'string') return val.toLowerCase() === 'yes' || val.toLowerCase() === 'true' || val.toLowerCase() === 'y';
+      return false;
+    }
+
+    function getTagsArray(provider) {
+      const tags = [];
+      if (isYes(provider.kid_friendly)) tags.push({ icon: '👶', label: 'Kid Friendly' });
+      if (isYes(provider.walkins_allowed)) tags.push({ icon: '🚶', label: 'Walk-ins Welcome' });
+      if (isYes(provider.mobile_service)) tags.push({ icon: '🚗', label: 'Mobile Service' });
+      if (isYes(provider.disabled_friendly)) tags.push({ icon: '♿', label: 'Accessible' });
+      if (isYes(provider.board_certified)) tags.push({ icon: '✅', label: 'Board Certified' });
+      return tags;
+    }
+
+    function formatHoursTable(openingHours) {
+      if (!openingHours) return '<div class="hours-row"><span class="hours-day">Hours</span><span class="hours-time">By appointment</span></div>';
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const today = new Date().getDay();
+      const todayIndex = today === 0 ? 6 : today - 1;
+      let html = '';
+      for (let i = 0; i < days.length; i++) {
+        const dayHours = openingHours[days[i]];
+        const isToday = i === todayIndex;
+        const isClosed = !dayHours || !dayHours.open || !dayHours.close;
+        html += `<div class="hours-row ${isToday ? 'today' : ''} ${isClosed ? 'closed' : ''}">
+          <span class="hours-day">${dayNames[i]}</span>
+          <span class="hours-time">${isClosed ? 'Closed' : `${dayHours.open} – ${dayHours.close}`}</span>
+        </div>`;
+      }
+      return html;
+    }
+
+    function isOpenNow(openingHours) {
+      if (!openingHours) return false;
+      const now = new Date();
+      const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const today = days[now.getDay()];
+      const todayHours = openingHours[today];
+      if (!todayHours || !todayHours.open || !todayHours.close) return false;
+      const [openH, openM] = todayHours.open.split(':').map(Number);
+      const [closeH, closeM] = todayHours.close.split(':').map(Number);
+      const current = now.getHours() * 60 + now.getMinutes();
+      const openTotal = openH * 60 + openM;
+      const closeTotal = closeH * 60 + closeM;
+      return current >= openTotal && current <= closeTotal;
+    }
+
+    function getGoogleMapsUrl(address) {
+      if (!address) return '';
+      const encoded = encodeURIComponent(address);
+      return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encoded}`;
+    }
+
+    // Photo type labels by sort_order
+    const PHOTO_LABELS = { 1: 'Logo', 2: 'Our Work', 3: 'Our Space' };
+
+    // Try a list of URLs in order — set src to first one that loads
+    function tryPhotoUrls(imgEl, urls, fallbackSrc) {
+      const queue = [...urls].filter(Boolean);
+      function tryNext() {
+        if (!queue.length) { imgEl.onerror = null; imgEl.src = fallbackSrc; return; }
+        const url = queue.shift();
+        imgEl.onerror = tryNext;
+        imgEl.src = url;
+      }
+      tryNext();
+    }
+
+    // Render photo gallery with real images from ProviderPhotos table
+    function renderPhotoGallery(photos) {
+      currentPhotos = photos || [];
+      if (!currentPhotos.length) {
+        return `
+          <div class="photo-gallery">
+            <div class="main-photo-container">
+              <img class="main-photo" src="https://placehold.co/800x450/f8bbd0/732839?text=No+Photos+Available" alt="No photos available">
+              <div class="photo-count">0 photos</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const primaryPhoto = currentPhotos.find(p => p.is_primary === 1) || currentPhotos[0];
+      const primaryUrl   = primaryPhoto?.photo_url || currentPhotos[0]?.photo_url;
+      const primaryLabel = PHOTO_LABELS[primaryPhoto?.sort_order] || '';
+
+      let thumbnailsHtml = '';
+      currentPhotos.forEach((photo, idx) => {
+        const isActive = photo === primaryPhoto ? 'active' : '';
+        const label = PHOTO_LABELS[photo.sort_order] || '';
+        thumbnailsHtml += `
+          <div class="thumbnail-wrap ${isActive}" onclick="changeMainPhoto(${idx})">
+            <img class="thumbnail"
+                 data-idx="${idx}"
+                 src="${photo.photo_url}"
+                 alt="${label || `Photo ${idx + 1}`}"
+                 onerror="this.closest('.thumbnail-wrap').style.display='none'">
+            ${label ? `<span class="thumb-label">${label}</span>` : ''}
+          </div>
+        `;
+      });
+
+      return `
+        <div class="photo-gallery">
+          <div class="main-photo-container">
+            <img class="main-photo" id="mainPhoto" src="${primaryUrl}" alt="Main provider photo"
+                 onerror="handleMainPhotoError(this)">
+            <div class="photo-count" id="photoCount">${currentPhotos.length} photo${currentPhotos.length !== 1 ? 's' : ''}</div>
+            ${primaryLabel ? `<div class="photo-type-badge" id="photoTypeBadge">${primaryLabel}</div>` : '<div class="photo-type-badge" id="photoTypeBadge" style="display:none"></div>'}
+          </div>
+          <div class="thumbnail-strip">
+            ${thumbnailsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    // If main photo fails, try the next available photo in currentPhotos
+    window.handleMainPhotoError = function(imgEl) {
+      const currentSrc = imgEl.src;
+      const remainingUrls = currentPhotos
+        .map(p => p.photo_url)
+        .filter(url => url && url !== currentSrc);
+      const placeholder = 'https://placehold.co/800x450/f8bbd0/732839?text=Photo+Unavailable';
+      tryPhotoUrls(imgEl, remainingUrls, placeholder);
+    };
+
+    // Function to change main photo when thumbnail is clicked
+    window.changeMainPhoto = function(index) {
+      if (!currentPhotos || !currentPhotos[index]) return;
+      const photo = currentPhotos[index];
+      const mainPhoto = document.getElementById('mainPhoto');
+      if (mainPhoto) {
+        // Build fallback list: all other photos except the one being shown
+        const fallbacks = currentPhotos
+          .filter((_, i) => i !== index)
+          .map(p => p.photo_url);
+        const placeholder = 'https://placehold.co/800x450/f8bbd0/732839?text=Photo+Unavailable';
+        mainPhoto.onerror = null;
+        mainPhoto.onerror = function() {
+          tryPhotoUrls(mainPhoto, fallbacks, placeholder);
+        };
+        mainPhoto.src = photo.photo_url;
+      }
+      // Update type badge
+      const badge = document.getElementById('photoTypeBadge');
+      if (badge) {
+        const label = PHOTO_LABELS[photo.sort_order] || '';
+        badge.textContent = label;
+        badge.style.display = label ? 'block' : 'none';
+      }
+      // Update active thumbnail
+      document.querySelectorAll('.thumbnail-wrap').forEach((wrap, i) => {
+        wrap.classList.toggle('active', i === index);
+      });
+    };
+
+    function renderProvider(provider, nearby, photos) {
+      currentProviderId = provider.businessID;
+      currentProviderName = provider.business_name;
+      currentPhotos = photos || [];
+
+      const isOpen = isOpenNow(provider.opening_hours);
+      const statusColor = isOpen ? '#2e7d32' : '#c62828';
+      const statusBg = isOpen ? '#e8f5e9' : '#ffebee';
+      const tags = getTagsArray(provider);
+      const tagsHtml = tags.map(t => `<span class="tag-badge">${t.icon} ${t.label}</span>`).join('');
+
+      let payments = [];
+      if (provider.payment_methods) {
+        if (Array.isArray(provider.payment_methods)) payments = provider.payment_methods;
+        else if (typeof provider.payment_methods === 'string') payments = provider.payment_methods.split(',').map(p => p.trim());
+      }
+      const paymentsHtml = payments.length ? payments.map(p => `<span class="tag-badge">💳 ${p.charAt(0).toUpperCase() + p.slice(1)}</span>`).join('') : '<span class="tag-badge">—</span>';
+
+      const phone = provider.phone_number;
+      const insta = provider.insta_link;
+      const tiktok = provider.tiktok_link;
+      const fb = provider.facebook_link;
+      const booking = provider.booking_link;
+      const otherBooking = provider.other_booking;
+      const address = provider.address || provider.parish;
+
+      let whatsappLink = null;
+      let whatsappLabel = null;
+      if (provider.other_contact && (provider.other_contact.toLowerCase().includes('whatsapp') || provider.other_contact.toLowerCase().includes('wa'))) {
+        whatsappLabel = provider.other_contact;
+        if (phone) whatsappLink = `https://wa.me/${phone.replace(/[^0-9]/g, '')}`;
+      }
+      if (!whatsappLink && otherBooking && (otherBooking.toLowerCase().includes('whatsapp') || otherBooking.toLowerCase().includes('wa'))) {
+        whatsappLabel = otherBooking;
+        if (phone) whatsappLink = `https://wa.me/${phone.replace(/[^0-9]/g, '')}`;
+      }
+
+      const breadcrumb = `
+        <div class="breadcrumb">
+          <a href="dashboard.html">Home</a> <span>›</span>
+          <a href="services_page.html?type=${provider.service_type?.toLowerCase().replace(' ', '-') || ''}">${provider.service_type || 'Services'}</a> <span>›</span>
+          <span style="color:var(--text); font-weight:500;">${escapeHtml(provider.business_name)}</span>
+        </div>
+      `;
+
+      const disclaimerHtml = `
+        <div class="disclaimer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          All bookings are completed externally via third‑party links. Belissima is not responsible for any booking issues, cancellations, or disputes.
+        </div>
+      `;
+
+      const favProvider = {
+        id: provider.businessID,
+        name: provider.business_name,
+        address: address,
+        phone: provider.phone_number,
+        hours: provider.opening_hours ? Object.values(provider.opening_hours).find(h => h && h.open) ? `${Object.values(provider.opening_hours).find(h => h && h.open).open}–${Object.values(provider.opening_hours).find(h => h && h.open).close}` : 'By appointment' : 'By appointment',
+        price: formatPrice(provider.starting_price),
+        payment: payments.join(', '),
+        parish: provider.parish,
+        type: provider.service_type,
+        worktime: provider.average_worktime ? formatTime(provider.average_worktime) : null,
+        walkins: isYes(provider.walkins_allowed),
+        mobile: isYes(provider.mobile_service),
+        kid: isYes(provider.kid_friendly),
+        accessible: isYes(provider.disabled_friendly),
+        certified: isYes(provider.board_certified)
+      };
+
+      const isSaved = isFavourite(provider.businessID);
+      const saveButtonClass = isSaved ? 'saved' : '';
+
+      // Render photo gallery with real photos
+      const photoGalleryHtml = renderPhotoGallery(photos);
+
+      const tiktokHtml = tiktok ? `
+        <div class="table-row">
+          <div class="table-label">TikTok</div>
+          <div class="table-value">
+            <a href="${tiktok}" target="_blank" class="tiktok-link">View TikTok</a>
+          </div>
+        </div>
+      ` : '';
+
+      const locationMapHtml = address ? `
+        <div class="location-section">
+          <h2>Location</h2>
+          <div class="map-container">
+            <iframe class="map-frame" src="${getGoogleMapsUrl(address)}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="address-text">
+              <strong>Address:</strong> ${escapeHtml(address)}
+            </div>
+          </div>
+        </div>
+      ` : '';
+
+      const html = `
+        ${breadcrumb}
+        <div class="profile-header">
+          <div>
+            <div class="profile-title"><h1>${escapeHtml(provider.business_name)}</h1></div>
+            <div class="profile-meta">
+              <span class="open-badge" style="background:${statusBg}; color:${statusColor}">${isOpen ? '● Open Now' : '● Closed'}</span>
+              <span>📍 ${escapeHtml(address || 'Jamaica')}</span>
+              <span>📞 ${escapeHtml(provider.phone_number || 'Contact for number')}</span>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button onclick="shareProfile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share</button>
+            <button id="saveBtn" class="${saveButtonClass}" onclick="toggleFavourite(${JSON.stringify(favProvider).replace(/"/g, '&quot;')}, this)">${isSaved ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Saved' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save'}</button>
+            <button class="report-btn" onclick="openReportModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Report</button>
+          </div>
+        </div>
+
+        ${photoGalleryHtml}
+
+        <div class="two-col">
+          <div>
+            <div class="about-section">
+              <h2>About</h2>
+              <p class="about-text">${escapeHtml(provider.business_name)} is a ${escapeHtml(provider.service_type?.toLowerCase() || 'beauty provider')} serving ${escapeHtml(provider.parish || 'Jamaica')}. Known for quality service and attention to detail. ${provider.average_worktime ? `Typical session lasts about ${formatTime(provider.average_worktime)}.` : ''}</p>
+            </div>
+
+            <div class="details-section">
+              <h2>Details & Tags</h2>
+              <div class="tags-table">
+                <div class="table-row"><div class="table-label">Specialties</div><div class="table-value">${tagsHtml || '<span class="tag-badge">—</span>'}</div></div>
+                <div class="table-row"><div class="table-label">Starting Price</div><div class="table-value">${formatPrice(provider.starting_price)}</div></div>
+                <div class="table-row"><div class="table-label">Average Worktime</div><div class="table-value">${provider.average_worktime ? formatTime(provider.average_worktime) : 'Not specified'}</div></div>
+                <div class="table-row"><div class="table-label">Payment Methods</div><div class="table-value">${paymentsHtml}</div></div>
+                ${provider.deposit_required && isYes(provider.deposit_required) ? `<div class="table-row"><div class="table-label">Deposit Required</div><div class="table-value">${provider.deposit_type === 'percentage' ? `${provider.deposit_value}%` : provider.deposit_value ? `J$${provider.deposit_value}` : 'Yes'}</div></div>` : ''}
+              </div>
+            </div>
+
+            <div class="details-section">
+              <h2>Connect & Contact</h2>
+              <div class="tags-table">
+                ${phone ? `<div class="table-row"><div class="table-label">Phone Number</div><div class="table-value"><a href="tel:${phone}" class="contact-link"> ${phone}</a></div></div>` : ''}
+                ${whatsappLink ? `<div class="table-row"><div class="table-label">WhatsApp, Call or DM?</div><div class="table-value"><a href="${whatsappLink}" target="_blank" class="contact-link"> ${escapeHtml(whatsappLabel || 'Message on WhatsApp')}</a></div></div>` : ''}
+                ${provider.other_contact && !whatsappLink ? `<div class="table-row"><div class="table-label">Other Contact Information</div><div class="table-value"><span class="contact-link">${escapeHtml(provider.other_contact)}</span></div></div>` : ''}
+                ${insta ? `<div class="table-row"><div class="table-label">Instagram Link</div><div class="table-value"><a href="${insta}" target="_blank" class="contact-link">View Profile</a></div></div>` : ''}
+                ${tiktokHtml}
+                ${fb ? `<div class="table-row"><div class="table-label">Facebook Link</div><div class="table-value"><a href="${fb}" target="_blank" class="contact-link">Visit Page</a></div></div>` : ''}
+                ${otherBooking && !whatsappLink ? `<div class="table-row"><div class="table-label">Other Ways to Book</div><div class="table-value"><span class="contact-link">${escapeHtml(otherBooking)}</span></div></div>` : ''}
+              </div>
+            </div>
+
+            ${locationMapHtml}
+          </div>
+
+          <div>
+            <div class="booking-card">
+              <h3>${escapeHtml(provider.business_name)}</h3>
+              ${disclaimerHtml}
+              <a href="${booking || '#'}" target="_blank" class="book-btn" ${!booking ? 'style="opacity:0.7; cursor:default;" onclick="return false;"' : ''}>Book Now</a>
+              <div class="hours-header"><strong>Opening Hours</strong></div>
+              <div class="hours-table">${formatHoursTable(provider.opening_hours)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      let nearbyHtml = '<div class="nearby-section"><div class="nearby-header"><h2> Service Providers You May Also Like </h2><button class="explore-btn" style="background:var(--soft-2); border:none; padding:8px 20px; border-radius:40px; font-weight:600;" onclick="window.location.href=\'services_page.html\'">Explore More</button></div><div class="nearby-grid">';
+      if (nearby && nearby.length) {
+        nearby.forEach(p => {
+          nearbyHtml += `
+            <div class="nearby-card" onclick="window.location.href='provider.html?id=${p.businessID}'">
+              <img src="https://placehold.co/400x140/f8bbd0/732839?text=${encodeURIComponent(p.business_name)}" alt="${p.business_name}">
+              <div class="nearby-info">
+                <div class="nearby-name">${escapeHtml(p.business_name)}</div>
+                <div class="nearby-address">${escapeHtml(p.address || p.parish || 'Jamaica')}</div>
+                <div class="nearby-type">${escapeHtml(p.service_type?.replace('_', ' ') || '')}</div>
+                <button class="visit-btn">View Profile →</button>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        nearbyHtml += `<div class="nearby-card"><img src="https://placehold.co/400x140/f8bbd0/732839?text=More+Providers"><div class="nearby-info"><div class="nearby-name">More Providers Coming Soon</div><div class="nearby-address">Check back for recommendations</div><button class="visit-btn" disabled>Explore</button></div></div>`;
+      }
+      nearbyHtml += '</div></div>';
+      document.getElementById('providerPage').innerHTML = html + nearbyHtml;
+    }
+
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const businessID = urlParams.get('id');
+    if (!businessID) {
+      document.getElementById('providerPage').innerHTML = '<div class="error">No provider selected. Please go back and try again.</div>';
+    } else {
+      // Fetch provider details AND photos separately
+      Promise.all([
+        fetch(`/api/provider/${businessID}`).then(res => res.json()),
+        fetch(`/api/provider/${businessID}/photos`).then(res => res.json()).catch(() => ({ photos: [] }))
+      ])
+        .then(([providerData, photoData]) => {
+          if (!providerData.success) throw new Error(providerData.error);
+          const photos = photoData.photos || [];
+          renderProvider(providerData.provider, providerData.nearby, photos);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('providerPage').innerHTML = '<div class="error">Unable to load provider details. Please try again later.</div>';
+        });
+    }
+
+    const topbar = document.getElementById('topbar');
+    window.addEventListener('scroll', () => topbar.classList.toggle('scrolled', window.scrollY > 80));
+    function checkAuth() {
+      const isLoggedIn = sessionStorage.getItem('belissimaLoggedIn') === 'true';
+      if (!isLoggedIn) window.location.href = 'index.html';
+    }
+    checkAuth();
+  </script>
+</body>
+
+</html>

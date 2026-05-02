@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account — Belissima</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f8f3f6;
+      --panel: rgba(255,255,255,0.9);
+      --text: #181114;
+      --muted: #6a5760;
+      --brand: #8a2347;
+      --brand-dark: #661731;
+      --soft: #efadc5;
+      --soft-2: #f8d0dd;
+      --border: rgba(156, 62, 92, 0.18);
+      --shadow: 0 16px 42px rgba(111, 29, 57, 0.12);
+      --radius: 28px;
+      --radius-sm: 18px;
+      --content-width: min(100%, 1450px);
+      --gutter: clamp(16px, 3vw, 32px);
+      --danger: #b64b57;
+      --success: #18794e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Chivo", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.88), transparent 26%),
+        linear-gradient(180deg, #fff5f9 0%, #f8f3f6 26%, #f7eef2 100%);
+      line-height: 1.45;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    img { display: block; }
+
+    .page-shell {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      transition: top 0.25s ease;
+    }
+    #topbar.scrolled { top: 14px; }
+    .topbar__inner {
+      width: min(100% - 32px, var(--content-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(156, 62, 92, 0.14);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .logo-area { display:flex; align-items:center; gap:320px; }
+    .back-btn {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(138,35,71,0.18);
+    }
+    
+    .brand img { height: 100px; width: auto; }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav__link, .nav__icon {
+      border: 1px solid rgba(156, 62, 92, 0.22);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--brand-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+    .nav__link {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+    .nav__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .nav__link:hover, .nav__icon:hover { transform: translateY(-2px); }
+    .nav__icon.active, .nav__link.active {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      border-color: transparent;
+    }
+    .nav__icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 450px;
+      padding: 28px var(--gutter) 70px;
+      background:
+        linear-gradient(90deg, rgba(248,243,246,0.96) 0%, rgba(248,243,246,0.82) 36%, rgba(248,243,246,0.3) 70%, rgba(248,243,246,0.08) 100%),
+        url("https://esmalteriacapricho.com.br/assets/img/esmaltaria-bg.jpg") center/cover no-repeat;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 170px;
+      background: linear-gradient(to bottom, rgba(248,243,246,0) 0%, rgba(248,243,246,0.97) 72%, rgba(248,243,246,1) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      padding-top: 160px;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hero__card {
+      max-width: 700px;
+      padding: clamp(24px, 4vw, 40px);
+      border-radius: 30px;
+      background: rgba(255,255,255,0.34);
+      border: 1px solid rgba(255,255,255,0.46);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 45px rgba(138, 35, 71, 0.14);
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .avatar-container { position: relative; flex: 0 0 auto; }
+    .avatar-main {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,208,221,0.9));
+      border: 4px solid rgba(255,255,255,0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 3rem;
+      box-shadow: 0 18px 34px rgba(102, 23, 49, 0.18);
+      cursor: pointer;
+    }
+    .avatar-main img { width:100%; height:100%; object-fit: cover; }
+    .avatar-edit, .remove-photo {
+      position:absolute;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      border: 2px solid #fff;
+      color:#fff;
+      cursor:pointer;
+    }
+    .avatar-edit {
+      width: 36px; height: 36px; right: 4px; bottom: 4px;
+      background: var(--brand-dark);
+    }
+    .remove-photo {
+      width: 28px; height: 28px; right: -4px; top: -4px;
+      background: var(--danger);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .hero__eyebrow {
+      font-family: "Cinzel", serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--brand-dark);
+      font-size: 0.74rem;
+      margin-bottom: 12px;
+    }
+    .profile-details h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.2rem, 2rem + 1.2vw, 3.4rem);
+      line-height: 0.95;
+      color: var(--brand-dark);
+      margin-bottom: 12px;
+    }
+    .profile-details .email { color: var(--muted); font-size: 1rem; margin-bottom: 14px; }
+    .member-badge {
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      background: rgba(138,35,71,0.12);
+      color: var(--brand);
+      border: 1px solid rgba(138,35,71,0.15);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .role-chip {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(156, 62, 92, 0.18);
+      color: var(--brand-dark);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+    }
+
+    .main-wrap {
+      width: min(100% - 32px, var(--content-width));
+      margin: -32px auto 70px;
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .sidebar-nav {
+      position: sticky;
+      top: 118px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+    .sidebar-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 16px 18px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #573743;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      text-align: left;
+    }
+    .sidebar-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.9; }
+    .sidebar-item:hover { background: rgba(248, 208, 221, 0.26); transform: translateX(3px); }
+    .sidebar-item.active { background: linear-gradient(135deg, rgba(138,35,71,0.12), rgba(241,162,183,0.18)); color: var(--brand); }
+    .sidebar-divider { height: 1px; background: rgba(156,62,92,0.1); margin: 10px 6px; }
+    .danger-item { color: var(--danger); }
+    .danger-item:hover { background: rgba(182, 75, 87, 0.08); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .panel-card {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(156,62,92,0.12);
+    }
+    .card-header svg { width:24px; height:24px; stroke: var(--brand); fill: none; stroke-width: 1.8; }
+    .card-header h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.45rem;
+      color: var(--brand-dark);
+    }
+    .card-subtitle { color: var(--muted); font-size: 0.9rem; margin-top: -10px; margin-bottom: 22px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .full-width { grid-column: 1 / -1; }
+    label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a6b77;
+    }
+    .info-display,
+    input,
+    select {
+      min-height: 54px;
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(156,62,92,0.18);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,243,246,0.95));
+      color: var(--text);
+      padding: 14px 16px;
+      font-size: 0.96rem;
+    }
+    .info-display {
+      display:flex;
+      align-items:center;
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: rgba(138,35,71,0.55);
+      box-shadow: 0 0 0 4px rgba(233,138,176,0.14);
+      background: #fff;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    .notif-item {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(156,62,92,0.08);
+    }
+    .notif-info strong { display:block; margin-bottom: 4px; color: var(--brand-dark); }
+    .notif-info p { color: var(--muted); font-size: 0.84rem; }
+    .toggle-switch {
+      width: 56px; height: 30px; border-radius: 999px;
+      background: #e7d6de; position: relative; cursor: pointer; flex: 0 0 auto;
+      transition: background 0.2s ease;
+    }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      width: 24px; height: 24px;
+      top: 3px; left: 4px;
+      border-radius: 50%; background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      transition: transform 0.2s ease;
+    }
+    .toggle-switch.active { background: linear-gradient(135deg, var(--brand), var(--brand-dark)); }
+    .toggle-switch.active::after { transform: translateX(24px); }
+
+    .admin-lock {
+      background: linear-gradient(135deg, rgba(138,35,71,0.1), rgba(241,162,183,0.12));
+      border: 1px solid rgba(138,35,71,0.14);
+      border-radius: 24px;
+      padding: 24px;
+      color: var(--brand-dark);
+    }
+    .admin-lock strong { display:block; margin-bottom: 8px; font-size: 1rem; }
+    .security-note {
+      background: rgba(248, 208, 221, 0.28);
+      border: 1px solid rgba(156,62,92,0.12);
+      padding: 14px 16px;
+      border-radius: 18px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-size: 0.86rem;
+    }
+
+    .btn-row { display:flex; flex-wrap:wrap; gap: 12px; margin-top: 24px; }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      min-height: 50px;
+      padding: 0 22px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: white;
+      box-shadow: 0 14px 28px rgba(138,35,71,0.18);
+    }
+    .btn-outline {
+      background: rgba(255,255,255,0.85);
+      color: var(--brand-dark);
+      border: 1px solid rgba(156,62,92,0.26);
+    }
+    .btn-danger {
+      background: rgba(255,255,255,0.95);
+      color: var(--danger);
+      border: 1px solid rgba(182,75,87,0.3);
+    }
+
+    .provider-cta {
+      text-align: center;
+      padding: 20px 6px 8px;
+    }
+    .provider-icon { font-size: 3.5rem; margin-bottom: 14px; }
+    .provider-cta h4 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.7rem;
+      color: var(--brand-dark);
+      margin-bottom: 12px;
+    }
+    .provider-cta p { color: var(--muted); max-width: 56ch; margin: 0 auto; }
+    .email-link { color: var(--brand); text-decoration: underline; font-weight: 700; }
+
+    .footer {
+      margin-top: 44px;
+      background: var(--brand-dark);
+      color: #fff6fa;
+      padding: 36px var(--gutter);
+    }
+    .footer__inner {
+      width: var(--content-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, 1fr);
+      gap: 28px;
+    }
+    .footer h3 {
+      margin-bottom: 12px;
+      font-size: 1rem;
+      font-family: "Cinzel", serif;
+    }
+    .footer p, .footer li {
+      color: rgba(255,246,250,0.86);
+      font-size: 0.92rem;
+      list-style: none;
+      line-height: 1.6;
+    }
+    .footer ul { list-style: none; display:grid; gap: 8px; }
+
+    .toast-message {
+      position: fixed;
+      left: 50%; bottom: 24px;
+      transform: translateX(-50%) translateY(90px);
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: #fff;
+      padding: 13px 24px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      box-shadow: 0 14px 30px rgba(102,23,49,0.28);
+      z-index: 10001;
+      transition: transform 0.28s ease;
+      text-align: center;
+      max-width: calc(100vw - 28px);
+    }
+    .toast-message.show { transform: translateX(-50%) translateY(0); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1080px) {
+      .main-wrap { grid-template-columns: 1fr; }
+      .sidebar-nav {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .sidebar-divider { display:none; }
+    }
+
+    @media (max-width: 760px) {
+      .hero__inner { padding-top: 148px; }
+      .hero__card { width: 100%; }
+      .profile-details h1 { font-size: 2.2rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: auto; }
+      .footer__inner { grid-template-columns: 1fr; }
+      .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+      .topbar__inner { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div id="topbar">
+        <div class="topbar__inner">
+          <div class="logo-area">
+            <a href="dashboard.html" class="back-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Back
+            </a>
+            <a href="dashboard.html" class="brand" aria-label="Belissima home">
+              <img src="belissima-logo.png" alt="Belissima"/>
+            </a>
+          </div>
+
+          <nav class="nav" aria-label="Primary">
+            <a href="Allura.html" class="nav__link">Allura</a>
+            <a href="dashboard.html#services" class="nav__link">Services</a>
+            <a href="about_us.html" class="nav__link">About Us</a>
+            <a href="become_provider.html" class="nav__link">Become a Provider</a>
+            <a href="#" class="nav__icon" id="favouritesBtn" aria-label="Favorites">
+              <svg viewBox="0 0 24 24"><path d="M12 21s-6.7-4.35-9.2-7.24C.7 11.3 1.02 7.9 3.7 6.1c2.1-1.4 4.9-.93 6.3.98L12 9.2l2-2.12c1.4-1.9 4.2-2.38 6.3-.98 2.68 1.8 3 5.2.9 7.66C18.7 16.65 12 21 12 21Z"></path></svg>
+            </a>
+            <a href="account.html" class="nav__icon active" aria-label="Profile">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"></path></svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="hero__inner">
+        <div class="hero__card">
+          <div class="avatar-container">
+            <div class="avatar-main" id="avatarMain" onclick="document.getElementById('avatarFile').click()">
+              <span id="avatarEmoji">💋</span>
+              <img id="avatarImage" src="" style="display:none;" alt="avatar">
+            </div>
+            <div class="avatar-edit" onclick="document.getElementById('avatarFile').click()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="remove-photo" id="removePhotoBtn" onclick="removeAvatar()" style="display:none;">✕</div>
+            <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+          </div>
+
+          <div class="profile-details">
+            <div class="hero__eyebrow" id="heroEyebrow">Belissima Member Space</div>
+            <h1 id="profileFullName">Hey, Doll! 👋</h1>
+            <div class="email" id="profileEmail">user@belissima.com</div>
+            <span class="member-badge" id="memberBadge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Belissima Member
+            </span>
+          </div>
+        </div>
+
+        <div class="role-chip" id="roleChip">User View</div>
+      </div>
+    </header>
+
+    <section class="main-wrap">
+      <aside class="sidebar-nav">
+        <button type="button" class="sidebar-item active" data-panel="profile">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"/></svg>
+          My Profile
+        </button>
+        <button type="button" class="sidebar-item" data-panel="provider" id="providerSidebarBtn">
+          <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>
+          Provider Info
+        </button>
+        <button type="button" class="sidebar-item" data-panel="notifications">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Notifications
+        </button>
+        <button type="button" class="sidebar-item" data-panel="security">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Security
+        </button>
+        <div class="sidebar-divider"></div>
+        <button type="button" class="sidebar-item danger-item" id="signOutBtn">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </aside>
+
+      <main>
+        <div id="panel-profile" class="panel active">
+          <div class="panel-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-3.4 5-5 8-5s6.2 1.6 8 5"/></svg>
+              <h3>My Profile</h3>
+            </div>
+            <p class="card-subtitle">Your first name, last name, and email below are pulled from the account information saved at Login.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>First Name</label>
+                <div class="info-display" id="displayFirstName">—</div>
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <div class="info-display" id="displayLastName">—</div>
+              </div>
+              <div class="form-group full-width">
+                <label>Email Address</label>
+                <div class="info-display" id="displayEmailStatic">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-provider" class="panel">
+          <div class="panel-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>
+              <h3>Provider Information</h3>
+            </div>
+            <div class="provider-cta">
+              <h4>Ready to grow with Belissima?</h4>
+              <p>If you’re interested in joining Belissima as a provider, please complete the “Become a Provider” form to submit your application and share your business details. If you are already a provider and need to update your listing, pricing, hours, or other information, you can use the same “Become a Provider” form to submit your revised or corrected details. This ensures our team can efficiently review and apply any updates to keep your information accurate and up to date. If there are any issues, please to email the Belissima Team.</p>
+              <div class="btn-row" style="justify-content:center;">
+                <a href="become_provider.html" class="btn btn-primary">Become a Provider</a>
+                <a href="mailto:belissima3901@yahoo.com" class="btn btn-outline">Email Support</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-notifications" class="panel">
+          <div class="panel-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <h3>Notification Preferences</h3>
+            </div>
+            <div class="notif-item">
+              <div class="notif-info">
+                <strong>New Providers</strong>
+                <p>Be notified when a new provider joins Belissima.</p>
+              </div>
+              <div class="toggle-switch" id="notifToggle"></div>
+            </div>
+            <div class="btn-row" id="saveNotificationsRow">
+              <button class="btn btn-primary" onclick="saveNotificationSettings()">Save Settings</button>
+            </div>
+            <p class="hint hidden" id="adminNotificationHint">Notifications are always enabled for administrators.</p>
+          </div>
+        </div>
+
+        <div id="panel-security" class="panel">
+          <div class="panel-card user-security-card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <h3>Security</h3>
+            </div>
+            <div id="userSecurityContent">
+              <div class="security-note">Updates made here will change your Login information. Leave the new password fields blank if you only want to update your name or email.</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" id="secFirstName" placeholder="First name">
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" id="secLastName" placeholder="Last name">
+                </div>
+                <div class="form-group full-width">
+                  <label>Email Address</label>
+                  <input type="email" id="secEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group full-width">
+                  <label>Current Password</label>
+                  <input type="password" id="currentPassword" placeholder="Enter current password to change password">
+                </div>
+                <div class="form-group">
+                  <label>New Password</label>
+                  <input type="password" id="newPassword" placeholder="New password">
+                </div>
+                <div class="form-group">
+                  <label>Confirm New Password</label>
+                  <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+                </div>
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-primary" onclick="updateAccountInfo()">Update Information</button>
+              </div>
+            </div>
+
+            <div id="adminSecurityContent" class="hidden">
+              <div class="admin-lock">
+                <strong>Authorization Required</strong>
+                <p>You are NOT allowed to modify your information WITHOUT authorization. Contact the Senior Administrator for changes to your account.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card" id="dangerZoneCard">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <h3>Danger Zone</h3>
+            </div>
+            <p style="color:var(--muted); line-height:1.7;">Deleting your account is permanent. Your record is removed from the database and you would need to create an account again before logging back in.</p>
+            <div class="btn-row">
+              <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete My Account</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <section>
+          <h3>Belissima</h3>
+          <p>Your one-stop hub for beauty services. Discover hairstylists, nail technicians, make-up artists, and wax specialists near you.</p>
+        </section>
+        <section>
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services_page.html?type=hair-stylists">Hairstylists</a></li>
+            <li><a href="services_page.html?type=wax-specialists">Wax Specialists</a></li>
+            <li><a href="services_page.html?type=makeup-artists">Make-up Artists</a></li>
+            <li><a href="services_page.html?type=nail-artists">Nail Artists</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="dashboard.html">Home</a></li>
+            <li><a href="about_us.html">About Us</a></li>
+            <li><a href="become_provider.html">Become a Provider</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>Support/Contact</h3>
+          <ul>
+            <li><a href="mailto:belissima3901@yahoo.com">belissima3901@yahoo.com</a></li>
+          </ul>
+        </section>
+      </div>
+    </footer>
+  </div>
+
+  <div id="toastMsg" class="toast-message"></div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    let currentUser = null;
+    let currentRole = 'user';
+
+    function showToast(msg) {
+      const t = document.getElementById('toastMsg');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function normalizeStoredUser(raw) {
+      const user = raw || {};
+      if (!user.firstname && user.name) {
+        const parts = String(user.name).trim().split(/\s+/);
+        user.firstname = parts[0] || '';
+        user.lastname = parts.slice(1).join(' ');
+      }
+      return user;
+    }
+
+    function storeUser(user) {
+      const normalized = normalizeStoredUser({ ...user });
+
+      normalized.id = normalized.id || normalized.userID || normalized.userId;
+
+      normalized.firstname = normalized.firstname || normalized.first_name || '';
+      normalized.lastname = normalized.lastname || normalized.last_name || '';
+
+      normalized.name = [normalized.firstname, normalized.lastname].filter(Boolean).join(' ').trim();
+
+      currentUser = normalized;
+      currentRole = normalized.role || 'user';
+
+      const userJson = JSON.stringify(normalized);
+      sessionStorage.setItem('belissimaUser', userJson);
+      localStorage.setItem('belissimaUser', userJson);
+      sessionStorage.setItem('belissimaLoggedIn', 'true');
+    }
+
+    function getStoredUser() {
+      try {
+        const raw = sessionStorage.getItem('belissimaUser') || localStorage.getItem('belissimaUser') || '{}';
+        return normalizeStoredUser(JSON.parse(raw));
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function setRoleUI(role) {
+      currentRole = role || 'user';
+      const isAdmin = currentRole === 'admin';
+      document.getElementById('roleChip').textContent = isAdmin ? 'Admin View' : 'User View';
+      document.getElementById('memberBadge').innerHTML = isAdmin
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l3 5 6 .9-4.4 4.3 1 6.1L12 16l-5.6 2.3 1-6.1L3 7.9 9 7z"/></svg> Belissima Administrator'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Belissima Member';
+      document.getElementById('heroEyebrow').textContent = isAdmin ? 'Belissima Administration' : 'Belissima Member Space';
+      document.getElementById('userSecurityContent').classList.toggle('hidden', isAdmin);
+      document.getElementById('adminSecurityContent').classList.toggle('hidden', !isAdmin);
+      document.getElementById('dangerZoneCard').classList.toggle('hidden', isAdmin);
+
+      document.getElementById('providerSidebarBtn').classList.toggle('hidden', isAdmin);
+      document.getElementById('panel-provider').classList.toggle('hidden', isAdmin);
+      document.getElementById('saveNotificationsRow').classList.toggle('hidden', isAdmin);
+      document.getElementById('adminNotificationHint').classList.toggle('hidden', !isAdmin);
+
+      if (isAdmin && document.getElementById('panel-provider').classList.contains('active')) {
+        showPanel('profile', document.querySelector('.sidebar-item[data-panel="profile"]'));
+      }
+    }
+
+    function applyUserDataToUI() {
+      if (!currentUser) return;
+      const first = currentUser.firstname || 'Belissima';
+      const last = currentUser.lastname || 'Member';
+      const fullName = [currentUser.firstname, currentUser.lastname].filter(Boolean).join(' ').trim() || 'Belissima Member';
+      const email = currentUser.email || 'user@belissima.com';
+      document.getElementById('displayFirstName').innerText = first;
+      document.getElementById('displayLastName').innerText = last;
+      document.getElementById('displayEmailStatic').innerText = email;
+      document.getElementById('profileFullName').innerHTML = `${fullName} 👋`;
+      document.getElementById('profileEmail').innerText = email;
+      document.getElementById('secFirstName').value = currentUser.firstname || '';
+      document.getElementById('secLastName').value = currentUser.lastname || '';
+      document.getElementById('secEmail').value = email;
+     
+      setRoleUI(currentUser.role || 'user');
+    }
+
+    async function fetchAccountData() {
+      const stored = getStoredUser();
+      if (!stored.id) {
+        window.location.href = 'index.html';
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE}/account/${stored.id}`);
+        const data = await response.json();
+        if (!response.ok || !data.user) throw new Error(data.message || 'Could not load account');
+        storeUser(data.user);
+        applyUserDataToUI();
+      } catch (error) {
+        storeUser(stored);
+        applyUserDataToUI();
+        showToast('Using saved account data.');
+      }
+    }
+
+    function showPanel(panelName, el) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(`panel-${panelName}`).classList.add('active');
+      document.querySelectorAll('.sidebar-item[data-panel]').forEach(i => i.classList.remove('active'));
+      if (el) el.classList.add('active');
+    }
+
+    document.querySelectorAll('.sidebar-item[data-panel]').forEach(item => {
+      item.addEventListener('click', () => showPanel(item.getAttribute('data-panel'), item));
+    });
+
+    function handleAvatarUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const imgUrl = ev.target.result;
+        localStorage.setItem('belissima_avatar', imgUrl);
+        document.getElementById('avatarEmoji').style.display = 'none';
+        document.getElementById('avatarImage').src = imgUrl;
+        document.getElementById('avatarImage').style.display = 'block';
+        document.getElementById('removePhotoBtn').style.display = 'flex';
+        showToast('Profile photo updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAvatar() {
+      localStorage.removeItem('belissima_avatar');
+      document.getElementById('avatarEmoji').style.display = 'flex';
+      document.getElementById('avatarImage').style.display = 'none';
+      document.getElementById('removePhotoBtn').style.display = 'none';
+      showToast('Profile photo removed.');
+    }
+
+    async function updateAccountInfo() {
+      if (currentRole === 'admin') return showToast('Admins need Senior Administrator authorization for account changes.');
+      if (!currentUser?.id) return showToast('You must be signed in to update your account.');
+
+      const first = document.getElementById('secFirstName').value.trim();
+      const last = document.getElementById('secLastName').value.trim();
+      const email = document.getElementById('secEmail').value.trim().toLowerCase();
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+      if (!first || !last || !email) return showToast('First name, last name, and email are required.');
+      if (newPassword && newPassword !== confirmPassword) return showToast("New passwords don't match.");
+      if (newPassword && newPassword.length < 6) return showToast('Password must be at least 6 characters.');
+      if (newPassword && !currentPassword) return showToast('Enter your current password to save a new password.');
+
+      try {
+        const response = await fetch(`${API_BASE}/account/${currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstname: first,
+            lastname: last,
+            email,
+            currentPassword,
+            newPassword
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Unable to update account.');
+          const updatedUser = {
+              ...currentUser,
+              ...(data.user || {}),
+              firstname: first,
+              lastname: last,
+              first_name: first,
+              last_name: last,
+              email,
+              name: `${first} ${last}`
+            };
+
+            storeUser(updatedUser);
+            applyUserDataToUI();
+
+        document.getElementById('profileFullName').innerHTML = `${first} ${last} 👋`;
+        document.getElementById('profileEmail').innerText = email;
+        document.getElementById('displayFirstName').innerText = first;
+        document.getElementById('displayLastName').innerText = last;
+        document.getElementById('displayEmailStatic').innerText = email;
+
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+        showToast('Account information updated successfully!');
+      } catch (error) {
+        showToast(error.message || 'Unable to update account.');
+      }
+    }
+
+  async function saveNotificationSettings() {
+    if (!currentUser?.id) return showToast('You must be signed in to save notification settings.');
+
+    const toggle = document.getElementById('notifToggle');
+    const isOn = currentRole === 'admin' ? true : toggle.classList.contains('active');
+
+    try {
+      const response = await fetch(`${API_BASE}/account/${currentUser.id}/notifications`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notify_new_providers: isOn })
+      });
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Unable to save settings.');
+      }
+
+      const updatedUser = data.user || {
+        ...currentUser,
+        notify_new_providers: isOn
+      };
+
+      storeUser(updatedUser);
+      toggle.classList.toggle('active', isOn);
+
+      showToast(isOn
+        ? 'Notification settings saved! New provider alerts are ON.'
+        : 'Notification settings saved! New provider alerts are OFF.');
+    } catch (error) {
+      console.error('Notification save error:', error);
+      showToast('Failed to update your notification settings.');
+    }
+  }
+
+  function loadNotificationSettings() {
+    const toggle = document.getElementById('notifToggle');
+    const isAdmin = currentRole === 'admin';
+
+    const savedValue = currentUser?.notify_new_providers;
+    const isOn = isAdmin ? true : !(savedValue === false || savedValue === 0 || savedValue === '0');
+
+    toggle.classList.toggle('active', isOn);
+    toggle.style.pointerEvents = isAdmin ? 'none' : 'auto';
+    toggle.onclick = isAdmin ? null : () => toggle.classList.toggle('active');
+  }
+
+    function hydrateAvatar() {
+      const avatar = localStorage.getItem('belissima_avatar');
+      if (!avatar) return;
+      document.getElementById('avatarEmoji').style.display = 'none';
+      document.getElementById('avatarImage').src = avatar;
+      document.getElementById('avatarImage').style.display = 'block';
+      document.getElementById('removePhotoBtn').style.display = 'flex';
+    }
+
+    function signOut() {
+      sessionStorage.removeItem('belissimaLoggedIn');
+      sessionStorage.removeItem('belissimaUser');
+      localStorage.removeItem('belissima_chat_history');
+      window.location.href = 'index.html';
+    }
+
+    async function confirmDeleteAccount() {
+      if (!currentUser?.id) return showToast('You must be signed in to delete your account.');
+      if (currentRole === 'admin') return showToast('Admin accounts require Senior Administrator authorization for changes.');
+      if (!confirm('⚠️ This will permanently delete your account. Are you absolutely sure?')) return;
+      try {
+        const response = await fetch(`${API_BASE}/account/${currentUser.id}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Unable to delete account.');
+        showToast('Account deleted. Redirecting…');
+        setTimeout(() => {
+          sessionStorage.clear();
+          localStorage.removeItem('belissimaUser');
+          localStorage.removeItem('belissimaLastEmail');
+          localStorage.removeItem('belissima_chat_history');
+          window.location.href = 'index.html';
+        }, 1000);
+      } catch (error) {
+        showToast(error.message || 'Unable to delete account.');
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('topbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    (async function init() {
+      const isLoggedIn = sessionStorage.getItem('belissimaLoggedIn') === 'true' || !!localStorage.getItem('belissimaUser');
+      if (!isLoggedIn) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      hydrateAvatar();
+      await fetchAccountData();
+      loadNotificationSettings();
+
+      document.getElementById('signOutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Are you sure you want to sign out?')) signOut();
+      });
+
+      document.getElementById('favouritesBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showToast('❤️ Favourites feature coming soon!');
+      });
+    })();
+  </script>
+</body>
+</html>
